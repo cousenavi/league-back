@@ -1,0 +1,12 @@
+{
+"name": { "type": "String", "index": { "unique": true }},
+"league": "String",
+
+"gamesPlayed": "Number",
+"gamesWon": "Number",
+"gamesDraw": "Number",
+"gamesLost": "Number",
+"points": "Number",
+"goalsScored": "Number",
+"goalsConceded": "Number"
+}

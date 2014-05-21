@@ -1,0 +1,7 @@
+{
+"name": "String",
+"team": "String",
+"birthday": "Date",
+"number": "Number",
+"position": "String"
+}

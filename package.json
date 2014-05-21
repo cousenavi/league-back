@@ -1,0 +1,10 @@
+{
+    "name": "league",
+    "engines": {
+        "node": ">= 0.10.26"
+    },
+    "dependencies": {
+        "zappa": ">= 0.0.3",
+        "mongoose": "latest"
+    }
+}

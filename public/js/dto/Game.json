@@ -1,0 +1,7 @@
+{
+    "homeTeam": "String",
+    "awayTeam": "String",
+    "homeScore": "Number",
+    "awayScore": "Number",
+    "date": "Date"
+}
