@@ -64,16 +64,20 @@ require('zappa') ->
 
   defineTeamsStatsChanges = (game, oldgame = null) ->
     #определяем, как изменить статистику у команды. Если уже сохраняли игру и теперь исправляем, передайте oldgame
-
-    if game.homeScore > game.awayScore
-      homePoints  = 3
-      awayPoints  = 0
-    else if game.homeScore = game.awayScore
-      homePoints  = 1
-      awayPoints  = 1
+    #TODO отрефакторить нормально
+    if game is null
+      game = {homeScore: 0, awayScore: 0, gamesPlayed: 0, homePoints: 0, awayPoints: 0}
     else
-      homePoints  = 0
-      awayPoints  = 3
+      game.gamesPlayed  = 1
+      if game.homeScore > game.awayScore
+        game.homePoints  = 3
+        game.awayPoints  = 0
+      else if game.homeScore = game.awayScore
+        game.homePoints  = 1
+        game.awayPoints  = 1
+      else
+        game.homePoints  = 0
+        game.awayPoints  = 3
 
     if oldgame is null
       oldHomePoints = 0
@@ -96,13 +100,13 @@ require('zappa') ->
         oldAwayPoints  = 3
 
     homeTeam =
-      points: homePoints - oldHomePoints
-      gamesPlayed: 1 - oldGamesPlayed,
+      points: game.homePoints - oldHomePoints
+      gamesPlayed: game.gamesPlayed - oldGamesPlayed,
       goalsScored: game.homeScore - oldHomeScore,
       goalsConceded: game.awayScore - oldAwayScore
     awayTeam =
-      points: awayPoints - oldAwayPoints,
-      gamesPlayed: 1 - oldGamesPlayed,
+      points: game.awayPoints - oldAwayPoints,
+      gamesPlayed: game.gamesPlayed - oldGamesPlayed,
       goalsScored: game.awayScore ,
       goalsConceded: game.homeScore
 
@@ -119,7 +123,24 @@ require('zappa') ->
       Team.where({ name: game.awayTeam}).update({ $inc: {away}})
 
   @post '/game_update': ->
-    Game.findByIdAndUpdate(@request.body._id, @request.body, => @send 'ok')
+    game = @request.body
+    Game.findById(@request.body._id, (err, oldGame) =>
+      Game.findByIdAndUpdate(@request.body._id, @request.body, => @send 'ok')
+      if game.homeTeamScore
+        diff = defineTeamsStatsChanges(game, oldGame)
+        home = diff.homeTeam
+        away = diff.awayTeam
+        Team.where({ name: game.homeTeam }).update({ $inc: {home}})
+        Team.where({ name: game.awayTeam}).update({ $inc: {away}})
+    )
 
   @post '/game_delete': ->
-    Game.findByIdAndRemove(@request.body._id, => @send 'ok')
+    Game.findById(@request.body._id, (err, game) =>
+      Game.findByIdAndRemove(@request.body._id, => @send 'ok')
+      if game.homeTeamScore
+        diff = defineTeamsStatsChanges(null, game)
+        home = diff.homeTeam
+        away = diff.awayTeam
+        Team.where({ name: game.homeTeam }).update({ $inc: {home}})
+        Team.where({ name: game.awayTeam}).update({ $inc: {away}})
+    )
