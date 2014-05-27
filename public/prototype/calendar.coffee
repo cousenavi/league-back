@@ -16,7 +16,8 @@ extractValues = ($obj) ->
 $ ->
   gameRowHtml = '''
                 <tr>
-                    <td style="display: none">%_id%</td>
+                    <td style="display: none" data-value="_id">%_id%</td>
+                    <td data-value="tour">%tour%</td>
                     <td data-value="date">%date%</td>
                     <td data-value="homeTeam">%homeTeam%</td>
                     <td data-value="awayTeam">%awayTeam%</td>
@@ -28,16 +29,16 @@ $ ->
     for model in data
       $('#calendarBody').prepend( render(gameRowHtml, model) )
 
-      $('#delGameBtn').click( (e) ->
-        model = extractValues($(e.target).parent().parent().parent())
-        console.log model
-#    $.post('/game_add', model, -> location.reload())
-      )
+    $('#delGameBtn').click( (e) ->
+      model = extractValues($(e.target).parent().parent().parent())
+      $.post('/game_delete', model, -> location.reload())
+    )
 
+    $('#addGameBtn').click( (e) ->
+      model = extractValues($(e.target).parent().parent().parent())
+      $.post('/game_add', model, -> location.reload())
+    )
   )
 
-  $('#addGameBtn').click( (e) ->
-    model = extractValues($(e.target).parent().parent().parent())
-    $.post('/game_add', model, -> location.reload())
-  )
+
 

@@ -18,6 +18,7 @@
             <table class="table">
                 <thead>
                 <tr>
+                    <th>tour</th>
                     <th>date</th>
                     <th>Home team</th>
                     <th>Away team</th>
@@ -27,10 +28,11 @@
                 </thead>
                 <tbody id="calendarBody">
                 <tr>
-                    <td><input type="text" class="form-control" placeholder="date" autofocus data-value="date"></td>
+                    <td class="col-md-1"><input type="text" class="form-control" placeholder="tour" autofocus data-value="tour" ></td>
+                    <td><input type="text" class="form-control" placeholder="date" data-value="date"></td>
                     <td><input type="text" class="form-control" placeholder="home team" data-value="homeTeam"></td>
                     <td><input type="text" class="form-control" placeholder="away team" data-value="awayTeam"></td>
-                    <td><input type="text" class="form-control" placeholder="TBD" data-value="result"></td>
+                    <td></td>
                     <td><button class="btn btn-success btn-block" id="addGameBtn"><span class="glyphicon glyphicon-plus"></span></button></td>
                 </tr>
                 </tbody>

@@ -3,5 +3,6 @@
     "awayTeam": "String",
     "homeScore": "Number",
     "awayScore": "Number",
-    "date": "Date"
+    "date": "Date",
+    "tour": "Number"
 }
