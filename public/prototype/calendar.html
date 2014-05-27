@@ -2,31 +2,39 @@
 <html>
 <head>
     <title></title>
+
+    <!--COMMON SCRIPTS -->
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="http://coffeescript.org/extras/coffee-script.js"></script>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <script type="text/coffeescript" src="calendar.coffee"></scrip t>
+    <!--              -->
+
+    <script type="text/coffeescript" src="calendar.coffee"></script>
 </head>
 <body>
     <div class="container">
         <div class="panel-body">
-            <div class="row">
-                <div class="col-xs-3 col-md-3">
-                    <input type="text" class="form-control" placeholder="date" autofocus>
-                </div>
-                <div class="col-xs-3 col-md-3 col-lg-3">
-                    <input type="text" class="form-control" placeholder="home team">
-                </div>
-                <div class="col-xs-3 col-md-3">
-                    <input type="text" class="form-control" placeholder="away team ">
-                </div>
-                <div class="col-xs-3 col-md-3 col-lg-3">
-                    <button class="btn btn-success btn-block">
-                        <span class="glyphicon glyphicon-plus"></span>
-                    </button>
-                </div>
-            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>date</th>
+                    <th>Home team</th>
+                    <th>Away team</th>
+                    <th>Result</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody id="calendarBody">
+                <tr>
+                    <td><input type="text" class="form-control" placeholder="date" autofocus data-value="date"></td>
+                    <td><input type="text" class="form-control" placeholder="home team" data-value="homeTeam"></td>
+                    <td><input type="text" class="form-control" placeholder="away team" data-value="awayTeam"></td>
+                    <td><input type="text" class="form-control" placeholder="TBD" data-value="result"></td>
+                    <td><button class="btn btn-success btn-block" id="addGameBtn"><span class="glyphicon glyphicon-plus"></span></button></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </body>
