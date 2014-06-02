@@ -4,7 +4,13 @@
         "node": ">= 0.10.26"
     },
     "dependencies": {
-        "zappa": ">= 0.0.3",
+        "express": "latest",
+        "body-parser": "latest",
+        "cookie-parser": "latest",
+        "express-session": "latest",
         "mongoose": "latest"
+    },
+    "scripts": {
+        "start": "coffee app.coffee"
     }
 }
