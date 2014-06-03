@@ -1,0 +1,57 @@
+FORMAT: 1A
+HOST: http://82.196.6.26:3000/
+
+# league
+
+# Group Auth
+
+## login [/login]
+### login [POST]
++ Request (application/json)
+
+        {"email": "cousenavi@gmail.com", password: "123"}
+
++ Response 200 (application/json)
+    
+        {"role": "ADMIN"}
+    
+## logout [/logout]
+### logout [GET]
++ Request (application/json)
+        
++ Response 200 (application/json)
+    
+        { "id": 3, "title": "Buy cheese and bread for breakfast." }
+
+## add_user [/add_user]
+### add_user [POST]
++ Request (application/json)
+    
+        {"email": "cousenavi@gmail.com", password: "123"}
++ Response 200 (application/json)
+    
+        {"ok": "ok"}
+
+## delete_user [/delete_user]
+### delete_user [POST]
++ Request (application/json)
+    
+        {"email": "cousenavi@gmail.com", password: "123"}
++ Response 200 (application/json)
+    
+        {"ok": "ok"}
+
+# Group Team
+## get [/teams/{name}]
+### get [GET]
++ Request (application/json)
+
++ Response 200 (application/json)
+    {}
+
+## get list [/teams]
+### get all [GET]
++ Request (application/json)
+
++ Response 200 (application/json)
+    {}
