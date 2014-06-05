@@ -10,9 +10,11 @@
         "express-session":  "latest",
         "mongoose":         "latest",
         "mocha":            "latest",
-        "supertest":        "latest"
+        "supertest":        "latest",
+        "minimist":         "latest"
     },
     "scripts": {
-        "start": "coffee app.coffee"
+        "start": "coffee main --env=dev",
+        "test": "mocha --compilers coffee:coffee-script"
     }
 }
