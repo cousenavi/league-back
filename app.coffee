@@ -4,10 +4,11 @@ module.exports = (config) ->
 
   app.use(express.static(__dirname + '/public'));
 
-
-
   cookieParser = require('cookie-parser')
   session      = require('express-session')
+
+
+
 
   app.mongoose = require('mongoose').connect(config.db)
 

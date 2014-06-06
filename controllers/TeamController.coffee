@@ -27,4 +27,7 @@ module.exports = class TeamController
     Team.findByIdAndUpdate(req.body._id, req.body, => res.send 'ok')
 
   delete : (req, res) ->
-    Team.findByIdAndRemove(req.body, => @send 'ok')
+    Team = new req.buildModel('Team')
+    Team.findByIdAndRemove(req.body._id, (err) =>
+      if err then res.status(500).send(err) else res.send 'ok'
+    )

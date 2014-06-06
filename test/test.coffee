@@ -36,8 +36,12 @@ describe '', ->
       request.get('/teams/Millwall').expect(200).end((err, res) ->
         id = res.body.team._id
         request.post('/teams_update').send(_id: id, name: "Millwall", league: 0).expect(200).end((err, res) ->
-          request.get('/teams/Millwall').expect(200, (err, res) ->
-            if (res.body.team.league is 0) then false else "team league expected to be 0, #{res.body.team.league} received"
-          ).end(done)
+          request.get('/teams/Millwall').expect(200).expect( (res) ->
+            if (res.body.team.league is "0") then false else "team league expected to be 0, #{res.body.team.league} received"
+          ).end((err, res) ->
+            request.post('/teams_delete').send(_id: id).expect(200).end( (err, res) ->
+              request.get('/teams').expect(200).expect('[]').end(done)
+            )
+          )
         )
       )

@@ -40,7 +40,7 @@ initRoutes = (app) ->
     teamController.update(req, res)
 
   app.post '/teams_delete', (req, res) ->
-    teamController.update(req, res)
+    teamController.delete(req, res)
 
   ###             players                ###
   ###             games                ###
