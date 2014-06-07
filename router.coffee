@@ -16,13 +16,16 @@ initRoutes = (app) ->
   app.get '/logout', (req, res) ->
     authController.logout(req, res)
 
-  app.post '/add_user', (req, res) ->
+  app.get '/users', (req, res) ->
+    authController.getAll(req, res)
+
+  app.post '/users_add', (req, res) ->
     authController.addUser(req, res)
 
-  app.post '/edit_user', (req, res) ->
+  app.post '/users_update', (req, res) ->
     authController.updateUser(req, res)
 
-  app.post '/delete_user', (req, res) ->
+  app.post '/users_delete', (req, res) ->
     authController.deleteUser(req, res)
 
 

@@ -7,9 +7,6 @@ module.exports = (config) ->
   cookieParser = require('cookie-parser')
   session      = require('express-session')
 
-
-
-
   app.mongoose = require('mongoose').connect(config.db)
 
   app.use cookieParser('omg_so_secret!')
@@ -19,14 +16,17 @@ module.exports = (config) ->
   app.use bodyParser()
 
   app.use (req, res, next) ->
+
+    req.requireRole = (role) ->
+      if req.session.user? && req.session.user.roles.indexOf(role) >= 0
+        return true
+      else
+        res.status(403).send()
+    next()
+
+  app.use (req, res, next) ->
     req.buildModel = (modelName) ->
-      #@TODO посмотреть, может хранить compiledModels не нужно и есть нативный метод у mongoose
-      app.compiledModels = [] if not app.compiledModels
-      if app.compiledModels[modelName] then return app.compiledModels[modelName] else
-        schema = app.mongoose.Schema(require("./public/js/dto/#{modelName}.json"))
-        model = app.mongoose.model(modelName, schema)
-        app.compiledModels[modelName] = model
-        return model
+     return require "./models/#{modelName}"
 
     next()
 

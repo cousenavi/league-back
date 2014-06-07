@@ -3,10 +3,23 @@ module.exports =
 class AuthController
 
   login: (req, res) ->
-    res.send 'login'
+    require('./../models/User').findOne({email: req.body.email, password: req.body.password}, (err, user) ->
+      if !user
+        res.status(400).send()
+      else
+        req.session.user = user
+        res.send roles: user.roles
+    )
 
   logout: (req, res) ->
     res.send 'logout'
+
+
+  getAll: (req, res) ->
+    req.requireRole('root')
+    require('./../models/User').find((err, users) ->
+      res.send users
+    )
 
   addUser: (req, res) ->
     res.send 'add user'
