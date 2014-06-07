@@ -47,11 +47,33 @@ HOST: http://82.196.6.26:3000/
 + Request (application/json)
 
 + Response 200 (application/json)
-    {}
+    {"team": {_id: "12345", name: "Millwall", league: "championship"}, "players": []}
 
 ## get list [/teams]
 ### get all [GET]
 + Request (application/json)
 
 + Response 200 (application/json)
-    {}
+    [{_id: "12345", name: "Millwall", league: "premier_league"}]
+
+## add team [/teams_add]
+### add team [POST]
++ Request (application/json)
+    {name: "Millwall", league: "championship"}
++ Response 200 (application/json)
+    "ok"
+
+## update team [/teams_update]
+### update team [POST]
++ Request (application/json)
+    {"team": {_id: "12345", name: "Millwall", league: "premier_league"}
++ Response 200 (application/json)
+    "ok"
+
+
+## delete team [/teams_delete]
+### delete team [POST]
++ Request (application/json)
+    {id: "12345"}
++ Response 200 (application/json)
+    "ok"
