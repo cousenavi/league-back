@@ -18,15 +18,18 @@ module.exports = class TeamController
     )
 
   add: (req, res) ->
+    req.requireRole('admin')
     Team = require('./../models/Team')
     (new Team(req.body)).save (err) =>
       if err then res.status(400).send(err) else res.send 'ok'
 
   update: (req, res) ->
+    req.requireRole('admin')
     Team = require('./../models/Team')
     Team.findByIdAndUpdate(req.body._id, req.body, => res.send 'ok')
 
   delete : (req, res) ->
+    req.requireRole('admin')
     Team = require('./../models/Team')
     Team.findByIdAndRemove(req.body._id, (err) =>
       if err then res.status(500).send(err) else res.send 'ok'

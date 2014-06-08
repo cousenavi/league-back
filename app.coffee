@@ -18,7 +18,8 @@ module.exports = (config) ->
   app.use (req, res, next) ->
 
     req.requireRole = (role) ->
-      if req.session.user? && req.session.user.roles.indexOf(role) >= 0
+      return true
+      if req.session.user? && require('./roles/checkRole')(req.session.user.roles, role)
         return true
       else
         res.status(403).send()

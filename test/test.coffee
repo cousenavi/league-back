@@ -1,7 +1,6 @@
 assert = require 'assert'
 supertest = require 'supertest'
 
-
 config = require('./../config')('test')
 app = require('./../app')(config)
 host = 'http://localhost:'+config.port
@@ -9,7 +8,7 @@ request = supertest.agent(host)
 
 fixture = (mongoose, done) ->
   User = require './../models/User'
-  (new User({email: "root", password: "root", roles: "root"})).save (err) ->
+  (new User({email: "root", password: "root", roles: ["root"]})).save (err) ->
     if err then trhow err else done()
 
 before (done)->
@@ -56,9 +55,16 @@ describe 'auth', ->
   it 'login', (done) ->
     request.post('/login').send(email: "root", password: "root").expect(200, roles: ['root']
     ).end(done)
+
+  it 'users_add', (done) ->
+    request.post('/users_add').send(email: 'user', password: 'user').expect(200).end(done)
+
   it 'users', (done) ->
-    request.get('/users').expect(200).end(done)
-
-
-#describe 'closed methods', ->
-#  for method in ['/users', 'users_add', 'users']
+    request.get('/users').expect(200)
+    .expect((res) ->
+        if res.body.length is 2 then false else 'incorrect number of users'
+      ).end( (err, res) ->
+        if err then done(err)
+        id = res.body[0]._id
+        request.post('/users_update').send(_id: id, roles: ["newRoles"]).expect(200).end(done)
+    )

@@ -17,15 +17,27 @@ class AuthController
 
   getAll: (req, res) ->
     req.requireRole('root')
-    require('./../models/User').find((err, users) ->
+    require('./../models/User').find({}, {password: 0}, (err, users) ->
       res.send users
     )
 
   addUser: (req, res) ->
-    res.send 'add user'
+    req.requireRole('root')
+    User = require('./../models/User')
+    (new User(req.body)).save (err) =>
+      if err then res.status(400).send(err) else res.send 'ok'
 
   updateUser: (req, res) ->
-    res.send 'edit user'
+    req.requireRole('root')
+    User = require('./../models/User')
+    User.findByIdAndUpdate(req.body._id, req.body, (err) =>
+      throw err if err?
+      res.send 'ok'
+    )
 
   deleteUser: (req, res) ->
-    res.send 'delete user'
+    req.requireRole('root')
+    User = require('./../models/User')
+    User.findByIdAndRemove(req.body._id, (err) =>
+      if err then res.status(500).send(err) else res.send 'ok'
+    )
