@@ -16,21 +16,19 @@ module.exports = (config) ->
   app.use bodyParser()
 
   app.use (req, res, next) ->
-
     req.requireRole = (role) ->
-      return true
       if req.session.user? && require('./roles/checkRole')(req.session.user.roles, role)
         return true
       else
-        res.status(403).send()
+        throw {code: 403, message: 'Access Denied'}
     next()
 
-  app.use (req, res, next) ->
-    req.buildModel = (modelName) ->
-     return require "./models/#{modelName}"
-
-    next()
 
   require('./router').initRoutes(app)
 
+  app.use (err, req, res, next)  ->
+    if err.code?
+      res.status(err.code).send(err.message)
+    else
+      throw err
   return app

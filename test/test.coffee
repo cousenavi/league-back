@@ -20,6 +20,33 @@ before (done)->
       )
     )
 
+describe 'auth', ->
+  it 'login', (done) ->
+    request.post('/login').send(email: "root", password: "root").expect(200, roles: ['root']
+    ).end(done)
+
+  it 'users_add', (done) ->
+    request.post('/users_add').send(email: 'user', password: 'user').expect(200).end(done)
+
+  it 'users', (done) ->
+    request.get('/users').expect(200)
+    .expect((res) ->
+        if res.body.length is 2 then false else 'incorrect number of users'
+      ).end( (err, res) ->
+        if err then done(err)
+        id = res.body[0]._id
+        request.post('/users_update').send(_id: id, roles: ["root", "newRoles"]).expect(200).end(done)
+    )
+
+  it 'logout', (done) ->
+    request.get('/logout').expect(200).end( (err, res) ->
+      if err then done(err)
+      request.get('/users').expect(403).end(done)
+    )
+
+  it 'yet another login to work with protected methods', (done) ->
+    request.post('/login').send(email: "root", password: "root").expect(200).end(done)
+
 describe 'teams', ->
   it 'empty teams list', (done) ->
     request.get('/teams').expect(200).expect('[]').end(done)
@@ -51,20 +78,3 @@ describe 'teams', ->
       )
     )
 
-describe 'auth', ->
-  it 'login', (done) ->
-    request.post('/login').send(email: "root", password: "root").expect(200, roles: ['root']
-    ).end(done)
-
-  it 'users_add', (done) ->
-    request.post('/users_add').send(email: 'user', password: 'user').expect(200).end(done)
-
-  it 'users', (done) ->
-    request.get('/users').expect(200)
-    .expect((res) ->
-        if res.body.length is 2 then false else 'incorrect number of users'
-      ).end( (err, res) ->
-        if err then done(err)
-        id = res.body[0]._id
-        request.post('/users_update').send(_id: id, roles: ["newRoles"]).expect(200).end(done)
-    )

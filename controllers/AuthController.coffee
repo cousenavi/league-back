@@ -12,7 +12,8 @@ class AuthController
     )
 
   logout: (req, res) ->
-    res.send 'logout'
+    req.session.destroy()
+    res.send 'ok'
 
 
   getAll: (req, res) ->
