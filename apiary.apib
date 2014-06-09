@@ -8,11 +8,9 @@ HOST: http://82.196.6.26:3000/
 ## login [/login]
 ### login [POST]
 + Request (application/json)
-
         {"email": "cousenavi@gmail.com", password: "123"}
 
 + Response 200 (application/json)
-    
         {"role": "ADMIN"}
     
 ## logout [/logout]
@@ -20,25 +18,37 @@ HOST: http://82.196.6.26:3000/
 + Request (application/json)
         
 + Response 200 (application/json)
-    
         { "id": 3, "title": "Buy cheese and bread for breakfast." }
 
-## add_user [/add_user]
+## users [/users]
+### users[GET]
++ Request (application/json)
++ Response 200 (application/json)
+    [ { _id: 5395d817b170174613f57d27,
+    email: 'root@root',
+    __v: 0,
+    roles: [ 'root' ] }]
+
+
+## add_user [/users_add]
 ### add_user [POST]
 + Request (application/json)
-    
         {"email": "cousenavi@gmail.com", password: "123"}
 + Response 200 (application/json)
-    
         {"ok": "ok"}
 
-## delete_user [/delete_user]
-### delete_user [POST]
+## update_user [/users_update]
+### update_user [POST]
 + Request (application/json)
-    
         {"email": "cousenavi@gmail.com", password: "123"}
 + Response 200 (application/json)
-    
+        {"ok": "ok"}
+
+## delete_user [/users_delete]
+### delete_user [POST]
++ Request (application/json)
+        {"email": "cousenavi@gmail.com", password: "123"}
++ Response 200 (application/json)
         {"ok": "ok"}
 
 # Group Team
