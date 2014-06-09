@@ -87,3 +87,31 @@ HOST: http://82.196.6.26:3000/
     {id: "12345"}
 + Response 200 (application/json)
     "ok"
+
+# Group Players
+
+## players list [/players]
+### players list [GET]
++ Request (application/json)
++ Response 200 (application/json)
+    [{_id: "123", name: "Cousen Avi", birthday: "1987-03-03", team: "Millwall", number: "8"}]
+
+## add player [/players_add]
+### add player [POST]
++ Request (application/json)
+    {name: "Cousen Avi", birthday: "1987-03-03", team: "Millwall", number: "8"}
++ Response 200 (application/json)
+
+## update player [/players_update]
+### update player [POST]
++ Request (application/json)
+    {_id: "123", number: "88"}
++ Response 200 (application/json)
+    "ok"
+
+## delete player [/players_delete]
+### delete player [POST]
++ Request (application/json)
+    {_id: "123"}
++ Response 200 (application/json)
+    "ok"
