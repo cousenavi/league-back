@@ -35,21 +35,21 @@ HOST: http://82.196.6.26:3000/
 + Request (application/json)
         {"email": "cousenavi@gmail.com", password: "123"}
 + Response 200 (application/json)
-        {"ok": "ok"}
+        {_id: 123}
 
 ## update_user [/users_update]
 ### update_user [POST]
 + Request (application/json)
         {"email": "cousenavi@gmail.com", password: "123"}
 + Response 200 (application/json)
-        {"ok": "ok"}
+        "ok"
 
 ## delete_user [/users_delete]
 ### delete_user [POST]
 + Request (application/json)
         {"email": "cousenavi@gmail.com", password: "123"}
 + Response 200 (application/json)
-        {"ok": "ok"}
+        "ok"
 
 # Group Team
 ## get [/teams/{name}]
@@ -71,7 +71,7 @@ HOST: http://82.196.6.26:3000/
 + Request (application/json)
     {name: "Millwall", league: "championship"}
 + Response 200 (application/json)
-    "ok"
+    {_id: "123"}
 
 ## update team [/teams_update]
 ### update team [POST]
@@ -101,6 +101,7 @@ HOST: http://82.196.6.26:3000/
 + Request (application/json)
     {name: "Cousen Avi", birthday: "1987-03-03", team: "Millwall", number: "8"}
 + Response 200 (application/json)
+    {_id: "123"}
 
 ## update player [/players_update]
 ### update player [POST]
