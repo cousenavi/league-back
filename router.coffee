@@ -2,10 +2,10 @@ TeamController = require './controllers/TeamController'
 teamController = new TeamController()
 AuthController = require './controllers/AuthController'
 authController = new AuthController()
+PlayerController = require './controllers/PlayerController'
+playerController = new PlayerController()
 
 #GameController   = require('./controllers/GameController')
-#PlayerController = require('./controllers/PlayerController')
-
 
 initRoutes = (app) ->
 
@@ -46,6 +46,10 @@ initRoutes = (app) ->
     teamController.delete(req, res)
 
   ###             players                ###
+  app.get '/players', (req, res) ->
+    playerController.getAll(req, res)
+
+
   ###             games                ###
 
 

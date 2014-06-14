@@ -20,8 +20,8 @@ module.exports = class TeamController
   add: (req, res) ->
     req.requireRole('admin')
     Team = require('./../models/Team')
-    (new Team(req.body)).save (err) =>
-      if err then res.status(400).send(err) else res.send 'ok'
+    (new Team(req.body)).save (err, team) =>
+      if err then res.status(400).send(err) else res.send {_id: team._id}
 
   update: (req, res) ->
     req.requireRole('admin')

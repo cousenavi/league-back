@@ -47,6 +47,7 @@ describe 'auth', ->
   it 'yet another login to work with protected methods', (done) ->
     request.post('/login').send(email: "root", password: "root").expect(200).end(done)
 
+
 describe 'teams', ->
   it 'empty teams list', (done) ->
     request.get('/teams').expect(200).expect('[]').end(done)
@@ -77,4 +78,18 @@ describe 'teams', ->
         )
       )
     )
+
+describe 'players', ->
+  it 'players', (done) ->
+    request.get('/players').expect(200).end(done)
+
+  it 'add player', (done) ->
+    request.post('/players_add').send(name: "Cousen Avi", team: "Millwall").expect(200).end((err, res) ->
+      id = res._id
+      request.post('/players_update').send(_id: id).expect(200).end((err, res) ->
+        request.post('/players_delete').send(_id: id).expect(200).end(done)
+      )
+    )
+
+
 

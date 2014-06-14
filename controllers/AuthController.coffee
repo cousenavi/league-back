@@ -25,8 +25,8 @@ class AuthController
   addUser: (req, res) ->
     req.requireRole('root')
     User = require('./../models/User')
-    (new User(req.body)).save (err) =>
-      if err then res.status(400).send(err) else res.send 'ok'
+    (new User(req.body)).save (err, user) =>
+      if err then res.status(400).send(err) else res.send {_id: user._id}
 
   updateUser: (req, res) ->
     req.requireRole('root')
