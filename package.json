@@ -11,10 +11,10 @@
         "mongoose":         "latest",
         "mocha":            "latest",
         "supertest":        "latest",
-        "minimist":         "latest"
+        "express-load":   "latest"
     },
     "scripts": {
-        "start": "coffee main --env=dev",
+        "start": "NODE_ENV='dev' coffee main ",
         "test": "mocha --compilers coffee:coffee-script"
     }
 }

@@ -1,7 +1,10 @@
-mongoose = require 'mongoose'
+module.exports = ->
+  mongoose = require 'mongoose'
 
-teamSchema = new mongoose.Schema(
-  name: {type: String, index: {unique: true}},
-  league: String
-)
-module.exports = mongoose.model('teams', teamSchema)
+  teamSchema = new mongoose.Schema(
+    name: {type: String, index: {unique: true}}
+    logo: String
+    leagueName: String
+    leagueId: mongoose.Schema.Types.ObjectId
+  )
+  mongoose.model('teams', teamSchema)

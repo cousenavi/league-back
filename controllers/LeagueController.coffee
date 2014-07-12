@@ -1,6 +1,7 @@
-class TeamController extends require('./AbstractCrudController')
+class LeagueController extends require('./AbstractCrudController')
   model: (req) ->
-    req.app.models.Team
+    req.app.models.League
+
 
   add: (req, res) ->
     req.requireRole('admin')
@@ -14,6 +15,6 @@ class TeamController extends require('./AbstractCrudController')
     req.requireRole('admin')
     super req, res
 
-module.exports = new TeamController()
+module.exports = new LeagueController()
 
 
