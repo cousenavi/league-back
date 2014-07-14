@@ -1,6 +1,6 @@
 module.exports = class AbstractCrudController
   getAll: (req, res) =>
-    @model(req).find((err, models) =>
+    @model(req).find(req.query, (err, models) =>
       res.send models
     )
 
@@ -25,8 +25,8 @@ module.exports = class AbstractCrudController
         res.status(200)
         res.send {_id: model._id}
 
-  upd: (req, res) ->
-    @model(req).findByIdAndUpdate(req.body._id, req.body, => res.send 'ok')
+  upd: (req, res) =>
+    @model(req).findByIdAndUpdate(req.body._id, req.body, =>  res.send 'ok'  )
 
   del : (req, res) ->
     @model(req).findByIdAndRemove(req.body._id, (err) =>

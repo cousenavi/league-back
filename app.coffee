@@ -33,15 +33,7 @@ module.exports = (config) ->
   load = require('express-load')
   load('models').then('controllers').then('routes').into(app)
 
-
-#  require('./router').initRoutes(app)
-#
-#  app.use (err, req, res, next)  ->
-#    if err.code?
-#      res.status(err.code).send(err.message)
-#    else
-#      throw err
-
+  app.on 'event:result_added', app.controllers.TablesController.onResultAdded
   return app
 
 

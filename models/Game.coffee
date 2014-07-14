@@ -16,5 +16,8 @@ module.exports = ->
 
     homeTeamScore: Number
     awayTeamScore: Number
+
+    leagueId:     mongoose.Schema.Types.ObjectId
+    tour:         Number
   )
   mongoose.model('games', gameSchema)
