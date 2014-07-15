@@ -33,6 +33,10 @@ module.exports = (config) ->
   load = require('express-load')
   load('models').then('controllers').then('routes').into(app)
 
+  #todo бред какой-то. Нельзя нормально получить доступ к объекту?
+  app.controllers.TablesController.app = app
+
+
   app.on 'event:result_added', app.controllers.TablesController.onResultAdded
   return app
 

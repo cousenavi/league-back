@@ -8,9 +8,10 @@ class GameController extends require('./AbstractCrudController')
 
   upd: (req, res) ->
     req.requireRole('admin')
-    @model(req).findByIdAndUpdate(req.body._id, req.body, (model) =>
-       console.log model
-       if req.body.homeTeamScore? then req.app.emit 'event:result_added', model
+    @model(req).findByIdAndUpdate(req.body._id, req.body,  =>
+      @model(req).findById(req.body._id, (err, model) =>
+        if req.body.homeTeamScore? then req.app.emit 'event:result_added', model
+      )
     )
 
   del: (req, res) =>
