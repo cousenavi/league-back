@@ -35,6 +35,9 @@
                         <a href="teams.html">Команды</a>
                     </li>
                     <li>
+                        <a href="players.html">Игроки</a>
+                    </li>
+                    <li>
                         <a href="referees.html">Судьи</a>
                     </li>
                     <li>
@@ -49,7 +52,27 @@
 
     </div>
 
-    <table class="table table-striped" id="simpletable">
-    </table>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <select class="form-control" autofocus id="leaguesSelect">
+
+            </select>
+        </div>
+        <div class="panel-body">
+            <table class="table table-striped" id="simpletable">
+            </table>
+            <table class="table" id="chesstable">
+            </table>
+
+            <script src="http://code.highcharts.com/highcharts.js"></script>
+            <script src="http://code.highcharts.com/modules/exporting.js"></script>
+
+            <div id="climbingChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+        </div>
+
+
+
+
 </div>
 </body>

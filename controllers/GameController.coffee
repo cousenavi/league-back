@@ -2,6 +2,11 @@ class GameController extends require('./AbstractCrudController')
   model: (req) ->
     req.app.models.Game
 
+  getAll: (req, res) =>
+    @model(req).find(req.query).sort(datetime: 'desc').find( (err, models) =>
+      res.send models
+    )
+
   add: (req, res) ->
     req.requireRole('admin')
     super req, res

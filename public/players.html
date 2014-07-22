@@ -11,7 +11,7 @@
 
     <script src="js/typeahead.min.js"></script>
 
-    <script type="text/coffeescript" src="./teams.coffee"></script>
+    <script type="text/coffeescript" src="./players.coffee"></script>
 </head>
 <body>
     <div class="container">
@@ -30,10 +30,10 @@
                         <li>
                             <a href="games.html">Игры</a>
                         </li>
-                        <li class="active">
+                        <li>
                             <a href="teams.html">Команды</a>
                         </li>
-                        <li>
+                        <li class="active">
                             <a href="players.html">Игроки</a>
                         </li>
                         <li>
@@ -52,27 +52,22 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
-                    <div class="col-xs-5 col-md-5 col-lg-5">
-                        <input type="text" class="form-control" placeholder="название команды" autofocus data-value="name">
+                    <div class="col-xs-6 col-md-6 col-lg-6">
+                        <select class="form-control" id="leagues"></select>
                     </div>
-                    <div class="col-xs-3 col-md-3 col-lg-3" >
-                        <input type="text" class="form-control" placeholder="лига" data-value="leagueName" id="leagues">
-                        <input type="hidden" data-value="leagueId">
+                    <div class="col-xs-5 col-md-5 col-lg-5" >
+                        <select class="form-control" id="teams"></select>
                     </div>
-                    <div class="col-xs-3 col-md-3 col-lg-3">
-                        <input type="text" class="form-control" placeholder="логотип" data-value="logo">
-                    </div>
-                    <div class="col-xs-1 col-md-1 col-lg-1">
+                    <div class="col-xs-1 col-md-1 col-lg-1" >
                         <button class="btn btn-block btn-success" id="addBtn"><span class="glyphicon glyphicon-plus"></span></button>
                     </div>
                 </div>
+
             </div>
-            <table class="table table-striped" id="list">
-
+            <table class="table table-hover" id="list">
             </table>
-
-
         </div>
+
     </div>
 </body>
 </html>

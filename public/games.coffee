@@ -1,21 +1,4 @@
 $ ->
-  typeaheadParams =
-    matcher: (item) ->
-     item.name.toLowerCase().indexOf(@query.toLowerCase()) > -1
-    updater: (item) ->
-      item.name
-    sorter: (items) -> return items
-    highlighter: (item) -> return item.name
-
-  selectTypeahead = (entity) ->
-    new Promise (resolve, reject) ->
-      $.getJSON "/#{entity}", (models) ->
-        $("##{entity}").typeahead(  $.extend( typeaheadParams, {
-          source: models
-          updater: (item) ->
-            resolve(item)
-            item.name
-        }))
 
   exportData = ($el) ->
     data = {}
@@ -25,66 +8,58 @@ $ ->
     return data
 
 
-  selectTypeahead('leagues').then( (league) ->
+  loadGames = (leagueId) ->
+    $("[data-value='homeTeamId']").val(leagueId)
 
-    $('#addBtn').click( (e) ->
-      console.log model = exportData(      $(e.target).parent().parent().parent()     )
-      model.leagueId = league._id
-      $.post( '/games/add',model, -> location.reload())
-    )
-
-    $.getJSON "/teams?leagueId=#{league._id}", (teams) ->
-      $("[data-value='homeTeamName']").typeahead(  $.extend( typeaheadParams, {
-            source: teams
-            updater: (item) ->
-              @$element.parent().find("[data-value='homeTeamId']").attr('value', item._id)
-              item.name
-          }))
-
-      $("[data-value='awayTeamName']").typeahead(  $.extend( typeaheadParams, {
-        source: teams
-        updater: (item) ->
-          @$element.parent().find("[data-value='awayTeamId']").attr('value', item._id)
-          item.name
-      }))
+    $.getJSON "/teams?leagueId=#{leagueId}", (teams) ->
+      html = ''
+      for team in teams
+        html += "<option value='#{team._id}'>#{team.name}</option>"
+      #todo навешивание колбеков отсюда убрать!!
+      $("[data-value='homeTeamId']").html(html).on('change', ->
+        $("[data-value='homeTeamName']").val($("option:selected", @).html()))
+      $("[data-value='awayTeamId']").html(html).on('change', ->
+        $("[data-value='awayTeamName']").val($("option:selected", @).html()))
 
     $.getJSON "/places", (places) ->
-      $("[data-value='placeName']").typeahead(  $.extend( typeaheadParams, {
-        source: places
-        updater: (item) ->
-          @$element.parent().find("[data-value='placeId']").attr('value', item._id)
-          item.name
-      }))
+      html = ''
+      for place in places
+        html += "<option value='#{place._id}'>#{place.name}</option>"
+      $("[data-value='placeId']").html(html).on('change', ->
+        $("[data-value='placeName']").val($("option:selected", @).html()))
 
     $.getJSON "/referees", (referees) ->
-      $("[data-value='refereeName']").typeahead(  $.extend( typeaheadParams, {
-        source: referees
-        updater: (item) ->
-          @$element.parent().find("[data-value='refereeId']").attr('value', item._id)
-          item.name
-      }))
+      html = ''
+      for ref in referees
+        html += "<option value='#{ref._id}'>#{ref.name}</option>"
+      $("[data-value='refereeId']").html(html).on('change', ->
+        $("[data-value='refereeName']").val($("option:selected", @).html()))
 
 
-    $.getJSON "/games?leagueId=#{league._id}", (games) ->
+    $("[data-value='datetime']").datetimepicker(
+      minuteStepping: 15
+      minDate: new Date()
+      showToday: false
+    )
+
+    $.getJSON "/games?leagueId=#{leagueId}", (games) ->
+
+      html = ''
       for game in games
-
         blockView =  (game) ->
-          if (game.homeTeamScore?)
-            ''
-          else
-            """
+          if (game.homeTeamScore?) then '' else  """
 <div>
- <input type="hidden" value="#{game._id}" data-value='_id'>
-Результат:
-<input type="text"  data-value="homeTeamScore" style="width: 30px">:
-<input type="text"  data-value="awayTeamScore" style="width: 30px">
-<button class="btn btn-block btn-success" id="addResultBtn" style="display: inline;  width: 30px">
-  <span class="glyphicon glyphicon-plus"></span>
-</button>
+  <input type="hidden" value="#{game._id}" data-value='_id'>
+  Результат:
+  <input type="text"  data-value="homeTeamScore" style="width: 30px">:
+  <input type="text"  data-value="awayTeamScore" style="width: 30px">
+  <button class="btn btn-block btn-success" id="addResultBtn" style="display: inline;  width: 30px">
+    <span class="glyphicon glyphicon-plus"></span>
+  </button>
 </div>
 """
 
-        html = """
+        html += """
                   <tr id='#{game._id}'>
                     <td class="col-md-11">
                       <span style="font-size: 18pt">#{game.homeTeamName} - #{game.awayTeamName}  #{if game.homeTeamScore? then game.homeTeamScore+' - '+game.awayTeamScore  else ''}</span><br>
@@ -98,26 +73,51 @@ $ ->
                       <button class="btn btn-block btn-danger" id="delBtn"><span class="glyphicon glyphicon-minus"></span></button>
                     </td>
                   </tr>
-  """
+        """
 
-        $('#list').append(
-          html
-        )
+      $('#list').html(html)
 
-        $('#delBtn').click( (e) ->
-          id = $(e.target).parent().parent().attr('id')
-          $.post( '/games/del',{_id: id}, -> location.reload())
-        )
 
-        $('#addResultBtn').click (e) ->
-          console.log model = exportData( $(e.target).parent() )
-          $.post( 'games/upd', model, -> location.reload())
 
+  $.getJSON('leagues', (leagues) ->
+    html = ''
+    for league in leagues
+      html += "<option value='#{league._id}'>#{league.name}</option>"
+
+    $('#leaguesSelect').html(html)
+
+    $('#leaguesSelect').on('change', ->
+      loadGames(@value)
+    );
+
+    $('#delBtn').click( (e) ->
+      id = $(e.target).parent().parent().attr('id')
+      $.post( '/games/del',{_id: id}, -> location.reload())
+    )
+    $('#addBtn').click( (e) ->
+      console.log model = exportData(      $(e.target).parent().parent().parent()     )
+#      $.post( '/games/add',model, -> location.reload())
+    )
+
+    $('#leaguesSelect').change()
   )
 
-  $("[data-value='datetime']").datetimepicker(
-    minuteStepping: 15
-    minDate: new Date()
-    showToday: false
-  )
+
+
+
+
+
+#
+#
+#
+#        $('#list').append(
+#          html
+#        )
+#
+
+#
+#        $('#addResultBtn').click (e) ->
+#          console.log model = exportData( $(e.target).parent() )
+#          $.post( 'games/upd', model, -> location.reload())
+#
 

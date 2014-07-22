@@ -2,9 +2,9 @@ module.exports = ->
 
   mongoose = require 'mongoose'
 
-  simpleTableSchema = new mongoose.Schema(
+  chessTableSchema = new mongoose.Schema(
     leagueId: mongoose.Schema.Types.ObjectId
     teams: Array
   )
 
-  mongoose.model('simpletables', simpleTableSchema)
+  mongoose.model('chesstables', chessTableSchema)

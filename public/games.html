@@ -37,6 +37,9 @@
                         <a href="teams.html">Команды</a>
                     </li>
                     <li>
+                        <a href="places.html">Игроки</a>
+                    </li>
+                    <li>
                         <a href="referees.html">Судьи</a>
                     </li>
                     <li>
@@ -54,31 +57,34 @@
             <b>Выберите лигу</b>
         </div>
         <div class="panel-body">
-            <input type="text" class="form-control" id="leagues" autofocus>
+            <select class="form-control" autofocus id="leaguesSelect">
+
+            </select>
         </div>
 
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
+                <input type="hidden" data-value="leagueId">
                 <div class="col-xs-2 col-md-2 col-lg-2">
-                    <input type="text" class="form-control" placeholder="команда хозяев" data-value="homeTeamName">
-                    <input type='hidden' data-value="homeTeamId">
+                    <select class="form-control" data-value="homeTeamId"></select>
+                    <input type="hidden" data-value="homeTeamName">
                 </div>
                 <div class="col-xs-2 col-md-2 col-lg-2">
-                    <input type="text" class="form-control" placeholder="команда гостей" data-value="awayTeamName">
-                    <input type='hidden' data-value="awayTeamId">
+                    <select class="form-control" data-value="awayTeamId"></select>
+                    <input type="hidden" data-value="awayTeamName">
                 </div>
                 <div class="col-xs-2 col-md-2 col-lg-2">
                     <input type="text" class="form-control" placeholder="дата и время" data-value="datetime" data-date-format="YYYY-MM-DD HH:mm">
                 </div>
                 <div class="col-xs-3 col-md-3 col-lg-3">
-                    <input type="text" class="form-control" placeholder="стадион" data-value="placeName">
-                    <input type='hidden' data-value="placeId">
+                    <select class="form-control" data-value="placeId"></select>
+                    <input type="hidden" data-value="placeName">
                 </div>
                 <div class="col-xs-2 col-md-2 col-lg-2">
-                    <input type="text" class="form-control" placeholder="судья" data-value="refereeName">
-                    <input type='hidden' data-value="refereeId">
+                    <select class="form-control" data-value="refereeId"></select>
+                    <input type="hidden" data-value="refereeName">
                 </div>
                 <div class="col-xs-1 col-md-1 col-lg-1">
                     <button class="btn btn-block btn-success" id="addBtn"><span class="glyphicon glyphicon-plus"></span></button>
