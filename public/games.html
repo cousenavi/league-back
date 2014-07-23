@@ -54,46 +54,49 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <b>Выберите лигу</b>
-        </div>
-        <div class="panel-body">
-            <select class="form-control" autofocus id="leaguesSelect">
-
-            </select>
-        </div>
-
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
             <div class="row">
-                <input type="hidden" data-value="leagueId">
-                <div class="col-xs-2 col-md-2 col-lg-2">
-                    <select class="form-control" data-value="homeTeamId"></select>
-                    <input type="hidden" data-value="homeTeamName">
-                </div>
-                <div class="col-xs-2 col-md-2 col-lg-2">
-                    <select class="form-control" data-value="awayTeamId"></select>
-                    <input type="hidden" data-value="awayTeamName">
-                </div>
-                <div class="col-xs-2 col-md-2 col-lg-2">
-                    <input type="text" class="form-control" placeholder="дата и время" data-value="datetime" data-date-format="YYYY-MM-DD HH:mm">
-                </div>
-                <div class="col-xs-3 col-md-3 col-lg-3">
-                    <select class="form-control" data-value="placeId"></select>
-                    <input type="hidden" data-value="placeName">
-                </div>
-                <div class="col-xs-2 col-md-2 col-lg-2">
-                    <select class="form-control" data-value="refereeId"></select>
-                    <input type="hidden" data-value="refereeName">
+                <div class="col-xs-11 col-md-11 col-lg-11">
+                    <input type="hidden" data-target="leaguesSelect" data-value="leagueName">
+                    <select class="form-control" autofocus id="leaguesSelect" data-value="leagueId">
+                    </select>
                 </div>
                 <div class="col-xs-1 col-md-1 col-lg-1">
-                    <button class="btn btn-block btn-success" id="addBtn"><span class="glyphicon glyphicon-plus"></span></button>
+                    <button class="btn btn-block btn-success" id="addBtn" autofocus><span class="glyphicon glyphicon-plus"></span></button>
                 </div>
             </div>
         </div>
-        <table class="table table-striped" id="list">
-
+        <table class="table table-hover" id="list">
         </table>
+    </div>
+    <!--<div class="panel panel-default">-->
+        <!--<div class="panel-heading">-->
+            <!--<div class="row">-->
+                <!--<input type="hidden" data-value="leagueId">-->
+                <!--<div class="col-xs-2 col-md-2 col-lg-2">-->
+                    <!--<select class="form-control" data-value="homeTeamId"></select>-->
+                    <!--<input type="hidden" data-value="homeTeamName">-->
+                <!--</div>-->
+                <!--<div class="col-xs-2 col-md-2 col-lg-2">-->
+                    <!--<select class="form-control" data-value="awayTeamId"></select>-->
+                    <!--<input type="hidden" data-value="awayTeamName">-->
+                <!--</div>-->
+                <!--<div class="col-xs-2 col-md-2 col-lg-2">-->
+                    <!--<input type="text" class="form-control" placeholder="дата и время" data-value="datetime" data-date-format="YYYY-MM-DD HH:mm">-->
+                <!--</div>-->
+                <!--<div class="col-xs-3 col-md-3 col-lg-3">-->
+                    <!--<select class="form-control" data-value="placeId"></select>-->
+                    <!--<input type="hidden" data-value="placeName">-->
+                <!--</div>-->
+                <!--<div class="col-xs-2 col-md-2 col-lg-2">-->
+                    <!--<select class="form-control" data-value="refereeId"></select>-->
+                    <!--<input type="hidden" data-value="refereeName">-->
+                <!--</div>-->
+                <!--<div class="col-xs-1 col-md-1 col-lg-1">-->
+                    <!--<button class="btn btn-block btn-success" id="addBtn"><span class="glyphicon glyphicon-plus"></span></button>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
 
 
     </div>

@@ -10,6 +10,7 @@ $ ->
           <input type='hidden' value="#{player.position}" data-value="position">
           <input type='hidden' value="#{player.teamName}" data-value="teamName">
           <input type='hidden' value="#{player.teamId}" data-value="teamId">
+          <input type='hidden' value="#{player.number}" data-value="number">
           <td>#{player.name}</td>
 
           <td>#{player.number}</td>
@@ -17,7 +18,6 @@ $ ->
         </tr>
               """
     popup: (player, teams) =>
-      console.log teams
       return """
         <div class="modal">
           <div class="modal-dialog">
@@ -30,29 +30,42 @@ $ ->
                 </div>
                 <div class="modal-body">
                    <input type="hidden" data-value="teamName" data-target='popupTeams'>
-                   <select class="form-control" id="popupTeams" autofocus='true' data-value="teamId">
-#{ ("<option value='#{team._id}'>#{team.name}</option>" for team in teams).join('')}
+                  #{if player._id? then "<input type='hidden' data-value='_id' value='#{player._id}'>" else ""}
 
+                   <select class="form-control" id="popupTeams" data-value="teamId">
+#{ ("<option #{if player.teamId is team._id then 'selected' else ''} value='#{team._id}'>#{team.name}</option>" for team in teams).join('')}
                    </select><br>
                    <div class="row">
                      <div class="col-xs-8 col-md-8 col-lg-8">
-                        <input type="text" class="form-control" data-value='name'>
+                        <input type="text" class="form-control" data-value='name' value="#{if player.name? then player.name else ''}">
                      </div>
                       <div class="col-xs-2 col-md-2 col-lg-2" >
-                        <select class="form-control" id="teams" data-value="position">
-#{("<option>#{pos}</option>" for pos in ['GK', 'CB', 'RB', 'LB', 'CM', 'LM', 'RM', 'ST']).join('')}
+                        <select class="form-control" id="positions" data-value="position">
+                             #{
+                             #todo возможно, можно разложить в один ряд
+                             html = ''
+                             for pos in ['GK', 'CB', 'RB', 'LB', 'CM', 'LM', 'RM', 'ST']
+                                if pos is player.position
+                                   html += '<option selected>'+pos+'</option>'
+                                else
+                                  html += '<option>'+pos+'</option>'
+                                html
+                             }
+
                         </select>
                       </div>
                       <div class="col-xs-2 col-md-2 col-lg-2" >
                         <select class="form-control" id="teams" data-value="number">
-#{("<option>#{num}</option>" for num in [1..99]).join('')}
+#{
+  ("<option #{if num is parseInt(player.number) then 'selected' else ''}>#{num}</option>" for num in [1..99]).join('')
+}
                         </select>
                       </div>
                 </div>
 
                 </div>
                 <div class="modal-footer">
-#{if !player.name? then '' else '<a href="#" class="btn btn-danger" style="float:left">Удалить</a>' }
+#{if !player.name? then '' else '<a class="btn btn-danger" id="btnDel" style="float:left">Удалить</a>' }
                   <a id="addPlayer" class="btn btn-success">Сохранить</a>
                 </div>
             </div>
@@ -95,12 +108,15 @@ $ ->
     $('#teams').change()
 
     $('#addBtn').on('click', ->
-      $(templates.popup(teamName: 'Millwall', teams[0])).modal(show: true)
+      $(templates.popup(teamId: $('#teams option:selected').val(), teams[0])).modal(show: true)
     )
 
     $('body').on('click',  '#addPlayer', (e) ->
-      console.log model = exportData $(e.target).parent().parent().parent()
-      $.post( '/players/add',model, -> location.reload())
+      model = exportData $(e.target).parent().parent().parent()
+      if model._id?
+        $.post('/players/upd', model, -> location.reload())
+      else
+        $.post( '/players/add',model, -> location.reload())
     ).on('change', 'select', (e) ->
       name = $(e.target).find('option:selected').html()
       id = $(e.target).attr('id')
@@ -108,17 +124,22 @@ $ ->
     )
 
 
-    $('body').on('click', '#list tr', (e) ->
-      console.log exportData($(e.currentTarget))
+    $('#list').on('click', 'tr', (e) ->
+      model =  exportData($(e.currentTarget))
       $(templates.popup(model, teams[0])).modal(show: true)
+    )
+
+    $('body').on('click', '#btnDel', (e) ->
+      model = exportData($(e.currentTarget).parent().parent())
+      $.post( '/players/del',{_id: model._id}, -> location.reload())
     )
 
   )
 
 #todo вынести в общий файл наконец!!!
   exportData = ($el) ->
-  data = {}
-  $el.find('[data-value]').each((k, e) ->
-    data[$(e).attr('data-value')] = $(e).val()
-  )
-  return data
+    data = {}
+    $el.find('[data-value]').each((k, e) ->
+     data[$(e).attr('data-value')] = $(e).val()
+    )
+    return data
