@@ -1,4 +1,5 @@
 $ ->
+  ##COMMON BLOCK##########
 
   exportData = ($el) ->
     data = {}
@@ -6,6 +7,14 @@ $ ->
       data[$(e).attr('data-value')] = $(e).val()
     )
     return data
+
+  $('body').on('change', 'select', (e) ->
+    name = $(e.target).find('option:selected').html()
+    id = $(e.target).attr('id')
+    $(e.target).parent().find("[data-target='#{id}']").val(name)
+  )
+  #########################
+
 
   formatDatetime=  (datetime) =>
         date = new Date(datetime)
@@ -22,6 +31,11 @@ $ ->
         return date.getDate()+'.'+(date.month())+' '+date.getHours()+':'+date.minutes()
 
   templates =
+    protocol: (homeTeamPlayers, awayTeamPlayers) ->
+      html = '<div class="row"><div class="col-xs-4 col-md-4 col-lg-4"><ul>'
+      for pl in homeTeamPlayers
+        html += "<li><b>#{pl.number}</b> #{pl.name}</li>"
+      html += '</ul></div></div>'
 
     game: (game) =>
       return """
@@ -44,8 +58,109 @@ $ ->
         </tr>
               """
 
-    popup: (game) =>
+    popup: (game, teams, places, referees) =>
       return """
+ <div class="modal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">
+                        #{if game._id? then 'Редактирование матча' else 'Добавление матча'}
+                    </h4>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                   <div class="col-xs-6 col-md-6 col-lg-6">
+                        <input type="hidden" data-target='homeTeamId' data-value='homeTeamName'>
+                        <select class="form-control" id="homeTeamId" data-value="homeTeamId">
+                          #{("<option id='#{team._id}'>#{team.name}</option>" for team in teams).join('')}
+                        </select>
+                    </div>
+                    <div class="col-xs-6 col-md-6 col-lg-6" >
+                        <input type="hidden" data-target='awayTeamId' data-value='awayTeamName'>
+                        <select class="form-control" id="awayTeamId" data-value="awayTeamId">
+                          #{("<option id='#{team._id}'>#{team.name}</option>" for team in teams).join('')}
+                        </select>
+                    </div>
+                  </div><br>
+                  <div class="row">
+                    <div class="col-xs-4 col-md-4 col-lg-4">
+                      <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                        <input type="text" data-target='datetime' class='form-control'>
+                      </div>
+                    </div>
+                    <div class="col-xs-4 col-md-4 col-lg-4" >
+                      <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-screenshot"></span></span>
+                        <input type="hidden" data-target='placeId' data-value='placeName'>
+                        <select class="form-control" data-value="placeId" id="placeId">
+                            #{("<option id='#{place._id}'>#{place.name}</option>" for place in places).join('')}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-xs-4 col-md-4 col-lg-4" >
+                      <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                        <input type="hidden" data-target='refereeId' data-value='refereeName'>
+                        <select class="form-control" id="refereeId" data-value="refereeId">
+                            #{("<option id='#{ref._id}'>#{ref.name}</option>" for ref in referees).join('')}
+                        </select>
+                      </div>
+                    </div>
+                  </div><br>
+
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                        <div class="row">
+                          <div class="col-xs-12 col-md-12 col-lg-12" style="text-align: center">
+                              <h4>Результат</h4>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xs-4 col-md-4 col-lg-4" ></div>
+                          <div class="col-xs-2 col-md-2 col-lg-2" >
+                            <select class="form-control" id="homeTeamScore" data-value="homeTeamScore">
+                              <option></option>
+                              #{("<option>#{hts}</option>" for hts in [0..50]).join('')}
+                            </select>
+                          </div>
+                          <div class="col-xs-2 col-md-2 col-lg-2" >
+                            <select class="form-control" id="homeTeamScore" data-value="awayTeamScore">
+                              <option></option>
+                              #{("<option>#{hts}</option>" for hts in [0..50]).join('')}
+                            </select>
+                          </div>
+                          <div class="col-xs-4 col-md-4 col-lg-4" ></div>
+                        </div>
+                  </div>
+                </div>
+
+
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                        <div class="row">
+                          <div class="col-xs-12 col-md-12 col-lg-12" style="text-align: center">
+                              <h4>
+                                  Протокол
+                                  <a id="addProtocol" class="btn btn-success">+</a>
+                              </h4>
+                              <div id='protocol'>
+                              </div>
+                          </div>
+                        </div>
+                  </div>
+                </div>
+
+                </div>
+                <div class="modal-footer">
+#{if !game._id? then '' else '<a class="btn btn-danger" id="btnDel" style="float:left">Удалить</a>' }
+                  <a id="addPlayer" class="btn btn-success">Сохранить</a>
+                </div>
+            </div>
+          </div>
+        </div>
 """
 
   loadGamesHtml = (leagueId) ->
@@ -76,7 +191,32 @@ $ ->
         )
       )
     ).change()
+
+    $('#addBtn').on('click', (e) ->
+      $(templates.popup(
+        exportData(
+          $(e.target).parent().parent()),
+          (team for team in teams[0] when team.leagueId is $('#leaguesSelect').val()),
+          places[0],
+          referees[0])
+      ).modal(show: true)
+    )
+
+    $('body').on('click', '#addProtocol', (e) ->
+        console.log  model = exportData($(e.currentTarget).parent().parent().parent().parent().parent().parent())
+
+        $.when(
+          $.getJSON("/players?teamId=#{model.homeTeamId}")
+          $.getJSON("/players?teamId=#{model.awayTeamId}")
+        ).then((homePlayers, awayPlayers) ->
+          $('#protocol').html(
+            templates.protocol(homePlayers, awayPlayers)
+          )
+        )
+    )
   )
+
+
 
 #
 #  loadGames = (leagueId) ->
