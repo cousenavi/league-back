@@ -3,8 +3,20 @@ $ ->
 
   exportData = ($el) ->
     data = {}
-    $el.find('[data-value]').each((k, e) ->
-      data[$(e).attr('data-value')] = $(e).val()
+    $el.find('[data-value]').each( ->
+      data[$(@).attr('data-value')] = $(@).val()
+    )
+    $el.find('[data-collection]').each(->
+      key = $(@).attr('data-collection')
+      data[key] = []
+      $(@).find('[data-element]').each( ->
+        obj = {}
+        $(@).find('[data-atom]').each( ->
+          obj[$(@).attr('data-atom')]  = $(@).val()
+        )
+        data[key].push(obj)
+      )
+
     )
     return data
 
@@ -32,10 +44,28 @@ $ ->
 
   templates =
     protocol: (homeTeamPlayers, awayTeamPlayers) ->
-      html = '<div class="row"><div class="col-xs-4 col-md-4 col-lg-4"><ul>'
-      for pl in homeTeamPlayers
-        html += "<li><b>#{pl.number}</b> #{pl.name}</li>"
-      html += '</ul></div></div>'
+
+      buildTable = (players, label) ->
+        html = '<div class="col-xs-6 col-md-6 col-lg-6">'
+        html += "<table class='table table-hover' data-collection='#{label}'><thead ><th>#</th><th></th><th style='text-align: center'>г/п</th><th style='text-align: center'>ж/к</th><th><span class='glyphicon glyphicon-star' id='star'></span></th></thead><tbody>"
+        for pl in players
+          html += """
+                <tr data-element>
+                <input type='hidden' data-atom="_id" value="#{pl._id}">
+                <input type='hidden' data-atom="name" value="#{pl.name}">
+                <input type='hidden' data-atom="star" value="false">
+                <input type='hidden' data-atom="played" value="false">
+
+                <td><span  class='glyphicon glyphicon-ok' style='display:none; color:green' id="played"></span>&nbsp;&nbsp;<b">#{pl.number}</b></td><td >#{pl.name}</td>
+                <td><input type="text" style="width:30px; text-align: center; background: #f5f5f5; border: 1px solid #f5f5f5; display: none;" value="" data-atom="goalsassists"></td>
+                <td><input type="text" style="width:30px; text-align: center; background: #f5f5f5; border: 1px solid #f5f5f5; display: none;" value="" data-atom="yellowred"></td>
+                <td><span  class='glyphicon glyphicon-star' style='display:none' id="star"></span></td>
+                </tr>
+"""
+        html += '</tbody></table></div>'
+        return html
+
+      html = '<div class="row">'+buildTable(homeTeamPlayers, 'homeTeamPlayers')+''+buildTable(awayTeamPlayers, 'awayTeamPlayers')+'</div>'
 
     game: (game) =>
       return """
@@ -52,6 +82,7 @@ $ ->
 
           <td>
             <span style="font-size:14pt">#{game.homeTeamName} - #{game.awayTeamName}</span>
+#{ if game.homeTeamScore? then "<span style='font-size:14pt'>#{game.homeTeamScore} - #{game.awayTeamScore}</span>" else ''}
             <span style="float: right">#{game.placeName}, #{formatDatetime(game.datetime)}</span>
 
           </td>
@@ -60,9 +91,10 @@ $ ->
 
     popup: (game, teams, places, referees) =>
       return """
- <div class="modal">
-          <div class="modal-dialog">
+ <div class="modal" >
+          <div class="modal-dialog" style='width:800px'>
             <div class="modal-content">
+                <input type='hidden' data-value='leagueId' value='#{game.leagueId}'>
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <h4 class="modal-title">
@@ -71,16 +103,22 @@ $ ->
                 </div>
                 <div class="modal-body">
                   <div class="row">
-                   <div class="col-xs-6 col-md-6 col-lg-6">
+                   <div class="col-xs-2 col-md-2 col-lg-2">
+                        <div class="input-group">
+                        <span class="input-group-addon">тур</span>
+                        <input type="text" class='form-control' data-value='tourNumber'>
+                      </div>
+                    </div>
+                   <div class="col-xs-5 col-md-5 col-lg-5">
                         <input type="hidden" data-target='homeTeamId' data-value='homeTeamName'>
                         <select class="form-control" id="homeTeamId" data-value="homeTeamId">
-                          #{("<option id='#{team._id}'>#{team.name}</option>" for team in teams).join('')}
+                          #{("<option value='#{team._id}'>#{team.name}</option>" for team in teams).join('')}
                         </select>
                     </div>
-                    <div class="col-xs-6 col-md-6 col-lg-6" >
+                    <div class="col-xs-5 col-md-5 col-lg-5" >
                         <input type="hidden" data-target='awayTeamId' data-value='awayTeamName'>
                         <select class="form-control" id="awayTeamId" data-value="awayTeamId">
-                          #{("<option id='#{team._id}'>#{team.name}</option>" for team in teams).join('')}
+                          #{("<option value='#{team._id}'>#{team.name}</option>" for team in teams).join('')}
                         </select>
                     </div>
                   </div><br>
@@ -88,7 +126,7 @@ $ ->
                     <div class="col-xs-4 col-md-4 col-lg-4">
                       <div class="input-group">
                         <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                        <input type="text" data-target='datetime' class='form-control'>
+                        <input type="text" data-value='datetime' class='form-control'>
                       </div>
                     </div>
                     <div class="col-xs-4 col-md-4 col-lg-4" >
@@ -96,7 +134,7 @@ $ ->
                         <span class="input-group-addon"><span class="glyphicon glyphicon-screenshot"></span></span>
                         <input type="hidden" data-target='placeId' data-value='placeName'>
                         <select class="form-control" data-value="placeId" id="placeId">
-                            #{("<option id='#{place._id}'>#{place.name}</option>" for place in places).join('')}
+                            #{("<option value='#{place._id}'>#{place.name}</option>" for place in places).join('')}
                         </select>
                       </div>
                     </div>
@@ -105,7 +143,7 @@ $ ->
                         <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
                         <input type="hidden" data-target='refereeId' data-value='refereeName'>
                         <select class="form-control" id="refereeId" data-value="refereeId">
-                            #{("<option id='#{ref._id}'>#{ref.name}</option>" for ref in referees).join('')}
+                            #{("<option value='#{ref._id}'>#{ref.name}</option>" for ref in referees).join('')}
                         </select>
                       </div>
                     </div>
@@ -138,14 +176,11 @@ $ ->
                 </div>
 
 
-                <div class="panel panel-default">
+                <div class="panel panel-default" id='protocolPanel' style="cursor: pointer">
                   <div class="panel-body">
                         <div class="row">
                           <div class="col-xs-12 col-md-12 col-lg-12" style="text-align: center">
-                              <h4>
-                                  Протокол
-                                  <a id="addProtocol" class="btn btn-success">+</a>
-                              </h4>
+                              <h4>Протокол</h4>
                               <div id='protocol'>
                               </div>
                           </div>
@@ -156,7 +191,7 @@ $ ->
                 </div>
                 <div class="modal-footer">
 #{if !game._id? then '' else '<a class="btn btn-danger" id="btnDel" style="float:left">Удалить</a>' }
-                  <a id="addPlayer" class="btn btn-success">Сохранить</a>
+                  <a id="addGame" class="btn btn-success">Сохранить</a>
                 </div>
             </div>
           </div>
@@ -192,123 +227,80 @@ $ ->
       )
     ).change()
 
-    $('#addBtn').on('click', (e) ->
+    $('#addBtn').on('click',  ->
       $(templates.popup(
-        exportData(
-          $(e.target).parent().parent()),
+          exportData($(@).parent().parent()),
           (team for team in teams[0] when team.leagueId is $('#leaguesSelect').val()),
           places[0],
           referees[0])
       ).modal(show: true)
+
+      $('.modal select').each(-> $(@).change() )
+
+      $("[data-value='datetime']").datetimepicker(minuteStepping: 15 )
+
     )
 
-    $('body').on('click', '#addProtocol', (e) ->
-        console.log  model = exportData($(e.currentTarget).parent().parent().parent().parent().parent().parent())
+    $('body').on('click', '#protocolPanel',  ->
+      if !$(@).attr('data-enabled')?
+        $(@).attr('data-enabled', true).css(cursor: 'default')
 
-        $.when(
-          $.getJSON("/players?teamId=#{model.homeTeamId}")
-          $.getJSON("/players?teamId=#{model.awayTeamId}")
-        ).then((homePlayers, awayPlayers) ->
-          $('#protocol').html(
-            templates.protocol(homePlayers, awayPlayers)
+        model = exportData($(@).parent().parent().parent().parent().parent().parent())
+
+        $.getJSON("/players?teamId=#{model.homeTeamId}", (homePlayers) ->
+          $.getJSON("/players?teamId=#{model.awayTeamId}", (awayPlayers) ->
+            $('#protocol').html(
+              templates.protocol(homePlayers, awayPlayers)
+            )
           )
         )
     )
+
+    $('body').on('click', '#protocol tr', (e) ->
+      #если флажок стоит, то снятие флажка обрабатываем только при нажатии на сам флажок
+      if $(@).find('#played').is(':visible')
+        if $(e.target).is('#played')
+          $(@).find('[data-atom=played]').val(false)
+          $(@).removeClass('active').find('#played').fadeOut(150)
+          $(@).find('#star').fadeOut(150)
+          $(@).find('input:text').fadeOut(150)
+        if $(e.target).is('#star')
+          if $(@).parent().parent().find('[data-atomt=star]').val()  is true
+            $(@).parent().parent().find('[data-atom=star]').val(false)
+            $(e.target).css(color: '#f5f5f5')
+          else
+            $(@).find('[data-atom=star]').val(true)
+            $(e.target).css(color: 'black')
+      else
+        $(@).find('[data-atom=played]').val(true)
+        $(@).addClass('active').find('#played').fadeIn(150)
+        $(@).find('#star').css(color: '#f5f5f5').fadeIn(150)
+        $(@).find('input:text').fadeIn(150)
+    )
+
+    $('body').on('click', '#addGame', ->
+      model = exportData($(@).parent().parent().parent().parent())
+      if model.homeTeamPlayers?
+        model.homeTeamPlayers = (pl for pl in model.homeTeamPlayers when pl.played is "true")
+        model.awayTeamPlayers = (pl for pl in model.awayTeamPlayers when pl.played is "true")
+        for pl in model.homeTeamPlayers
+          pl.goals   = pl.goalsassists.split('/')[0]
+          pl.assists = pl.goalsassists.split('/')[1]
+          pl.yellow  = pl.yellowred.split('/')[0]
+          pl.red     = pl.yellowred.split('/')[1]
+          delete pl.goalsassists
+          delete pl.yellowred
+
+        for pl in model.awayTeamPlayers
+          pl.goals   = pl.goalsassists.split('/')[0]
+          pl.assists = pl.goalsassists.split('/')[1]
+          pl.yellow  = pl.yellowred.split('/')[0]
+          pl.red     = pl.yellowred.split('/')[1]
+          delete pl.goalsassists
+          delete pl.yellowred
+
+      method = (if model._id? then 'upd' else 'add')
+      $.post("/games/#{method}", model, -> location.reload())
+    )
   )
 
-
-
-#
-#  loadGames = (leagueId) ->
-#    $("[data-value='homeTeamId']").val(leagueId)
-#
-#    $.getJSON "/teams?leagueId=#{leagueId}", (teams) ->
-#      html = ''
-#      for team in teams
-#        html += "<option value='#{team._id}'>#{team.name}</option>"
-#      #todo навешивание колбеков отсюда убрать!!
-#      $("[data-value='homeTeamId']").html(html).on('change', ->
-#        $("[data-value='homeTeamName']").val($("option:selected", @).html()))
-#      $("[data-value='awayTeamId']").html(html).on('change', ->
-#        $("[data-value='awayTeamName']").val($("option:selected", @).html()))
-#
-#    $.getJSON "/places", (places) ->
-#      html = ''
-#      for place in places
-#        html += "<option value='#{place._id}'>#{place.name}</option>"
-#      $("[data-value='placeId']").html(html).on('change', ->
-#        $("[data-value='placeName']").val($("option:selected", @).html()))
-#
-#    $.getJSON "/referees", (referees) ->
-#      html = ''
-#      for ref in referees
-#        html += "<option value='#{ref._id}'>#{ref.name}</option>"
-#      $("[data-value='refereeId']").html(html).on('change', ->
-#        $("[data-value='refereeName']").val($("option:selected", @).html()))
-#
-#
-#    $("[data-value='datetime']").datetimepicker(
-#      minuteStepping: 15
-#      minDate: new Date()
-#      showToday: false
-#    )
-#
-#    $.getJSON "/games?leagueId=#{leagueId}", (games) ->
-#
-#      html = ''
-#      for game in games
-#        blockView =  (game) ->
-#          if (game.homeTeamScore?) then '' else  """
-#<div>
-#  <input type="hidden" value="#{game._id}" data-value='_id'>
-#  Результат:
-#  <input type="text"  data-value="homeTeamScore" style="width: 30px">:
-#  <input type="text"  data-value="awayTeamScore" style="width: 30px">
-#  <button class="btn btn-block btn-success" id="addResultBtn" style="display: inline;  width: 30px">
-#    <span class="glyphicon glyphicon-plus"></span>
-#  </button>
-#</div>
-#"""
-#
-#        html += """
-#                  <tr id='#{game._id}'>
-#                    <td class="col-md-11">
-#                      <span style="font-size: 18pt">#{game.homeTeamName} - #{game.awayTeamName}  #{if game.homeTeamScore? then game.homeTeamScore+' - '+game.awayTeamScore  else ''}</span><br>
-#                      #{game.datetime} #{game.placeName} <br>
-#                      Судья: #{game.refereeName}<br>
-#                      #{blockView(game)}
-#                    </td>
-#
-#
-#                    <td class="col-md-1">
-#                      <button class="btn btn-block btn-danger" id="delBtn"><span class="glyphicon glyphicon-minus"></span></button>
-#                    </td>
-#                  </tr>
-#        """
-#
-#      $('#list').html(html)
-#
-#
-#
-#  $.getJSON('leagues', (leagues) ->
-#    html = ''
-#    for league in leagues
-#      html += "<option value='#{league._id}'>#{league.name}</option>"
-#
-#    $('#leaguesSelect').html(html)
-#
-#    $('#leaguesSelect').on('change', ->
-#      loadGames(@value)
-#    );
-#
-#    $('#delBtn').click( (e) ->
-#      id = $(e.target).parent().parent().attr('id')
-#      $.post( '/games/del',{_id: id}, -> location.reload())
-#    )
-#    $('#addBtn').click( (e) ->
-#      console.log model = exportData(      $(e.target).parent().parent().parent()     )
-##      $.post( '/games/add',model, -> location.reload())
-#    )
-#
-#    $('#leaguesSelect').change()
-#  )

@@ -179,5 +179,34 @@ class TablesController
       res.send model
     )
 
+  getTopGoalscorers: (req, res) ->
+    Model = req.app.models.TopGoalscorers
+
+    Model.findOne(req.query, (err, model) ->
+      res.send model
+    )
+
+  getTopAssistants: (req, res) ->
+    Model = req.app.models.TopAssistants
+
+    Model.findOne(req.query, (err, model) ->
+      res.send model
+    )
+
+  getTopPoints: (req, res) ->
+    Model = req.app.models.TopPoints
+
+    Model.findOne(req.query, (err, model) ->
+      res.send model
+    )
+
+  getTopStars: (req, res) ->
+    Model = req.app.models.TopStars
+
+    Model.findOne(req.query, (err, model) ->
+      res.send model
+    )
+
+
 module.exports = new TablesController()
 
