@@ -4,7 +4,7 @@ module.exports = ->
 
   schema = new mongoose.Schema(
     leagueId: mongoose.Schema.Types.ObjectId
-    teams: Array
+    players: Array
   )
 
   mongoose.model('toppoints', schema)

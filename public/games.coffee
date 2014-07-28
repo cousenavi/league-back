@@ -95,6 +95,7 @@ $ ->
           <div class="modal-dialog" style='width:800px'>
             <div class="modal-content">
                 <input type='hidden' data-value='leagueId' value='#{game.leagueId}'>
+                <input type='hidden' data-value='_id' value='#{game._id}'>
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <h4 class="modal-title">
@@ -190,7 +191,7 @@ $ ->
 
                 </div>
                 <div class="modal-footer">
-#{if !game._id? then '' else '<a class="btn btn-danger" id="btnDel" style="float:left">Удалить</a>' }
+#{if !game._id? then '' else '<a class="btn btn-danger" id="delGame" style="float:left">Удалить</a>' }
                   <a id="addGame" class="btn btn-success">Сохранить</a>
                 </div>
             </div>
@@ -230,10 +231,23 @@ $ ->
     $('#addBtn').on('click',  ->
       $(templates.popup(
           exportData($(@).parent().parent()),
-          (team for team in teams[0] when team.leagueId is $('#leaguesSelect').val()),
-          places[0],
+          (team for team in teams[0] when team.leagueId is $('#leaguesSelect').val())
+          places[0]
           referees[0])
       ).modal(show: true)
+
+      $('.modal select').each(-> $(@).change() )
+
+      $("[data-value='datetime']").datetimepicker(minuteStepping: 15 )
+    )
+
+    $('#list').on('click', 'tr', ->
+      $(templates.popup(
+        exportData($(@))
+        (team for team in teams[0] when team.leagueId is $('#leaguesSelect').val())
+        places[0]
+        referees[0]
+      )).modal(show:true)
 
       $('.modal select').each(-> $(@).change() )
 
@@ -299,8 +313,16 @@ $ ->
           delete pl.goalsassists
           delete pl.yellowred
 
-      method = (if model._id? then 'upd' else 'add')
+
+      method = (if model._id is 'undefined' then 'add' else 'upd')
+
+      delete model._id if model._id is 'undefined'
       $.post("/games/#{method}", model, -> location.reload())
+    )
+
+    $('body').on('click', '#delGame', ->
+      model = exportData($(@).parent().parent().parent().parent())
+      $.post( '/games/del',{_id: model._id}, -> location.reload())
     )
   )
 

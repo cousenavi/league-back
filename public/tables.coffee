@@ -11,6 +11,7 @@ $ ->
       $('#simpletable').html(tablesCache[leagueId]['simpletable'])
       $('#chesstable').html(tablesCache[leagueId]['chesstable'])
       drawClimbingChart(tablesCache[leagueId]['climbingchart'])
+      $('#goalscorers').html(tablesCache[leagueId]['goalscorers'])
     else
       tablesCache[leagueId] = {}
 
@@ -104,6 +105,18 @@ $ ->
 
           tablesCache[leagueId]['chesstable'] = html
           $('#chesstable').html(html)
+      )
+
+      $.getJSON('/tables/top_goalscorers',  {leagueId: leagueId}, (table) ->
+        console.log table.players
+        html = '<table><thead><th>Name</th><th>Gls</th><th>Pld</th</thead><tbody>'
+        for pl in table.players
+          html += "<tr><td>#{pl.name}</td><td>#{pl.goals}</td><td>#{pl.played}</td></tr>"
+        html += '</tbody></table>'
+
+        tablesCache[leagueId]['goalscorers'] = html
+        $('#goalscorers').html(html)
+
       )
 
   $.getJSON('/leagues', (leagues) ->
