@@ -1,7 +1,6 @@
 $ ->
   $.getJSON '/places', (places) ->
     for place in places
-       console.log place
        html = """
                 <tr id='#{place._id}'>
                   <td class="col-md-11">

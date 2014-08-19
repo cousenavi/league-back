@@ -1,0 +1,26 @@
+table {
+    width: 700px;
+    text-align: center; 
+}
+
+table img {
+    width: 55px;
+}
+
+table tr {
+    border: 1px solid #f0f0f0;
+}
+
+table td {
+    text-align: center; 
+    font-size: 16pt;
+    line-height: 20px;
+}
+
+table td .players {
+    font-size: 10pt;
+}
+
+table .score {
+    font-size: 32pt;
+}

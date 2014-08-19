@@ -4,7 +4,8 @@ module.exports = ->
 
   schema = new mongoose.Schema(
     leagueId: mongoose.Schema.Types.ObjectId
+    tourNumber: Number
     players: Array
   )
 
-  mongoose.model('topstars', schema)
+  mongoose.model('bestplayers', schema)

@@ -16,14 +16,14 @@ $ ->
        html = """
                 <tr id='#{team._id}'>
                   <td class="col-md-1">
-                    <img src="#{team.logo}" width="100px" height="100px">
+                    <img src="#{team.logo}" width="50px" height="50px">
                   </td>
                   <td class="col-md-10">
                     <span style="font-size: 18pt">#{team.name}</span>
                     <br><b>Лига:</b> #{team.leagueName}
                   </td>
                   <td class="col-md-1">
-                    <button class="btn btn-block btn-danger" id="delBtn"><span class="glyphicon glyphicon-minus"></span></button>
+                    <button type="button" class="close" id="delBtn">×</button>
                   </td>
                 </tr>
 """

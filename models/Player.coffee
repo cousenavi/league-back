@@ -5,8 +5,8 @@ module.exports = ->
     name: String
     photo: String
 
-    teamName: String
     teamId: mongoose.Schema.Types.ObjectId
+    leagueId: mongoose.Schema.Types.ObjectId
 
     position: String
     number: Number

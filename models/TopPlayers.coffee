@@ -7,4 +7,4 @@ module.exports = ->
     players: Array
   )
 
-  mongoose.model('toppoints', schema)
+  mongoose.model('topplayers', schema)
