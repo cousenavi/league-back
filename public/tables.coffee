@@ -7,12 +7,12 @@ $ ->
         title: text: 'Динамика набора очков командами'
         plotOptions:
             spline:
-              lineWidth: 2
+              lineWidth: 3
               marker: enabled: false
               states: hover: lineWidth: 5
-        yAxis: title: {text: 'очки'}, floor: 0, gridLineWidth: 0,  allowDecimals: false
+        yAxis: title: {text: 'очки'}, floor: 0, gridLineWidth: 1, alternateGridColor: '#fcfcfc', gridLineDashStyle: 'Dash', allowDecimals: false
         xAxis: title: {text: 'матчи'}, floor: 0, allowDecimals: false
-        series: chart.series.splice(0, 8)
+        series: chart.series.filter((v) -> (['Millwall', 'Reading', 'Leicester City', 'Wigan Athletics'].indexOf(v.name) isnt -1))
 
 
 
@@ -29,9 +29,9 @@ $ ->
 
         seriesColors = [
           '#FF523A',
-          '#00ff00',
-          '#0000ff',
-          '#000000'
+          '#009900',
+          '#000099',
+          '#777777'
         ]
 
         '<div style="color: #ff0000"'>

@@ -1,20 +1,29 @@
 {
-    "name": "league",
-    "engines": {
-        "node": ">= 0.10.26"
-    },
-    "dependencies": {
-        "express":          "latest",
-        "body-parser":      "latest",
-        "cookie-parser":    "latest",
-        "express-session":  "latest",
-        "mongoose":         "latest",
-        "mocha":            "latest",
-        "supertest":        "latest",
-        "express-load":   "latest"
-    },
-    "scripts": {
-        "start": "NODE_ENV='dev' coffee main ",
-        "test": "mocha --compilers coffee:coffee-script"
-    }
+  "name": "league",
+  "engines": {
+    "node": ">= 0.10.26"
+  },
+  "dependencies": {
+    "express": "latest",
+    "body-parser": "latest",
+    "cookie-parser": "latest",
+    "express-session": "latest",
+    "mongoose": "latest",
+    "mocha": "latest",
+    "supertest": "latest",
+    "express-load": "latest"
+  },
+  "scripts": {
+    "start": "NODE_ENV='dev' coffee main ",
+    "test": "mocha --compilers coffee:coffee-script"
+  },
+  "devDependencies": {
+    "gulp": "~3.8.7",
+    "gulp-concat": "~2.3.4",
+    "gulp-uglify": "~0.3.1",
+    "gulp-coffee": "~2.1.1",
+    "del": "~0.1.2",
+    "gulp-notify": "~1.5.0",
+    "gulp-sourcemaps": "~1.1.1"
+  }
 }

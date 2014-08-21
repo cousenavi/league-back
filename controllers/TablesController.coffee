@@ -60,15 +60,22 @@ class TablesController
             name: team.name
             _id: team.id
             logo: team.logo
-            games: []
+            games: {}
+
+          for tm in teams
+            records[team._id].games[tm._id] = []
 
         games = (game for game in games when game.homeTeamScore?)
 
         for game in games
-          records[game.homeTeamId].games.push({'scored': game.homeTeamScore, 'conceeded': game.awayTeamScore, 'opponent': game.awayTeamId})
-          records[game.awayTeamId].games.push({'scored': game.awayTeamScore, 'conceeded': game.homeTeamScore, 'opponent': game.homeTeamId})
+          records[game.homeTeamId].games[game.awayTeamId].push({'scored': game.homeTeamScore, 'conceeded': game.awayTeamScore})
+          records[game.awayTeamId].games[game.homeTeamId].push({'scored': game.awayTeamScore, 'conceeded': game.homeTeamScore})
 
         records = (record for id, record of records)
+        records.sort((a,b) -> if a._id > b._id then 1 else - 1)
+        for t in records
+          t.games = ({opponent: id, matches: g} for id, g of t.games).sort((a,b) -> if a.opponent > b.opponent then 1 else - 1)
+
 
         Model = @app.models.ChessTable
         Model.findOne(leagueId: game.leagueId, (err, model) ->

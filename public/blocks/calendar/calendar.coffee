@@ -46,6 +46,4 @@
           (templates.row(gm) for gm in games)
         ))
       )
-
-    @.html(leagueId)
 )(jQuery)

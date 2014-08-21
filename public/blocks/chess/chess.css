@@ -1,0 +1,21 @@
+table img {
+    width: 20px;
+    height: 20px;
+}
+
+table td {
+    border: 1px solid #ddd;
+}
+
+table td:nth-child(n+2), table th{
+    text-align: center;
+    font-weight: 900;
+}
+
+table .red {
+    color: #c60000;
+}
+
+table .green {
+    color: #006700;
+}

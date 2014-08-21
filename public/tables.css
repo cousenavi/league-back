@@ -11,6 +11,10 @@
 #simpletable tbody td:nth-child(n+3) {
     width: 50px;
 }
+
+#simpletable tbody td:nth-child(n+10) {
+    font-weight: 900;
+}
 #simpletable tbody td:nth-child(n+11) {
     width: 110px;
 }
