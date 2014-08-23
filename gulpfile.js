@@ -21,7 +21,7 @@ gulp.task('mobile-scripts', function() {
 
 
 gulp.task('mobile-scripts-concat', function() {
-    return gulp.src('public/mobile/js/*.js')
+    return gulp.src(['public/mobile/js/jquery-1.11.1.min.js', 'public/mobile/js/main.js'])
         .pipe(concat('main.js'))
         .pipe(gulp.dest('public/mobile/js/'))
         .pipe(uglify())
