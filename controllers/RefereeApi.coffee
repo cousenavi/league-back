@@ -1,6 +1,12 @@
 class RefereeApi
-  login: (req, res) ->
-    res.send [{_id: '123', homeTeamName: 'Millwall', awayTeamName: 'Wimbledon', date: '2015-01-01', time: '12:00', placeName: 'Прага'}]
+  login: (req, res) =>
+    res.send @getMatches()
+
+  matches: (req, res) =>
+    res.send @getMatches()
+
+  getMatches: ->
+    [{_id: '123', homeTeamName: 'Millwall', awayTeamName: 'Wimbledon', date: '2015-01-01', time: '12:00', placeName: 'Прага'}]
 
   game: (req, res) ->
     res.send {
@@ -16,7 +22,6 @@ class RefereeApi
           'ac132b8q':  [13, 'Mcsimov']
         }
     }
-
 
   logout: (req, res) ->
     res.send('ok')

@@ -1,22 +1,50 @@
 #container {
-    width: 100%;
-    height: 100%;
+    width: 250px;
+    min-height: 470px;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 14px;
     text-align: center;
+    border: 1px solid #ccc;
 }
 #container .littleText {
     font-size: 12pt;
 }
 
 #container .player {
-    border-radius: 0;
+    border-radius: 2px;
     background-color: #f0f0f0;
     color: black;
     font-weight: 600;
     font-size: 12pt;
     height: 40px;
     margin: 2px;
+}
+
+#container .playerEventTable td:nth-child(1), #container .playerEventTable      th:nth-child(1) {
+    border-right: 1px solid #ccc;
+}
+
+#container .playerEventTable .goal {
+    background-color: rgba(97, 237, 58, 0.27);
+}
+#container .playerEventTable .assist {
+    background-color: rgba(232, 237, 45, 0.27);
+}
+
+#container .playerEvent {
+    min-width: 50px;
+    height: 50px;
+    padding: 0;
+    text-align: center;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 14pt;
+    margin: 5px;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+#container #saveEventBtn {
+    width: 100%;
 }
 
 #container .activePlayer {
@@ -59,8 +87,18 @@
     white-space: nowrap;
     word-spacing: 0px;
     writing-mode: lr-tb;
-    min-width: 164px;
+    width: 100%;
     font-weight: 900;
     font-size: 16pt;
     background-color: #ccc;
+}
+
+#container .strip {
+    width: 100%;
+    height: 25px;
+    line-height: 25px;
+    font-size: 12pt;
+    background: #f3f3f3;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
 }
