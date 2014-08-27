@@ -74,32 +74,34 @@
         })()).join('')) + "\n</td>\n</tr></table>\n<button id=\"saveEventBtn\">OK</button>";
       },
       endEvent: function() {
-        return "<button id=\"homeTeamChoise\">выбор " + registry.currentGame.homeTeam.name + "</button> <br>\n<button type=\"button\" id=\"awayTeamChoise\">выбор " + registry.currentGame.awayTeam.name + "</button> <br>\n<button id=\"saveChoises\" " + (!registry.choisesMade ? "enabled=false" : void 0) + ">OK</button>";
+        return "<button id=\"homeTeamChoise\">выбор " + registry.currentGame.homeTeam.name + "</button> <br>\n<button type=\"button\" id=\"awayTeamChoise\">выбор " + registry.currentGame.awayTeam.name + "</button> <br>\n<button id=\"saveChoises\">OK</button>";
       },
       choise: function(side) {
-        var id, mark, p, players;
+        var id, mark, pl, players, team;
         players = [];
-        if (side === 'home') {
+        if (side === 'Home') {
           players = registry.currentGame.awayTeam.players;
+          team = registry.currentGame.homeTeam;
         } else {
           players = registry.currentGame.homeTeam.players;
+          team = registry.currentGame.awayTeam;
         }
-        return "  <div class=\"strip\">оценка судье:</div>\n  " + (((function() {
+        return "  <div class=\"strip\">оценка судье:</div>\n<div>\n  " + (((function() {
           var _i, _results;
           _results = [];
           for (mark = _i = 2; _i <= 5; mark = ++_i) {
-            _results.push("<input type='button' class='playerEvent refereeMark' value='" + mark + "'>");
+            _results.push("<input type='button' class='playerEvent refereeMark mark" + side + " " + (mark === team.refereeMark ? "activeBtn" : "") + "' value='" + mark + "'>");
           }
           return _results;
-        })()).join('')) + "\n<br><br><div class=\"strip\">лучшие игроки соперника:</div>\n  " + (((function() {
+        })()).join('')) + "\n</div>\n  <br><div class=\"strip\">лучшие игроки соперника:</div>\n  <div>\n  " + (((function() {
           var _results;
           _results = [];
           for (id in players) {
-            p = players[id];
-            _results.push("<input type='button' id='" + id + "' class='playerEvent' value='" + p[0] + "'>");
+            pl = players[id];
+            _results.push("<input type='button' id='" + id + "' class='playerEvent bestPlayer " + (pl.star != null ? "activeBtn" : "") + "' value='" + pl[0] + "'>");
           }
           return _results;
-        })()).join('')) + "\n  <br><br><button id=\"saveTeamChoise\" " + (!registry.choisesMade ? "disabled" : void 0) + ">OK</button>";
+        })()).join('')) + "\n  </div><br><button id=\"save" + side + "TeamChoise\">OK</button>";
       },
       error: function() {
         return 'error';
@@ -140,8 +142,9 @@
     registry.save = function() {
       return localStorage.setItem('registry', JSON.stringify(registry));
     };
-    registry.sync = function() {
-      return console.log('здесь мы синхронизируем регистр с сервером');
+    registry.sync = function(callback) {
+      console.log('здесь мы синхронизируем регистр с сервером');
+      return typeof callback === "function" ? callback() : void 0;
     };
     registry.endGame = function() {
       this.currentGame.ended = true;
@@ -154,6 +157,32 @@
     };
     registry.setUser = function(user) {
       this.currentUser = user;
+      return this.save();
+    };
+    registry.setHomeRefereeMark = function(mark) {
+      this.currentGame.homeTeam.refereeMark = parseInt(mark);
+      console.log('home', mark, this.currentGame.homeTeam);
+      return this.save();
+    };
+    registry.setAwayRefereeMark = function(mark) {
+      this.currentGame.awayTeam.refereeMark = parseInt(mark);
+      console.log('away', mark, this.currentGame.awayTeam);
+      return this.save();
+    };
+    registry.removeBestPlayer = function(id) {
+      if (this.currentGame.homeTeam.players[id] != null) {
+        delete this.currentGame.homeTeam.players[id].star;
+      } else {
+        delete this.currentGame.awayTeam.players[id].star;
+      }
+      return this.save();
+    };
+    registry.setBestPlayer = function(id) {
+      if (this.currentGame.homeTeam.players[id] != null) {
+        this.currentGame.homeTeam.players[id].star = true;
+      } else {
+        this.currentGame.awayTeam.players[id].star = true;
+      }
       return this.save();
     };
     registry.setPlayerActivity = function(id, isActive) {
@@ -244,10 +273,42 @@
       }
     });
     $('#container').on('click', '#homeTeamChoise', function() {
-      return $('#container').html(templates.choise('home'));
+      return $('#container').html(templates.choise('Home'));
     });
     $('#container').on('click', '#awayTeamChoise', function() {
-      return $('#container').html(templates.choise('away'));
+      return $('#container').html(templates.choise('Away'));
+    });
+    $('#container').on('click', '.refereeMark', function() {
+      if ($(this).hasClass('markHome')) {
+        registry.setHomeRefereeMark($(this).val());
+      } else {
+        registry.setAwayRefereeMark($(this).val());
+      }
+      $(this).parent().find('.activeBtn').each(function() {
+        return $(this).removeClass('activeBtn');
+      });
+      return $(this).addClass('activeBtn');
+    });
+    $('#container').on('click', '.bestPlayer', function() {
+      if ($(this).hasClass('activeBtn')) {
+        $(this).removeClass('activeBtn');
+        return registry.removeBestPlayer($(this).attr('id'));
+      } else if ($(this).parent().find('.activeBtn').length < 3) {
+        $(this).addClass('activeBtn');
+        return registry.setBestPlayer($(this).attr('id'));
+      }
+    });
+    $('#container').on('click', '#saveHomeTeamChoise', function() {
+      return $('#container').html(templates.endEvent());
+    });
+    $('#container').on('click', '#saveAwayTeamChoise', function() {
+      return $('#container').html(templates.endEvent());
+    });
+    $('#container').on('click', '#saveChoises', function() {
+      $(this).html('...');
+      return registry.sync(function() {
+        return location.reload();
+      });
     });
     $('#container').on('click', '#event-goal input', function() {
       if ($('.playerEventTable .goal').length === 0) {

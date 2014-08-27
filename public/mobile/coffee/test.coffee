@@ -56,18 +56,27 @@ $ ->
         """
       <button id="homeTeamChoise">выбор #{registry.currentGame.homeTeam.name}</button> <br>
       <button type="button" id="awayTeamChoise">выбор #{registry.currentGame.awayTeam.name}</button> <br>
-      <button id="saveChoises" #{if !registry.choisesMade then "enabled=false"}>OK</button>
+      <button id="saveChoises">OK</button>
 """
 
     choise: (side) ->
       players = []
-      if side is 'home' then players = registry.currentGame.awayTeam.players else players = registry.currentGame.homeTeam.players
+      if side is 'Home'
+        players = registry.currentGame.awayTeam.players
+        team = registry.currentGame.homeTeam
+      else
+        players = registry.currentGame.homeTeam.players
+        team = registry.currentGame.awayTeam
+
       """
       <div class="strip">оценка судье:</div>
-      #{("<input type='button' class='playerEvent refereeMark' value='#{mark}'>" for mark in [2..5]).join('') }
-    <br><br><div class="strip">лучшие игроки соперника:</div>
-      #{("<input type='button' id='#{id}' class='playerEvent' value='#{p[0]}'>" for id, p of players).join('')}
-      <br><br><button id="saveTeamChoise" #{if !registry.choisesMade then "disabled"}>OK</button>
+    <div>
+      #{("<input type='button' class='playerEvent refereeMark mark#{side} #{if mark is team.refereeMark then "activeBtn" else ""  }' value='#{mark}'>" for mark in [2..5]).join('') }
+    </div>
+      <br><div class="strip">лучшие игроки соперника:</div>
+      <div>
+      #{("<input type='button' id='#{id}' class='playerEvent bestPlayer #{if pl.star? then "activeBtn" else ""}' value='#{pl[0]}'>" for id, pl of players).join('')}
+      </div><br><button id="save#{side}TeamChoise">OK</button>
 """
     error: ->
       'error'
@@ -103,8 +112,9 @@ $ ->
   registry.save = ->
     localStorage.setItem('registry', JSON.stringify(registry))
 
-  registry.sync = ->
+  registry.sync = (callback) ->
     console.log 'здесь мы синхронизируем регистр с сервером'
+    callback?()
 
   registry.endGame = () ->
     @currentGame.ended = true
@@ -119,6 +129,30 @@ $ ->
     @currentUser = user
     @save()
 
+  registry.setHomeRefereeMark = (mark) ->
+    @currentGame.homeTeam.refereeMark = parseInt(mark)
+    console.log 'home', mark, @currentGame.homeTeam
+    @save()
+
+  registry.setAwayRefereeMark = (mark) ->
+    @currentGame.awayTeam.refereeMark = parseInt(mark)
+    console.log 'away', mark, @currentGame.awayTeam
+    @save()
+
+  registry.removeBestPlayer = (id) ->
+    if @currentGame.homeTeam.players[id]?
+      delete @currentGame.homeTeam.players[id].star
+    else
+      delete @currentGame.awayTeam.players[id].star
+    @save()
+
+  registry.setBestPlayer = (id) ->
+    if @currentGame.homeTeam.players[id]?
+      @currentGame.homeTeam.players[id].star = true
+    else
+      @currentGame.awayTeam.players[id].star = true
+    @save()
+
   registry.setPlayerActivity = (id, isActive) ->
     if @currentGame.homeTeam.players[id]?
       @currentGame.homeTeam.players[id][2] = isActive
@@ -126,8 +160,6 @@ $ ->
       @currentGame.awayTeam.players[id][2] = isActive
     @save()
   #=========================================#
-
-
 
   registry.load()
   if !registry.currentUser?
@@ -208,11 +240,42 @@ $ ->
   )
 
   $('#container').on('click', '#homeTeamChoise', ->
-    $('#container').html(templates.choise('home'))
+    $('#container').html(templates.choise('Home'))
   )
   $('#container').on('click', '#awayTeamChoise', ->
-    $('#container').html(templates.choise('away'))
+    $('#container').html(templates.choise('Away'))
   )
+
+
+
+    #--- team choises --#
+  $('#container').on('click', '.refereeMark', ->
+    if $(@).hasClass('markHome') then registry.setHomeRefereeMark($(@).val()) else registry.setAwayRefereeMark($(@).val())
+    $(@).parent().find('.activeBtn').each(-> $(@).removeClass('activeBtn'))
+    $(@).addClass('activeBtn')
+  )
+
+  $('#container').on('click', '.bestPlayer', ->
+    if ($(@).hasClass('activeBtn'))
+      $(@).removeClass('activeBtn')
+      registry.removeBestPlayer($(@).attr('id'))
+    else if $(@).parent().find('.activeBtn').length < 3
+      $(@).addClass('activeBtn')
+      registry.setBestPlayer($(@).attr('id'))
+  )
+
+  $('#container').on('click', '#saveHomeTeamChoise', ->
+    $('#container').html(templates.endEvent())
+  )
+  $('#container').on('click', '#saveAwayTeamChoise', ->
+    $('#container').html(templates.endEvent())
+  )
+
+  $('#container').on('click', '#saveChoises', ->
+    $(@).html('...')
+    registry.sync(-> location.reload())
+  )
+    #--               --#
 
   $('#container').on('click', '#event-goal input',  ->
     if $('.playerEventTable .goal').length is 0

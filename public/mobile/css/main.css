@@ -1,10 +1,9 @@
 #container {
-    width: 250px;
+    width: 100%;
     min-height: 470px;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 14px;
     text-align: center;
-    border: 1px solid #ccc;
 }
 #container .littleText {
     font-size: 12pt;
@@ -47,7 +46,7 @@
     width: 100%;
 }
 
-#container .activePlayer {
+#container .activeBtn {
     background-color: rgba(8, 227, 0, 0.18);
 }
 #container #loginForm {
