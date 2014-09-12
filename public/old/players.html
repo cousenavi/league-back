@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap-theme.min.css">
+
+    <script src="../js/jquery-1.11.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/coffee-script.js"></script>
+
+    <script src="../js/typeahead.min.js"></script>
+
+    <script type="text/coffeescript" src="players.coffee"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="tables.html">Таблицы</a>
+                        </li>
+                        <li>
+                            <a href="games.html">Игры</a>
+                        </li>
+                        <li>
+                            <a href="teams.html">Команды</a>
+                        </li>
+                        <li class="active">
+                            <a href="players.html">Игроки</a>
+                        </li>
+                        <li>
+                            <a href="referees.html">Судьи</a>
+                        </li>
+                        <li>
+                            <a href="leagues.html">Лиги</a>
+                        </li>
+                        <li>
+                            <a href="places.html">Стадионы</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-6 col-md-6 col-lg-6">
+                        <input type="hidden" data-target="leagues" data-value="leagueName">
+                        <select class="form-control" id="leagues" data-value="leagueId"></select>
+                    </div>
+                    <div class="col-xs-5 col-md-5 col-lg-5" >
+                        <select class="form-control" id="teams"></select>
+                    </div>
+                    <div class="col-xs-1 col-md-1 col-lg-1" >
+                        <button class="btn btn-block btn-success" id="addBtn" autofocus><span class="glyphicon glyphicon-plus"></span></button>
+                    </div>
+                </div>
+
+            </div>
+            <table class="table table-hover" id="list">
+            </table>
+        </div>
+
+    </div>
+</body>
+</html>

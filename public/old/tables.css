@@ -1,0 +1,66 @@
+#topplayers thead th:nth-of-type(n+2){
+    cursor: pointer
+}
+
+
+/* ------- simpletable --------------- */
+
+#simpletable tbody td:nth-child(1) {
+    width: 15px;
+}
+#simpletable tbody td:nth-child(n+3) {
+    width: 50px;
+}
+
+#simpletable tbody td:nth-child(n+10) {
+    font-weight: 900;
+}
+#simpletable tbody td:nth-child(n+11) {
+    width: 110px;
+}
+
+#simpletable tbody tr:nth-child(n+1) {
+    background: rgba(3, 255, 21, 0.20);
+}
+
+#simpletable tbody tr:nth-child(n+3) {
+    background: rgba(3, 255, 21, 0.11);
+}
+
+#simpletable tbody tr:nth-child(n+5) {
+    background: rgba(26, 178, 255, 0.04);
+}
+
+#simpletable tbody tr:nth-child(n+13) {
+    background: rgba(255, 3, 21, 0.11);
+}
+
+#simpletable tbody tr:nth-child(n+15) {
+    background: rgba(255, 3, 21, 0.20);
+}
+
+/* -------- chesstable ------------*/
+
+#chesstable td {
+    border: 1px solid #ddd;
+}
+
+#chesstable th {
+    text-align: center;
+}
+
+#chesstable td:nth-child(n+1) {
+    text-align: center;
+}
+
+.chesscore {
+    font-weight: 900;
+}
+
+.chesscore-red {
+    color: #c60000;
+}
+
+.chesscore-green {
+    color: #006700;
+}

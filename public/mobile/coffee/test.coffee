@@ -2,61 +2,130 @@ $ ->
   templates =
     login: -> """
 <div id="loginForm">
-<input type="text" data-value="login" placeholder='login' autofocus='true'><br><br>
-<input type="password" data-value="password" placeholder='password'><br><br>
-<button id="loginBtn">Go!</button>
+<input type="text" data-value="login" class="form-control" placeholder='login'><br>
+<input type="password" data-value="password" class="form-control" placeholder='password'><br>
+<button id="loginBtn" class="btn btn-success btn-block">Go!</button>
 </div>
 """
     matches: (matches) ->
-      ("<button id='#{m._id}'class='match'>#{m.homeTeamName} - #{m.awayTeamName}<br><span class='littleText'>#{m.date} #{m.time} #{m.placeName}</span></button><br>" for m in matches).join('')
+      html = """
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header">
+                <a class="navbar-brand">Выберите матч</a>
+            </div>
+        </nav>
+"""
+      html += ("<button class='btn btn-block btn-info match' id='#{m._id}'class='match'>#{m.homeTeamName} <br> #{m.awayTeamName}<br><span class='smallText'>#{m.date} #{m.time} #{m.placeName}</span></button><br>" for m in matches).join('')
+
 
     game: (game) ->
       """
-<div id="homeTeam">
-  <b>#{game.homeTeam.name}</b>
-  #{( "<button id='#{id}' class='player homePlayer'>#{p[0]} #{p[1]}</button>" for id, p of game.homeTeam.players).join('')}
-  <button id="saveHomeTeamBtn">OK</button>
+<div id="homeTeam" class="protocol">
+    <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header">
+                <a class="navbar-brand">#{game.homeTeam.name}: состав</a>
+            </div>
+      </nav>
+  #{( "<button class='btn btn-block btn-default player homePlayer' id='#{id}' >#{p.number} #{p.name}</button>" for id, p of game.homeTeam.players).join('')}
+  <button class='btn btn-block btn-success'  id="saveHomeTeamBtn">OK</button>
 </div>
 
-<div id="awayTeam" style='display: none'>
-  #{("<button id='#{id}' class='player awayPlayer'>#{p[0]} #{p[1]}</button>" for id, p of game.awayTeam.players).join('')}
-  <button id="saveAwayTeamBtn">OK</button>
+<div id="awayTeam" style='display: none' class="protocol">
+      <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header">
+                <a class="navbar-brand">#{game.awayTeam.name}: состав</a>
+            </div>
+      </nav>
+  #{("<button class='btn btn-block btn-default player awayPlayer'  id='#{id}'>#{p.number} #{p.name}</button>" for id, p of game.awayTeam.players).join('')}
+  <button class='btn btn-block btn-success' id="saveAwayTeamBtn">OK</button>
 </div>
 """
 
     events: () ->
       """
-  <button class="event" id="goalEvent">Гол</button><br>
-  <button class="event" id="yellowEvent">Жк</button><br>
-  <button class="event" id="redEvent">Кк</button><br>
-  <button class="event" id="endEvent">Конец матча</button><br>
+      <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header">
+                <a class="navbar-brand"> #{registry.currentGame.homeTeam.name} #{registry.currentGame.homeTeam.score}-#{registry.currentGame.awayTeam.score} #{registry.currentGame.awayTeam.name}</a>
+            </div>
+      </nav>
+  <button class="btn btn-block btn-info event" id="goalEvent">Гол</button><br>
+  <button class="btn btn-block btn-info event" id="yellowEvent">Жёлтая карточка</button><br>
+  <button class="btn btn-block btn-info event" id="redEvent">Прямая красная</button><br>
+  <button class="btn btn-block btn-success event" id="endEvent">Конец матча</button><br>
 """
 
     goalEvent: ->
-      ""
-    yellowEvent: ->
-      ""
-    redEvent: ->
-      ""
-
-    playerEvent: (eventName) ->
       """
-      <table class="playerEventTable" id="#{eventName}"><thead><th>#{registry.currentGame.homeTeam.name}</th><th>#{registry.currentGame.awayTeam.name}</th></thead><tr><td>
-      #{if eventName is 'event-goal' then "<input type='button' value='автогол' class='playerEvent'/>"}
-      #{("<input type='button' id='#{id}' class='playerEvent' value='#{p[0]}'>" for id, p of registry.currentGame.homeTeam.players).join('')}
-      </td><td>
-      #{if eventName is 'event-goal' then "<input type='button' value='автогол' class='playerEvent'/>"}
-      #{("<input type='button' id='#{id}' class='playerEvent' value='#{p[0]}'>" for id, p of registry.currentGame.awayTeam.players).join('')}
-      </td>
-      </tr></table>
-      <button id="saveEventBtn">OK</button>
+      <span id='goal'>
+        <nav class="navbar navbar-default" role="navigation">
+          <div class="navbar-header">
+            <a class="navbar-brand">Гол</a>
+          </div>
+        </nav>
+          <div class="btn-group btn-group-justified">
+      <a class="btn btn-default active goalEventType" role="button" id="G+">Гол+ </a>
+      <a class="btn btn-default goalEventType" role="button" id="A+">Пас+ </a>
+      <a class="btn btn-default goalEventType" role="button" id="G-">Гол-</a>
+      <a class="btn btn-default goalEventType" role="button" id="A-">Пас-</a>
+    </div>
+          <h2>#{registry.currentGame.homeTeam.name}</h2>
+          #{("<button id='#{id}' class='btn btn-default playerEvent'>#{pl.number}
+            <span class='goals'>#{if pl.goals? then pl.goals else 0}</span>
+            <span class='assists'>#{if pl.assists? then pl.assists else 0}</span>
+          </button> " for id, pl of registry.currentGame.homeTeam.players).join('')}
+          <h2>#{registry.currentGame.awayTeam.name}</h2>
+          #{("<button id='#{id}' class='btn btn-default playerEvent'>#{pl.number}
+              <span class='goals'>#{if pl.goals? then pl.goals else 0}</span>
+              <span class='assists'>#{if pl.assists? then pl.assists else 0}</span>
+            </button> " for id, pl of registry.currentGame.awayTeam.players).join('')}
+<br><br>
+        <button class="btn btn-block btn-success" id="saveEvent">OK</button>
+      </span>
 """
+
+    yellowEvent: ->
+
+      """
+      <span id='yellow'>
+      <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+          <a class="navbar-brand">Жёлтая карточка</a>
+        </div>
+      </nav>
+        <h4>Millwall</h4>
+        #{("<button id='#{id}' class='btn btn-default playerEvent #{if pl.yellow is 2 then "btn-selected-red" else if pl.yellow is 1 then "btn-selected-yellow" else ""}'>#{pl.number}</button> " for id, pl of registry.currentGame.homeTeam.players).join('')}
+        <h4>Wimbledon</h4>
+        #{("<button id='#{id}' class='btn btn-default playerEvent #{if pl.yellow is 2 then "btn-selected-red" else if pl.yellow is 1 then "btn-selected-yellow" else ""}'>#{pl.number}</button> " for id, pl of registry.currentGame.awayTeam.players).join('')}
+
+      <br><br><button class="btn btn-block btn-success" id="saveEvent">OK</button>
+      </span>
+"""
+
+    redEvent: ->
+      console.log registry.currentGame.homeTeam.players
+      """
+      <span id='red'>
+      <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+          <a class="navbar-brand">Прямая красная</a>
+        </div>
+      </nav>
+        <h4>Millwall</h4>
+        #{("<button id='#{id}' class='btn btn-default playerEvent #{if pl.red is 1 then "btn-selected-red" else ""}'>#{pl.number}</button> " for id, pl of registry.currentGame.homeTeam.players).join('')}
+        <h4>Wimbledon</h4>
+        #{("<button id='#{id}' class='btn btn-default playerEvent #{if pl.red is 1 then "btn-selected-red" else ""}' >#{pl.number}</button> " for id, pl of registry.currentGame.awayTeam.players).join('')}
+
+      <br><br><button class="btn btn-block btn-success" id="saveEvent">OK</button>
+      </span>
+"""
+
+
 
     endEvent: ->
         """
-      <button id="homeTeamChoise">выбор #{registry.currentGame.homeTeam.name}</button> <br>
-      <button type="button" id="awayTeamChoise">выбор #{registry.currentGame.awayTeam.name}</button> <br>
-      <button id="saveChoises">OK</button>
+      <button class="btn btn-block btn-info" id="homeTeamChoise">выбор<br>#{registry.currentGame.homeTeam.name}</button> <br>
+      <button class="btn btn-block btn-info"  type="button" id="awayTeamChoise">выбор<br>#{registry.currentGame.awayTeam.name}</button> <br>
+      <button class="btn btn-block btn-success" id="saveChoises">OK</button>
 """
 
     choise: (side) ->
@@ -68,15 +137,32 @@ $ ->
         players = registry.currentGame.homeTeam.players
         team = registry.currentGame.awayTeam
 
-      """
-      <div class="strip">оценка судье:</div>
+      html = """
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header">
+                <a class="navbar-brand">#{team.name}: оценка судье</a>
+            </div>
+        </nav>
     <div>
-      #{("<input type='button' class='playerEvent refereeMark mark#{side} #{if mark is team.refereeMark then "activeBtn" else ""  }' value='#{mark}'>" for mark in [2..5]).join('') }
-    </div>
-      <br><div class="strip">лучшие игроки соперника:</div>
-      <div>
-      #{("<input type='button' id='#{id}' class='playerEvent bestPlayer #{if pl.star? then "activeBtn" else ""}' value='#{pl[0]}'>" for id, pl of players).join('')}
-      </div><br><button id="save#{side}TeamChoise">OK</button>
+        <div class="row">
+"""
+      for mark in [2..5]
+        html += """
+        <div class="col-xs-3 col-md-3 col-lg-3">
+          <button type="button" class='btn btn-default btn-block refereeMark mark#{side} #{if mark is team.refereeMark then ":active" else ""  }'>#{mark}</button>
+        </div>
+"""
+
+      html += """
+        </div><br>
+          <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header">
+                <a class="navbar-brand">лучшие игроки соперника</a>
+            </div>
+          </nav>
+        <div>
+        #{("<button class='btn btn-default playerEvent bestPlayer #{if pl.star? then ":active" else ""}'  id='#{id}' class='playerEvent bestPlayer }'>#{pl.number}</button>" for id, pl of players).join('')}
+        </div><br><button class="btn btn-block btn-success" id="save#{side}TeamChoise">OK</button>
 """
     error: ->
       'error'
@@ -103,7 +189,9 @@ $ ->
   #===================================
 
   #=========== registry ====================#
-  registry = {}
+  registry = {
+    currentEvent: 'G+'
+  }
 
   registry.load = ->
     for key, prop of JSON.parse(localStorage.getItem('registry'))
@@ -123,6 +211,7 @@ $ ->
 
   registry.setCurrentGame = (game) ->
     @currentGame = game
+    if game then @currentGame.homeTeam.score = @currentGame.awayTeam.score = 0
     @save()
 
   registry.setUser = (user) ->
@@ -131,12 +220,10 @@ $ ->
 
   registry.setHomeRefereeMark = (mark) ->
     @currentGame.homeTeam.refereeMark = parseInt(mark)
-    console.log 'home', mark, @currentGame.homeTeam
     @save()
 
   registry.setAwayRefereeMark = (mark) ->
     @currentGame.awayTeam.refereeMark = parseInt(mark)
-    console.log 'away', mark, @currentGame.awayTeam
     @save()
 
   registry.removeBestPlayer = (id) ->
@@ -155,10 +242,47 @@ $ ->
 
   registry.setPlayerActivity = (id, isActive) ->
     if @currentGame.homeTeam.players[id]?
-      @currentGame.homeTeam.players[id][2] = isActive
+      @currentGame.homeTeam.players[id].played = isActive
     else
-      @currentGame.awayTeam.players[id][2] = isActive
+      @currentGame.awayTeam.players[id].played = isActive
     @save()
+
+  #todo эти четыре метода сжать в один сеттер
+
+  registry.setPlayerGoals = (id, goals) ->
+    if @currentGame.homeTeam.players[id]?
+      @currentGame.homeTeam.players[id].goals = goals
+    else
+     @currentGame.awayTeam.players[id].goals = goals
+
+    @currentGame.homeTeam.score = @currentGame.awayTeam.score = 0
+    @currentGame.homeTeam.score += parseInt(pl.goals) for id, pl of @currentGame.homeTeam.players when pl.goals?
+    @currentGame.awayTeam.score += parseInt(pl.goals) for id, pl of @currentGame.awayTeam.players when pl.goals?
+
+    @save()
+
+
+  registry.setPlayerAssists = (id, assists) ->
+    if @currentGame.homeTeam.players[id]?
+      @currentGame.homeTeam.players[id].assists = assists
+    else
+     @currentGame.awayTeam.players[id].assists = assists
+    @save()
+
+  registry.setPlayerYellow = (id, yellow) ->
+    if @currentGame.homeTeam.players[id]?
+      @currentGame.homeTeam.players[id].yellow = yellow
+    else
+      @currentGame.awayTeam.players[id].yellow = yellow
+    @save()
+
+  registry.setPlayerRed = (id, red) ->
+    if @currentGame.homeTeam.players[id]?
+      @currentGame.homeTeam.players[id].red = red
+    else
+      @currentGame.awayTeam.players[id].red = red
+    @save()
+
   #=========================================#
 
   registry.load()
@@ -206,9 +330,9 @@ $ ->
     )
   )
 
-  $('#container').on('click', '.player', ->
-    $(@).toggleClass('activePlayer')
-    registry.setPlayerActivity($(@).attr('id'), $(@).hasClass('activePlayer'))
+  $('#container').on('click', '.protocol .player', ->
+    $(@).toggleClass('btn-selected')
+    registry.setPlayerActivity($(@).attr('id'), $(@).hasClass('btn-selected'))
   )
 
   $('#container').on('click', '#saveHomeTeamBtn', ->
@@ -245,22 +369,60 @@ $ ->
   $('#container').on('click', '#awayTeamChoise', ->
     $('#container').html(templates.choise('Away'))
   )
+    #-- event -- #
+  $('#container').on('click', '.goalEventType', ->
+    $(@).parent().find('.goalEventType').each(-> $(@).removeClass('active'))
+    $(@).addClass('active')
+    registry.currentEvent  =  $(@).attr('id')
+  )
 
+  $('#container').on('click', '#goal .playerEvent', ->
+    if registry.currentEvent is 'G+' then $(@).find('.goals').html( parseInt($(@).find('.goals').html()) + 1 )
+    if registry.currentEvent is 'G-' then $(@).find('.goals').html( parseInt($(@).find('.goals').html()) - 1 )
+    if registry.currentEvent is 'A+' then $(@).find('.assists').html( parseInt($(@).find('.assists').html()) + 1 )
+    if registry.currentEvent is 'A-' then $(@).find('.assists').html( parseInt($(@).find('.assists').html()) - 1 )
+    registry.setPlayerGoals($(@).attr('id'),  $(@).find('.goals').html())
+    registry.setPlayerAssists($(@).attr('id'),  $(@).find('.assists').html())
+  )
 
+  $('#container').on('click', '#yellow .playerEvent', ->
+    if $(@).hasClass('btn-selected-yellow')
+      $(@).removeClass('btn-selected-yellow').addClass('btn-selected-red')
+      registry.setPlayerYellow($(@).attr('id'), 2)
+    else if $(@).hasClass('btn-selected-red')
+      $(@).removeClass('btn-selected-red')
+      registry.setPlayerYellow($(@).attr('id'), 0)
+    else
+      $(@).addClass('btn-selected-yellow')
+      registry.setPlayerYellow($(@).attr('id'), 1)
+
+  )
+
+  $('#container').on('click', '#red .playerEvent', ->
+    if $(@).hasClass('btn-selected-red')
+      $(@).removeClass('btn-selected-red')
+      registry.setPlayerRed($(@).attr('id'), 0)
+    else
+      $(@).addClass('btn-selected-red')
+      registry.setPlayerRed($(@).attr('id'), 1)
+  )
+
+    #----- ------#
 
     #--- team choises --#
   $('#container').on('click', '.refereeMark', ->
-    if $(@).hasClass('markHome') then registry.setHomeRefereeMark($(@).val()) else registry.setAwayRefereeMark($(@).val())
-    $(@).parent().find('.activeBtn').each(-> $(@).removeClass('activeBtn'))
-    $(@).addClass('activeBtn')
+    if $(@).hasClass('markHome') then registry.setHomeRefereeMark($(@).html()) else registry.setAwayRefereeMark($(@).html())
+
+    $(@).parent().parent().find('.btn-selected').each(-> $(@).removeClass('btn-selected'))
+    $(@).addClass('btn-selected')
   )
 
   $('#container').on('click', '.bestPlayer', ->
-    if ($(@).hasClass('activeBtn'))
-      $(@).removeClass('activeBtn')
+    if ($(@).hasClass('btn-selected'))
+      $(@).removeClass('btn-selected')
       registry.removeBestPlayer($(@).attr('id'))
-    else if $(@).parent().find('.activeBtn').length < 3
-      $(@).addClass('activeBtn')
+    else if $(@).parent('.btn-selected').length < 3
+      $(@).addClass('btn-selected')
       registry.setBestPlayer($(@).attr('id'))
   )
 
@@ -273,7 +435,10 @@ $ ->
 
   $('#container').on('click', '#saveChoises', ->
     $(@).html('...')
-    registry.sync(-> location.reload())
+    registry.sync(->
+      registry.setCurrentGame(null)
+      location.reload()
+    )
   )
     #--               --#
 
@@ -289,7 +454,7 @@ $ ->
   )
 
   $('#container').on('click', '#saveEvent', ->
-    console.log 'ok'
+    $('#container').html(templates.events())
   )
   #=========================================#
 

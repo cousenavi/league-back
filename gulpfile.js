@@ -18,6 +18,13 @@ gulp.task('mobile-scripts', function() {
         .pipe(gulp.dest('public/mobile/compiled/'))
         .pipe(notify({ message: 'Scripts task complete' }));
 });
+gulp.task('admin-scripts', function() {
+    return gulp.src('public/admin/coffee/*.coffee')
+        .pipe(coffee())
+        .pipe(gulp.dest('public/admin/js/'))
+        .pipe(uglify())
+        .pipe(notify({ message: 'Scripts task complete' }));
+});
 
 
 gulp.task('mobile-scripts-concat', function() {
@@ -36,4 +43,5 @@ gulp.task('mobile-scripts-concat', function() {
 
 gulp.task('watch', function() {
     gulp.watch('public/mobile/coffee/*.coffee', ['mobile-scripts']);
+    gulp.watch('public/admin/coffee/*.coffee', ['admin-scripts']);
 });

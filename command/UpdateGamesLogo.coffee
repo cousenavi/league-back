@@ -10,12 +10,12 @@ app.models.Game.find( (err, models) ->
 
     for gm in models
       app.models.Game.findByIdAndUpdate(gm._id, {
+          homeTeamName: mappedTeams[gm.homeTeamId].name
+          awayTeamName: mappedTeams[gm.awayTeamId].name
           homeTeamLogo: mappedTeams[gm.homeTeamId].logo
           awayTeamLogo: mappedTeams[gm.awayTeamId].logo
         }, (err, models) ->
         console.log err, models
       )
-#    app.models.Player.update(teamId: team._id, leagueId: team.leagueId, ->
-#    )
   )
 )

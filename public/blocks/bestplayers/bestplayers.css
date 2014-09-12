@@ -1,0 +1,74 @@
+#field {
+    width: 375px;
+    height: 423px;
+    background: url(/img/sprite/field2.png);
+    position: absolute;
+}
+
+#field .player {
+    position: absolute;
+    font-size: 20pt;
+    width: 175px;
+    height: 25px;
+    text-align: center;
+    color: #efefef;
+    font-weight: 900;
+}
+
+#field .player img {
+    height: 40px;
+}
+
+#field .ST {
+    margin-top: 2%;
+    margin-left: 0;
+    width: 100%;
+}
+
+#field .LM {
+    margin-top: 15%;
+    left: 0;
+}
+
+#field .RM {
+    margin-top: 15%;
+    right: 0;
+}
+
+#field .CM {
+    margin-top: 40%;
+    margin-left: 0;
+    width: 100%;
+}
+
+#field .LB {
+    margin-top: 56%;
+    left: 0;
+}
+#field .RB {
+    margin-top: 56%;
+    right: 0;
+}
+
+#field .CB {
+    margin-top: 72%;
+    margin-left: 0;
+    width: 100%;
+}
+#field .GK {
+    margin-top: 92%;
+    margin-left: 0;
+    width: 100%;
+}
+
+#statsTable {
+    width: 375px;
+    height: 423px;
+    margin-left: 385px;
+    position: absolute;
+    border-bottom: 1px solid #ddd;
+}
+
+#statsTable img {
+    height: 20px;
+}

@@ -22,20 +22,51 @@ module.exports = (config) ->
     next()
 
   app.use (req, res, next) ->
-    req.requireRole = (role) ->
-      return true
-      if req.session.user? && require('./roles/checkRole')(req.session.user.roles, role)
+    req.checkRootAccess = ->
+      if req.session.user? && req.session.user.role is 'root'
         return true
+      res.status(403).send('Access denied').end()
+      throw new Error(403)
+    req.checkAccessToLeague = (leagueId) ->
+      if req.session.user?
+        if req.session.user.role is 'root'
+          return true
+        else if req.session.user.role is 'Head' and req.session.user.leagueId is leagueId
+          return true
+      res.status(403).send('Access denied').end()
+      throw new Error(403)
+
+    req.checkAccessToTeam = (teamId) ->
+      if req.session.user?
+        if req.session.user.role is 'root'
+          return true
+        else
+          req.app.models.Team.findById(teamId, (err, team) ->
+
+            if req.session.user.role is 'Head' and req.session.user.leagueId is team.leagueId
+              return true
+            else if req.session.user.role is 'Captain' and req.session.user.teamId is team._id+''
+              return true
+            else
+              res.status(403).send('Access denied').end()
+              throw new Error(403)
+          )
       else
-        throw {code: 403, message: 'Access Denied'}
+        res.status(403).send('Access denied').end()
+        throw new Error(403)
     next()
+
+
+  #todo этот перехватчик не работает!! Разобраться, кто собирает все ошибки
+  app.use (err, req, res, next) ->
+     console.log 'caught', err
+     next()
 
   load = require('express-load')
   load('models').then('controllers').then('routes').into(app)
 
   #todo бред какой-то. Нельзя нормально получить доступ к объекту?
   app.controllers.TablesController.app = app
-
 
   app.on 'event:result_added', app.controllers.TablesController.onResultAdded
   return app

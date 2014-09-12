@@ -1,26 +1,37 @@
-table {
-    width: 700px;
-    text-align: center; 
+.match {
+    border-top: 1px solid #f0f0f0;
+    padding: 10px;
+    text-align: center;
 }
 
-table img {
-    width: 55px;
+.match:nth-child(odd) {
+    background: #fafafa;
 }
 
-table tr {
-    border: 1px solid #f0f0f0;
+.match img {
+    height: 60px;
 }
 
-table td {
-    text-align: center; 
-    font-size: 16pt;
-    line-height: 20px;
+.match .teamName {
+    font-size: 18pt;
 }
 
-table td .players {
+.match .teamName .players {
     font-size: 10pt;
 }
 
-table .score {
-    font-size: 32pt;
+.match .score {
+    font-size: 24pt;
+}
+
+.summary tbody img {
+    height: 20px;
+}
+
+.summary td:nth-child(1){
+    width: 300px;
+}
+
+.summary th:nth-child(2) {
+    font-size: 24pt;
 }

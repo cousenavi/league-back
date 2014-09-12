@@ -4,18 +4,18 @@
   var templates;
   templates = {
     table: function(heads, rows) {
-      return "<table class=\"table\"><thead><th class='active'></th>" + (heads.join('')) + "</thead><tbody>" + (rows.join('')) + "</tbody></table>";
+      return "<table class=\"table\"><thead><th></th>" + (heads.join('')) + "</thead><tbody>" + (rows.join('')) + "</tbody></table>";
     },
     head: function(teamLogo) {
-      return "<th><img src='" + teamLogo + "'></th>";
+      return "<th><img src='/" + teamLogo + "'></th>";
     },
     row: function(team, cells) {
-      return "<tr><td><img src='" + team.logo + "'>&nbsp;" + team.name + "</td>" + (cells.join('')) + "</tr>";
+      return "<tr><td><img src='/" + team.logo + "'>&nbsp;" + team.name + "</td>" + (cells.join('')) + "</tr>";
     },
     cell: function(team, gm) {
       var color, html, m, _i, _len, _ref;
       if (team._id === gm.opponent) {
-        return '<td class="active"></td>';
+        return '<td class="active"><img src="/leagues/portugal/logo/league.png"></td>';
       } else {
         html = '';
         _ref = gm.matches;

@@ -29,5 +29,7 @@ module.exports = ->
 
     homeTeamPlayers: Array
     awayTeamPlayers: Array
+
+    ended: Boolean
   )
   mongoose.model('games', gameSchema)

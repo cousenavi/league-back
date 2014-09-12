@@ -2,21 +2,21 @@
 
 #------------------------------------------------------------------------------------------------#
   templates =
-#--
+    #--
     table: (heads, rows) ->
       """
-        <table class="table"><thead><th class='active'></th>#{heads.join('')}</thead><tbody>#{rows.join('')}</tbody></table>
+        <table class="table"><thead><th></th>#{heads.join('')}</thead><tbody>#{rows.join('')}</tbody></table>
 """
-#--
+    #--
     head: (teamLogo) ->
-      "<th><img src='#{teamLogo}'></th>"
-#--
+      "<th><img src='/#{teamLogo}'></th>"
+    #--
     row: (team, cells) ->
-      "<tr><td><img src='#{team.logo}'>&nbsp;#{team.name}</td>#{cells.join('')}</tr>"
-#--
+      "<tr><td><img src='/#{team.logo}'>&nbsp;#{team.name}</td>#{cells.join('')}</tr>"
+    #--
     cell: (team, gm) ->
       if team._id is gm.opponent
-        '<td class="active"></td>'
+        '<td class="active"><img src="/leagues/portugal/logo/league.png"></td>'
       else
         html = ''
         for m in gm.matches

@@ -1,0 +1,33 @@
+table tbody td:nth-child(1) {
+    width: 15px;
+}
+table tbody td:nth-child(n+3) {
+    width: 50px;
+}
+
+table tbody td:nth-child(n+10) {
+    font-weight: 900;
+}
+table tbody td:nth-child(n+11) {
+    width: 110px;
+}
+
+table tbody tr:nth-child(n+1) {
+    background: url(/img/sprite/gold.png);
+}
+
+table tbody tr:nth-child(n+2) {
+    background: url(/img/sprite/silver.png);
+}
+
+table tbody tr:nth-child(n+3) {
+    background: url(/img/sprite/bronze.png);
+}
+table tbody tr:nth-child(n+4) {
+    background: rgba(26, 178, 255, 0.04);
+}
+
+
+table tbody tr:nth-child(n+15) {
+    background: rgba(255, 3, 21, 0.20);
+}

@@ -3,81 +3,118 @@
     var extractData, registry, templates;
     templates = {
       login: function() {
-        return "<div id=\"loginForm\">\n<input type=\"text\" data-value=\"login\" placeholder='login' autofocus='true'><br><br>\n<input type=\"password\" data-value=\"password\" placeholder='password'><br><br>\n<button id=\"loginBtn\">Go!</button>\n</div>";
+        return "<div id=\"loginForm\">\n<input type=\"text\" data-value=\"login\" class=\"form-control\" placeholder='login'><br>\n<input type=\"password\" data-value=\"password\" class=\"form-control\" placeholder='password'><br>\n<button id=\"loginBtn\" class=\"btn btn-success btn-block\">Go!</button>\n</div>";
       },
       matches: function(matches) {
-        var m;
-        return ((function() {
+        var html, m;
+        html = "<nav class=\"navbar navbar-default\" role=\"navigation\">\n    <div class=\"navbar-header\">\n        <a class=\"navbar-brand\">Выберите матч</a>\n    </div>\n</nav>";
+        return html += ((function() {
           var _i, _len, _results;
           _results = [];
           for (_i = 0, _len = matches.length; _i < _len; _i++) {
             m = matches[_i];
-            _results.push("<button id='" + m._id + "'class='match'>" + m.homeTeamName + " - " + m.awayTeamName + "<br><span class='littleText'>" + m.date + " " + m.time + " " + m.placeName + "</span></button><br>");
+            _results.push("<button class='btn btn-block btn-info match' id='" + m._id + "'class='match'>" + m.homeTeamName + " <br> " + m.awayTeamName + "<br><span class='smallText'>" + m.date + " " + m.time + " " + m.placeName + "</span></button><br>");
           }
           return _results;
         })()).join('');
       },
       game: function(game) {
         var id, p;
-        return "<div id=\"homeTeam\">\n  <b>" + game.homeTeam.name + "</b>\n  " + (((function() {
+        return "<div id=\"homeTeam\" class=\"protocol\">\n    <nav class=\"navbar navbar-default\" role=\"navigation\">\n            <div class=\"navbar-header\">\n                <a class=\"navbar-brand\">" + game.homeTeam.name + ": состав</a>\n            </div>\n      </nav>\n  " + (((function() {
           var _ref, _results;
           _ref = game.homeTeam.players;
           _results = [];
           for (id in _ref) {
             p = _ref[id];
-            _results.push("<button id='" + id + "' class='player homePlayer'>" + p[0] + " " + p[1] + "</button>");
+            _results.push("<button class='btn btn-block btn-default player homePlayer' id='" + id + "' >" + p.number + " " + p.name + "</button>");
           }
           return _results;
-        })()).join('')) + "\n  <button id=\"saveHomeTeamBtn\">OK</button>\n</div>\n\n<div id=\"awayTeam\" style='display: none'>\n  " + (((function() {
+        })()).join('')) + "\n  <button class='btn btn-block btn-success'  id=\"saveHomeTeamBtn\">OK</button>\n</div>\n\n<div id=\"awayTeam\" style='display: none' class=\"protocol\">\n      <nav class=\"navbar navbar-default\" role=\"navigation\">\n            <div class=\"navbar-header\">\n                <a class=\"navbar-brand\">" + game.awayTeam.name + ": состав</a>\n            </div>\n      </nav>\n  " + (((function() {
           var _ref, _results;
           _ref = game.awayTeam.players;
           _results = [];
           for (id in _ref) {
             p = _ref[id];
-            _results.push("<button id='" + id + "' class='player awayPlayer'>" + p[0] + " " + p[1] + "</button>");
+            _results.push("<button class='btn btn-block btn-default player awayPlayer'  id='" + id + "'>" + p.number + " " + p.name + "</button>");
           }
           return _results;
-        })()).join('')) + "\n  <button id=\"saveAwayTeamBtn\">OK</button>\n</div>";
+        })()).join('')) + "\n  <button class='btn btn-block btn-success' id=\"saveAwayTeamBtn\">OK</button>\n</div>";
       },
       events: function() {
-        return "<button class=\"event\" id=\"goalEvent\">Гол</button><br>\n<button class=\"event\" id=\"yellowEvent\">Жк</button><br>\n<button class=\"event\" id=\"redEvent\">Кк</button><br>\n<button class=\"event\" id=\"endEvent\">Конец матча</button><br>";
+        return "    <nav class=\"navbar navbar-default\" role=\"navigation\">\n          <div class=\"navbar-header\">\n              <a class=\"navbar-brand\"> " + registry.currentGame.homeTeam.name + " " + registry.currentGame.homeTeam.score + "-" + registry.currentGame.awayTeam.score + " " + registry.currentGame.awayTeam.name + "</a>\n          </div>\n    </nav>\n<button class=\"btn btn-block btn-info event\" id=\"goalEvent\">Гол</button><br>\n<button class=\"btn btn-block btn-info event\" id=\"yellowEvent\">Жёлтая карточка</button><br>\n<button class=\"btn btn-block btn-info event\" id=\"redEvent\">Прямая красная</button><br>\n<button class=\"btn btn-block btn-success event\" id=\"endEvent\">Конец матча</button><br>";
       },
       goalEvent: function() {
-        return "";
-      },
-      yellowEvent: function() {
-        return "";
-      },
-      redEvent: function() {
-        return "";
-      },
-      playerEvent: function(eventName) {
-        var id, p;
-        return "<table class=\"playerEventTable\" id=\"" + eventName + "\"><thead><th>" + registry.currentGame.homeTeam.name + "</th><th>" + registry.currentGame.awayTeam.name + "</th></thead><tr><td>\n" + (eventName === 'event-goal' ? "<input type='button' value='автогол' class='playerEvent'/>" : void 0) + "\n" + (((function() {
+        var id, pl;
+        return "  <span id='goal'>\n    <nav class=\"navbar navbar-default\" role=\"navigation\">\n      <div class=\"navbar-header\">\n        <a class=\"navbar-brand\">Гол</a>\n      </div>\n    </nav>\n      <div class=\"btn-group btn-group-justified\">\n  <a class=\"btn btn-default active goalEventType\" role=\"button\" id=\"G+\">Гол+ </a>\n  <a class=\"btn btn-default goalEventType\" role=\"button\" id=\"A+\">Пас+ </a>\n  <a class=\"btn btn-default goalEventType\" role=\"button\" id=\"G-\">Гол-</a>\n  <a class=\"btn btn-default goalEventType\" role=\"button\" id=\"A-\">Пас-</a>\n</div>\n      <h2>" + registry.currentGame.homeTeam.name + "</h2>\n      " + (((function() {
           var _ref, _results;
           _ref = registry.currentGame.homeTeam.players;
           _results = [];
           for (id in _ref) {
-            p = _ref[id];
-            _results.push("<input type='button' id='" + id + "' class='playerEvent' value='" + p[0] + "'>");
+            pl = _ref[id];
+            _results.push("<button id='" + id + "' class='btn btn-default playerEvent'>" + pl.number + " <span class='goals'>" + (pl.goals != null ? pl.goals : 0) + "</span> <span class='assists'>" + (pl.assists != null ? pl.assists : 0) + "</span> </button> ");
           }
           return _results;
-        })()).join('')) + "\n</td><td>\n" + (eventName === 'event-goal' ? "<input type='button' value='автогол' class='playerEvent'/>" : void 0) + "\n" + (((function() {
+        })()).join('')) + "\n      <h2>" + registry.currentGame.awayTeam.name + "</h2>\n      " + (((function() {
           var _ref, _results;
           _ref = registry.currentGame.awayTeam.players;
           _results = [];
           for (id in _ref) {
-            p = _ref[id];
-            _results.push("<input type='button' id='" + id + "' class='playerEvent' value='" + p[0] + "'>");
+            pl = _ref[id];
+            _results.push("<button id='" + id + "' class='btn btn-default playerEvent'>" + pl.number + " <span class='goals'>" + (pl.goals != null ? pl.goals : 0) + "</span> <span class='assists'>" + (pl.assists != null ? pl.assists : 0) + "</span> </button> ");
           }
           return _results;
-        })()).join('')) + "\n</td>\n</tr></table>\n<button id=\"saveEventBtn\">OK</button>";
+        })()).join('')) + "\n<br><br>\n    <button class=\"btn btn-block btn-success\" id=\"saveEvent\">OK</button>\n  </span>";
+      },
+      yellowEvent: function() {
+        var id, pl;
+        return "<span id='yellow'>\n<nav class=\"navbar navbar-default\" role=\"navigation\">\n  <div class=\"navbar-header\">\n    <a class=\"navbar-brand\">Жёлтая карточка</a>\n  </div>\n</nav>\n  <h4>Millwall</h4>\n  " + (((function() {
+          var _ref, _results;
+          _ref = registry.currentGame.homeTeam.players;
+          _results = [];
+          for (id in _ref) {
+            pl = _ref[id];
+            _results.push("<button id='" + id + "' class='btn btn-default playerEvent " + (pl.yellow === 2 ? "btn-selected-red" : pl.yellow === 1 ? "btn-selected-yellow" : "") + "'>" + pl.number + "</button> ");
+          }
+          return _results;
+        })()).join('')) + "\n  <h4>Wimbledon</h4>\n  " + (((function() {
+          var _ref, _results;
+          _ref = registry.currentGame.awayTeam.players;
+          _results = [];
+          for (id in _ref) {
+            pl = _ref[id];
+            _results.push("<button id='" + id + "' class='btn btn-default playerEvent " + (pl.yellow === 2 ? "btn-selected-red" : pl.yellow === 1 ? "btn-selected-yellow" : "") + "'>" + pl.number + "</button> ");
+          }
+          return _results;
+        })()).join('')) + "\n\n<br><br><button class=\"btn btn-block btn-success\" id=\"saveEvent\">OK</button>\n</span>";
+      },
+      redEvent: function() {
+        var id, pl;
+        console.log(registry.currentGame.homeTeam.players);
+        return "<span id='red'>\n<nav class=\"navbar navbar-default\" role=\"navigation\">\n  <div class=\"navbar-header\">\n    <a class=\"navbar-brand\">Прямая красная</a>\n  </div>\n</nav>\n  <h4>Millwall</h4>\n  " + (((function() {
+          var _ref, _results;
+          _ref = registry.currentGame.homeTeam.players;
+          _results = [];
+          for (id in _ref) {
+            pl = _ref[id];
+            _results.push("<button id='" + id + "' class='btn btn-default playerEvent " + (pl.red === 1 ? "btn-selected-red" : "") + "'>" + pl.number + "</button> ");
+          }
+          return _results;
+        })()).join('')) + "\n  <h4>Wimbledon</h4>\n  " + (((function() {
+          var _ref, _results;
+          _ref = registry.currentGame.awayTeam.players;
+          _results = [];
+          for (id in _ref) {
+            pl = _ref[id];
+            _results.push("<button id='" + id + "' class='btn btn-default playerEvent " + (pl.red === 1 ? "btn-selected-red" : "") + "' >" + pl.number + "</button> ");
+          }
+          return _results;
+        })()).join('')) + "\n\n<br><br><button class=\"btn btn-block btn-success\" id=\"saveEvent\">OK</button>\n</span>";
       },
       endEvent: function() {
-        return "<button id=\"homeTeamChoise\">выбор " + registry.currentGame.homeTeam.name + "</button> <br>\n<button type=\"button\" id=\"awayTeamChoise\">выбор " + registry.currentGame.awayTeam.name + "</button> <br>\n<button id=\"saveChoises\">OK</button>";
+        return "<button class=\"btn btn-block btn-info\" id=\"homeTeamChoise\">выбор<br>" + registry.currentGame.homeTeam.name + "</button> <br>\n<button class=\"btn btn-block btn-info\"  type=\"button\" id=\"awayTeamChoise\">выбор<br>" + registry.currentGame.awayTeam.name + "</button> <br>\n<button class=\"btn btn-block btn-success\" id=\"saveChoises\">OK</button>";
       },
       choise: function(side) {
-        var id, mark, pl, players, team;
+        var html, id, mark, pl, players, team, _i;
         players = [];
         if (side === 'Home') {
           players = registry.currentGame.awayTeam.players;
@@ -86,22 +123,19 @@
           players = registry.currentGame.homeTeam.players;
           team = registry.currentGame.awayTeam;
         }
-        return "  <div class=\"strip\">оценка судье:</div>\n<div>\n  " + (((function() {
-          var _i, _results;
-          _results = [];
-          for (mark = _i = 2; _i <= 5; mark = ++_i) {
-            _results.push("<input type='button' class='playerEvent refereeMark mark" + side + " " + (mark === team.refereeMark ? "activeBtn" : "") + "' value='" + mark + "'>");
-          }
-          return _results;
-        })()).join('')) + "\n</div>\n  <br><div class=\"strip\">лучшие игроки соперника:</div>\n  <div>\n  " + (((function() {
+        html = "    <nav class=\"navbar navbar-default\" role=\"navigation\">\n        <div class=\"navbar-header\">\n            <a class=\"navbar-brand\">" + team.name + ": оценка судье</a>\n        </div>\n    </nav>\n<div>\n    <div class=\"row\">";
+        for (mark = _i = 2; _i <= 5; mark = ++_i) {
+          html += "<div class=\"col-xs-3 col-md-3 col-lg-3\">\n  <button type=\"button\" class='btn btn-default btn-block refereeMark mark" + side + " " + (mark === team.refereeMark ? ":active" : "") + "'>" + mark + "</button>\n</div>";
+        }
+        return html += "</div><br>\n  <nav class=\"navbar navbar-default\" role=\"navigation\">\n    <div class=\"navbar-header\">\n        <a class=\"navbar-brand\">лучшие игроки соперника</a>\n    </div>\n  </nav>\n<div>\n" + (((function() {
           var _results;
           _results = [];
           for (id in players) {
             pl = players[id];
-            _results.push("<input type='button' id='" + id + "' class='playerEvent bestPlayer " + (pl.star != null ? "activeBtn" : "") + "' value='" + pl[0] + "'>");
+            _results.push("<button class='btn btn-default playerEvent bestPlayer " + (pl.star != null ? ":active" : "") + "'  id='" + id + "' class='playerEvent bestPlayer }'>" + pl.number + "</button>");
           }
           return _results;
-        })()).join('')) + "\n  </div><br><button id=\"save" + side + "TeamChoise\">OK</button>";
+        })()).join('')) + "\n</div><br><button class=\"btn btn-block btn-success\" id=\"save" + side + "TeamChoise\">OK</button>";
       },
       error: function() {
         return 'error';
@@ -128,7 +162,9 @@
       });
       return data;
     };
-    registry = {};
+    registry = {
+      currentEvent: 'G+'
+    };
     registry.load = function() {
       var key, prop, _ref, _results;
       _ref = JSON.parse(localStorage.getItem('registry'));
@@ -153,6 +189,9 @@
     };
     registry.setCurrentGame = function(game) {
       this.currentGame = game;
+      if (game) {
+        this.currentGame.homeTeam.score = this.currentGame.awayTeam.score = 0;
+      }
       return this.save();
     };
     registry.setUser = function(user) {
@@ -161,12 +200,10 @@
     };
     registry.setHomeRefereeMark = function(mark) {
       this.currentGame.homeTeam.refereeMark = parseInt(mark);
-      console.log('home', mark, this.currentGame.homeTeam);
       return this.save();
     };
     registry.setAwayRefereeMark = function(mark) {
       this.currentGame.awayTeam.refereeMark = parseInt(mark);
-      console.log('away', mark, this.currentGame.awayTeam);
       return this.save();
     };
     registry.removeBestPlayer = function(id) {
@@ -187,9 +224,57 @@
     };
     registry.setPlayerActivity = function(id, isActive) {
       if (this.currentGame.homeTeam.players[id] != null) {
-        this.currentGame.homeTeam.players[id][2] = isActive;
+        this.currentGame.homeTeam.players[id].played = isActive;
       } else {
-        this.currentGame.awayTeam.players[id][2] = isActive;
+        this.currentGame.awayTeam.players[id].played = isActive;
+      }
+      return this.save();
+    };
+    registry.setPlayerGoals = function(id, goals) {
+      var pl, _ref, _ref1;
+      if (this.currentGame.homeTeam.players[id] != null) {
+        this.currentGame.homeTeam.players[id].goals = goals;
+      } else {
+        this.currentGame.awayTeam.players[id].goals = goals;
+      }
+      this.currentGame.homeTeam.score = this.currentGame.awayTeam.score = 0;
+      _ref = this.currentGame.homeTeam.players;
+      for (id in _ref) {
+        pl = _ref[id];
+        if (pl.goals != null) {
+          this.currentGame.homeTeam.score += parseInt(pl.goals);
+        }
+      }
+      _ref1 = this.currentGame.awayTeam.players;
+      for (id in _ref1) {
+        pl = _ref1[id];
+        if (pl.goals != null) {
+          this.currentGame.awayTeam.score += parseInt(pl.goals);
+        }
+      }
+      return this.save();
+    };
+    registry.setPlayerAssists = function(id, assists) {
+      if (this.currentGame.homeTeam.players[id] != null) {
+        this.currentGame.homeTeam.players[id].assists = assists;
+      } else {
+        this.currentGame.awayTeam.players[id].assists = assists;
+      }
+      return this.save();
+    };
+    registry.setPlayerYellow = function(id, yellow) {
+      if (this.currentGame.homeTeam.players[id] != null) {
+        this.currentGame.homeTeam.players[id].yellow = yellow;
+      } else {
+        this.currentGame.awayTeam.players[id].yellow = yellow;
+      }
+      return this.save();
+    };
+    registry.setPlayerRed = function(id, red) {
+      if (this.currentGame.homeTeam.players[id] != null) {
+        this.currentGame.homeTeam.players[id].red = red;
+      } else {
+        this.currentGame.awayTeam.players[id].red = red;
       }
       return this.save();
     };
@@ -245,9 +330,9 @@
         }
       });
     });
-    $('#container').on('click', '.player', function() {
-      $(this).toggleClass('activePlayer');
-      return registry.setPlayerActivity($(this).attr('id'), $(this).hasClass('activePlayer'));
+    $('#container').on('click', '.protocol .player', function() {
+      $(this).toggleClass('btn-selected');
+      return registry.setPlayerActivity($(this).attr('id'), $(this).hasClass('btn-selected'));
     });
     $('#container').on('click', '#saveHomeTeamBtn', function() {
       $('#homeTeam').hide();
@@ -278,23 +363,67 @@
     $('#container').on('click', '#awayTeamChoise', function() {
       return $('#container').html(templates.choise('Away'));
     });
+    $('#container').on('click', '.goalEventType', function() {
+      $(this).parent().find('.goalEventType').each(function() {
+        return $(this).removeClass('active');
+      });
+      $(this).addClass('active');
+      return registry.currentEvent = $(this).attr('id');
+    });
+    $('#container').on('click', '#goal .playerEvent', function() {
+      if (registry.currentEvent === 'G+') {
+        $(this).find('.goals').html(parseInt($(this).find('.goals').html()) + 1);
+      }
+      if (registry.currentEvent === 'G-') {
+        $(this).find('.goals').html(parseInt($(this).find('.goals').html()) - 1);
+      }
+      if (registry.currentEvent === 'A+') {
+        $(this).find('.assists').html(parseInt($(this).find('.assists').html()) + 1);
+      }
+      if (registry.currentEvent === 'A-') {
+        $(this).find('.assists').html(parseInt($(this).find('.assists').html()) - 1);
+      }
+      registry.setPlayerGoals($(this).attr('id'), $(this).find('.goals').html());
+      return registry.setPlayerAssists($(this).attr('id'), $(this).find('.assists').html());
+    });
+    $('#container').on('click', '#yellow .playerEvent', function() {
+      if ($(this).hasClass('btn-selected-yellow')) {
+        $(this).removeClass('btn-selected-yellow').addClass('btn-selected-red');
+        return registry.setPlayerYellow($(this).attr('id'), 2);
+      } else if ($(this).hasClass('btn-selected-red')) {
+        $(this).removeClass('btn-selected-red');
+        return registry.setPlayerYellow($(this).attr('id'), 0);
+      } else {
+        $(this).addClass('btn-selected-yellow');
+        return registry.setPlayerYellow($(this).attr('id'), 1);
+      }
+    });
+    $('#container').on('click', '#red .playerEvent', function() {
+      if ($(this).hasClass('btn-selected-red')) {
+        $(this).removeClass('btn-selected-red');
+        return registry.setPlayerRed($(this).attr('id'), 0);
+      } else {
+        $(this).addClass('btn-selected-red');
+        return registry.setPlayerRed($(this).attr('id'), 1);
+      }
+    });
     $('#container').on('click', '.refereeMark', function() {
       if ($(this).hasClass('markHome')) {
-        registry.setHomeRefereeMark($(this).val());
+        registry.setHomeRefereeMark($(this).html());
       } else {
-        registry.setAwayRefereeMark($(this).val());
+        registry.setAwayRefereeMark($(this).html());
       }
-      $(this).parent().find('.activeBtn').each(function() {
-        return $(this).removeClass('activeBtn');
+      $(this).parent().parent().find('.btn-selected').each(function() {
+        return $(this).removeClass('btn-selected');
       });
-      return $(this).addClass('activeBtn');
+      return $(this).addClass('btn-selected');
     });
     $('#container').on('click', '.bestPlayer', function() {
-      if ($(this).hasClass('activeBtn')) {
-        $(this).removeClass('activeBtn');
+      if ($(this).hasClass('btn-selected')) {
+        $(this).removeClass('btn-selected');
         return registry.removeBestPlayer($(this).attr('id'));
-      } else if ($(this).parent().find('.activeBtn').length < 3) {
-        $(this).addClass('activeBtn');
+      } else if ($(this).parent('.btn-selected').length < 3) {
+        $(this).addClass('btn-selected');
         return registry.setBestPlayer($(this).attr('id'));
       }
     });
@@ -307,6 +436,7 @@
     $('#container').on('click', '#saveChoises', function() {
       $(this).html('...');
       return registry.sync(function() {
+        registry.setCurrentGame(null);
         return location.reload();
       });
     });
@@ -322,7 +452,7 @@
       }
     });
     return $('#container').on('click', '#saveEvent', function() {
-      return console.log('ok');
+      return $('#container').html(templates.events());
     });
   });
 

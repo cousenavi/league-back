@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+
+    <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/coffee-script.js"></script>
+    <script src="/blocks/listplayers/listplayers.js"></script>
+    <link rel="stylesheet" href="/blocks/listplayers/listplayers.css">
+</head>
+<body>
+<div id="lpl" style="min-width: 800px"></div>
+<script>
+    var field = location.search.substr(1);
+    $('#lpl').listplayers('54009eb17336983c24342ed9', field)
+</script>
+</body>
+</html>

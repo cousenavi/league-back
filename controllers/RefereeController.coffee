@@ -8,8 +8,6 @@ class RefereeController extends require('./AbstractCrudController')
       res.send(refs)
     )
 
-
-
   add: (req, res) ->
     req.requireRole('admin')
     super req, res

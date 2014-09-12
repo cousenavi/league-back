@@ -1,0 +1,8 @@
+#topplayers td:nth-child(n+2), #topplayers th:nth-child(n+2) {
+    width: 75px;
+    text-align: center;
+}
+
+#topplayers .active {
+    background: rgba(106, 202, 93, 0.07);
+}

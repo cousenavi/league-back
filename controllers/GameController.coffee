@@ -2,8 +2,6 @@ class GameController extends require('./AbstractCrudController')
   model: (req) ->
     req.app.models.Game
 
-
-
   get: (req, res) =>
     @model(req).findById(req.params.id, (err, model) ->
       res.send model
@@ -39,7 +37,6 @@ class GameController extends require('./AbstractCrudController')
     return new Date(dt[1]+'/'+dt[0]+'/'+dt[2]+' '+tm['0']+':'+tm[1])
 
   add: (req, res) ->
-    req.requireRole('admin')
     req.body.refereeId = null if req.body.refereeId is ''
     req.body.datetime = formatDatetime(req.body.date, req.body.time)
 
@@ -56,7 +53,6 @@ class GameController extends require('./AbstractCrudController')
         )
 
   upd: (req, res) ->
-    req.requireRole('admin')
     req.body.refereeId = null if req.body.refereeId is ''
     req.body.datetime = formatDatetime(req.body.date, req.body.time)
 
@@ -68,7 +64,6 @@ class GameController extends require('./AbstractCrudController')
     )
 
   del: (req, res) =>
-    req.requireRole('admin')
     super req, res
 
 module.exports = new GameController()
