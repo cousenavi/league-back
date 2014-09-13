@@ -2,6 +2,11 @@ class PlayerController extends require('./AbstractCrudController')
   getAll: (req, res) =>
     if req.checkAccessToTeam(req.query.teamId)
       @model(req).find(req.query, (err, models) =>
+        models.sort( (a, b) ->
+          priority = ['GK', 'CB', 'LB', 'RB', 'CM', 'LM', 'RM', 'ST']
+          if priority.indexOf(a.position) > priority.indexOf(b.position) then 1 else -1
+        )
+
         res.send models
       )
 

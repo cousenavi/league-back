@@ -14,7 +14,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
       return "<div class=\"alert alert-danger\" role=\"alert\">" + errorText + "</div>";
     },
     popup: function(head, content, footer) {
-      return "<div class=\"modal\">\n          <div class=\"modal-dialog\">\n            <div class=\"modal-content\">\n                <div class=\"modal-header\">\n                    <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>\n                    <h4 class=\"modal-title\">" + head + "</h4>\n                </div>\n                <div class=\"modal-body\">" + content + "</div>\n                <div class=\"modal-footer\">" + footer + "</div>\n            </div>\n          </div>";
+      return "<div class=\"modal active\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n  <div class=\"modal-dialog\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×</button>\n        <h4 class=\"modal-title\">" + head + "</h4>\n      </div>\n      <div class=\"modal-body\">" + content + "</div>\n      <div class=\"modal-footer\">" + footer + "</div>\n    </div>\n  </div>\n</div>";
     },
     hiddenModel: function(model) {
       var html, key, value;
@@ -119,7 +119,7 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
 
   $('body').on('click', '.modal .btn', function() {
     $('.modal').hide();
-    return $('#container').html('...');
+    return $('#container').html('');
   });
 
 }).call(this);
