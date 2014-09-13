@@ -16,7 +16,7 @@ $ ->
       <input type='hidden' data-value='teamId' value='#{player.teamId}'>
       <div class="row">
          <div class="col-xs-12 col-md-12 col-lg-12">
-            <input type="text" class="form-control" data-value='name' value="#{if player.name? then player.name else ''}" tabindex=1 style="text-transform:uppercase;" autofocus tabindex=1>
+            <input type="text" class="form-control" data-value='name' value="#{if player.name? then player.name else ''}" tabindex=1 style="text-transform:uppercase;" autofocus tabindex=1 placeholder='NAME'>
          </div>
       </div><br>
       <div class="row">
@@ -28,7 +28,7 @@ $ ->
             </select>
          </div>
          <div class="col-xs-6 col-md-6 col-lg-6" >
-            <input type="text" class="form-control" data-value='number'  style='text-align: center' tabindex='3' value="#{if player.number? then player.number else ''}">
+            <input type="text" class="form-control" data-value='number'  style='text-align: center' tabindex='3' value="#{if player.number? then player.number else ''}" placeholder='№'>
          </div>
       </div>
   """

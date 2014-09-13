@@ -34,6 +34,7 @@
     });
     $('#container').on('click', '#loginBtn', function() {
       var model;
+      $(this).html('...');
       model = extractData($(this).parent());
       return request({
         url: '/adminapi/login',
@@ -42,6 +43,11 @@
         success: function(user) {
           localStorage.setItem('user', JSON.stringify(user));
           return $('body').trigger('login', [user]);
+        },
+        error: function(error) {
+          $('#loginBtn').html('Go!');
+          $('#container .alert-danger').remove();
+          return $('#container').prepend(window.templates.error(error.responseText));
         }
       });
     });

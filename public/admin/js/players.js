@@ -21,7 +21,7 @@
       player = player || {
         teamId: localStorageRead('user').teamId
       };
-      return "" + (player._id != null ? "<input type='hidden' data-value='_id' value='" + player._id + "'>" : "") + "\n<input type='hidden' data-value='teamId' value='" + player.teamId + "'>\n<div class=\"row\">\n   <div class=\"col-xs-12 col-md-12 col-lg-12\">\n      <input type=\"text\" class=\"form-control\" data-value='name' value=\"" + (player.name != null ? player.name : '') + "\" tabindex=1 style=\"text-transform:uppercase;\" autofocus tabindex=1>\n   </div>\n</div><br>\n<div class=\"row\">\n   <div class=\"col-xs-6 col-md-6 col-lg-6\" >\n      <select class=\"form-control\" id=\"positions\" data-value=\"position\" tabindex=\"2\">\n           " + ((function() {
+      return "" + (player._id != null ? "<input type='hidden' data-value='_id' value='" + player._id + "'>" : "") + "\n<input type='hidden' data-value='teamId' value='" + player.teamId + "'>\n<div class=\"row\">\n   <div class=\"col-xs-12 col-md-12 col-lg-12\">\n      <input type=\"text\" class=\"form-control\" data-value='name' value=\"" + (player.name != null ? player.name : '') + "\" tabindex=1 style=\"text-transform:uppercase;\" autofocus tabindex=1 placeholder='NAME'>\n   </div>\n</div><br>\n<div class=\"row\">\n   <div class=\"col-xs-6 col-md-6 col-lg-6\" >\n      <select class=\"form-control\" id=\"positions\" data-value=\"position\" tabindex=\"2\">\n           " + ((function() {
         var _i, _len, _ref, _results;
         _ref = ['GK', 'CB', 'RB', 'LB', 'CM', 'LM', 'RM', 'ST'];
         _results = [];
@@ -30,7 +30,7 @@
           _results.push("<option " + (pos === player.position ? 'selected' : '') + ">" + pos + "</option> ");
         }
         return _results;
-      })()) + "\n      </select>\n   </div>\n   <div class=\"col-xs-6 col-md-6 col-lg-6\" >\n      <input type=\"text\" class=\"form-control\" data-value='number'  style='text-align: center' tabindex='3' value=\"" + (player.number != null ? player.number : '') + "\">\n   </div>\n</div>";
+      })()) + "\n      </select>\n   </div>\n   <div class=\"col-xs-6 col-md-6 col-lg-6\" >\n      <input type=\"text\" class=\"form-control\" data-value='number'  style='text-align: center' tabindex='3' value=\"" + (player.number != null ? player.number : '') + "\" placeholder='№'>\n   </div>\n</div>";
     };
     templates.popupFooter = function(player) {
       return "<div class=\"row\">\n  <div class=\"col-xs-6  col-md-6 col-lg-6\">\n        " + (player != null ? "<button id='" + player._id + "' class='btn btn-danger delBtn' style='float: left'>delete</button>" : '') + "\n  </div>\n  <div class=\"col-xs-6 col-md-6 col-lg-6\">\n        <button class=\"btn btn-success addBtn\" tabindex=4>save</button>\n  </div>\n</div>";

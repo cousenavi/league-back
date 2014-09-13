@@ -107,4 +107,9 @@
     }
   };
 
+  $('body').on('click', '.modal .btn', function() {
+    $('.modal').hide();
+    return $('#container').html('...');
+  });
+
 }).call(this);

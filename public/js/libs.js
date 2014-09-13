@@ -117,4 +117,9 @@ if("undefined"==typeof jQuery)throw new Error("Bootstrap's JavaScript requires j
     }
   };
 
+  $('body').on('click', '.modal .btn', function() {
+    $('.modal').hide();
+    return $('#container').html('...');
+  });
+
 }).call(this);

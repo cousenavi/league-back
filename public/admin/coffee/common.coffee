@@ -80,3 +80,8 @@ window.localStorageRead = (key) ->
     return JSON.parse(val)
   else return null
 #---------------------------------------------------------#
+
+$('body').on('click', '.modal .btn', ->
+  $('.modal').hide()
+  $('#container').html('...')
+)

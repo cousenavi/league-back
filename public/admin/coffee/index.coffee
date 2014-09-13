@@ -43,10 +43,19 @@ $ ->
   )
 
   $('#container').on('click', '#loginBtn', ->
+    $(@).html('...')
     model = extractData($(@).parent())
-    request(url: '/adminapi/login', method: 'POST', params: model, success: (user) ->
-      localStorage.setItem('user', JSON.stringify(user))
-      $('body').trigger('login', [user])
+    request(
+      url: '/adminapi/login',
+      method: 'POST',
+      params: model,
+      success: (user) ->
+        localStorage.setItem('user', JSON.stringify(user))
+        $('body').trigger('login', [user])
+      error: (error) ->
+        $('#loginBtn').html('Go!')
+        $('#container .alert-danger').remove()
+        $('#container').prepend(window.templates.error(error.responseText))
     )
   )
 
