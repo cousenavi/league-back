@@ -38,7 +38,7 @@ $ ->
        html += """
                 <tr id='#{team._id}'>
                   <td class="col-md-1" style="text-align: center">
-                    <img src="#{team.logo}"  height="50px">
+                    <img src="/#{team.logo}"  height="50px">
                   </td>
                   <td class="col-md-10">
                     <span style="font-size: 18pt">#{team.name}</span>

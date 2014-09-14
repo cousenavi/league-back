@@ -7,7 +7,7 @@ module.exports = ->
     password: String
 
     role: String # root|head|captain
-    leagueId:     {type: mongoose.Schema.Types.ObjectId, null: true}
+    leagueId:      {type: mongoose.Schema.Types.ObjectId, null: true}
     teamId:        {type: mongoose.Schema.Types.ObjectId, null: true}
   )
 

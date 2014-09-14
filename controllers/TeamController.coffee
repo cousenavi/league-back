@@ -3,15 +3,15 @@ class TeamController extends require('./AbstractCrudController')
     req.app.models.Team
 
   add: (req, res) ->
-    req.requireRole('admin')
+    req.checkRootAccess()
     super req, res
 
   upd: (req, res) ->
-    req.requireRole('admin')
+    req.checkRootAccess()
     super req, res
 
   del: (req, res) =>
-    req.requireRole('admin')
+    req.checkRootAccess()
     super req, res
 
 module.exports = new TeamController()
