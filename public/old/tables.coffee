@@ -72,7 +72,7 @@ $ ->
                 <td>#{team.position}</td>
                 <td>#{
                     if team.logo? and team.logo isnt ''
-                      "<img style='width: 20px; height: 20px' src='#{team.logo}'>&nbsp;"
+                      "<img style='width: 20px; height: 20px' src='/#{team.logo}'>&nbsp;"
                     else
                       ''
                   }#{team.name}</td>
@@ -110,7 +110,7 @@ $ ->
           for team in table.teams
             html += """<tr><td>#{
                 if team.logo? and team.logo isnt ''
-                  "<img style='width: 20px; height: 20px' src='#{team.logo}'>&nbsp;"
+                  "<img style='width: 20px; height: 20px' src='/#{team.logo}'>&nbsp;"
                 else
                   ''
             }#{team.name}</td>"""
@@ -178,7 +178,7 @@ $ ->
             for pl in table.players
               html += """
                 <tr>
-                  <td>#{if pl.teamLogo then "<img style='width: 20px; height: 20px' src='#{pl.teamLogo}'>&nbsp;" else "" }#{pl.name}</td>
+                  <td>#{if pl.teamLogo then "<img style='width: 20px; height: 20px' src='/#{pl.teamLogo}'>&nbsp;" else "" }#{pl.name}</td>
                   <td>#{pl.goals}</td>
                   <td>#{pl.assists}</td>
                   <td>#{pl.points}</td>
