@@ -4,17 +4,20 @@
     templates.sections = function(user) {
       var html;
       html = '';
-      if (user.role === 'head' || user.role === 'root') {
-        html += "<a class='btn btn-block btn-info match' href=\"teams\">Teams</a><br>";
+      if (user.role === 'Head' || user.role === 'root') {
+        html += "<a class='btn btn-block btn-info match' href=\"teams\" disabled>Teams</a><br>";
       }
-      if (user.role === 'head' || user.role === 'root') {
-        html += "<a class='btn btn-block btn-info match' href=\"players\">Players</a><br>";
+      if (user.role === 'Head' || user.role === 'root') {
+        html += "<a class='btn btn-block btn-info match' href=\"players\" disabled>Players</a><br>";
       }
-      if (user.role === 'head' || user.role === 'root') {
+      if (user.role === 'Head' || user.role === 'root') {
         html += "<a class='btn btn-block btn-info match' href=\"games\">Games</a><br>";
       }
-      if (user.role === 'head' || user.role === 'root') {
-        html += "<a class='btn btn-block btn-info match' href=\"referees\">Referrees</a><br>\n";
+      if (user.role === 'Head' || user.role === 'root') {
+        html += "<a class='btn btn-block btn-info match' href=\"referees\" disabled>Referrees</a><br>";
+      }
+      if (user.role === 'Head' || user.role === 'root') {
+        html += "<a class='btn btn-block btn-info match' href=\"places\" disabled>Places</a><br>";
       }
       if (user.role === 'root') {
         html += "<a class='btn btn-block btn-info match' href=\"users\">Users</a><br>";

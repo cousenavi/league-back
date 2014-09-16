@@ -8,33 +8,11 @@ var gulp = require('gulp'),
 //sourcemaps = require('gulp-sourcemaps'), TEMPORARY DISABLED
 
 
-gulp.task('mobile-scripts', function() {
-    return gulp.src('public/mobile/coffee/*.coffee')
-        .pipe(coffee())
-        .pipe(gulp.dest('public/mobile/js/'))
-        .pipe(concat('main.js'))
-        .pipe(gulp.dest('public/mobile/js/'))
-        .pipe(uglify())
-        .pipe(gulp.dest('public/mobile/compiled/'))
-        .pipe(notify({ message: 'Scripts task complete' }));
-});
-
-
 gulp.task('admin-scripts', function() {
     return gulp.src('public/admin/coffee/*.coffee')
         .pipe(coffee())
         .pipe(gulp.dest('public/admin/js/'))
         .pipe(uglify())
-        .pipe(notify({ message: 'Scripts task complete' }));
-});
-
-
-gulp.task('mobile-scripts-concat', function() {
-    return gulp.src(['public/mobile/js/jquery.min.js', 'public/mobile/js/main.js'])
-        .pipe(concat('main.js'))
-        .pipe(gulp.dest('public/mobile/js/'))
-        .pipe(uglify())
-        .pipe(gulp.dest('public/mobile/compiled/'))
         .pipe(notify({ message: 'Scripts task complete' }));
 });
 
@@ -47,6 +25,13 @@ gulp.task('deploy-js', function() {
        .pipe(concat('libs.js'))
        .pipe(gulp.dest('public/js/'))
 });
+
+gulp.task('referee-js', function() {
+    return gulp.src([
+       'public/referee/*.coffee'
+    ]).pipe(gulp.dest('public/referee/compiled'))
+});
+
 gulp.task('deploy-css', function() {
    return gulp.src([
        'public/lib/css/bootstrap.min.css',
@@ -58,6 +43,7 @@ gulp.task('deploy-css', function() {
 
 
 gulp.task('watch', function() {
-    gulp.watch('public/mobile/coffee/*.coffee', ['mobile-scripts']);
+    gulp.watch('public/referee/coffee/*.coffee', ['referee-js']);
+    gulp.watch('public/admin/coffee/*.coffee', ['deploy-js']);
     gulp.watch('public/admin/coffee/*.coffee', ['admin-scripts']);
 });

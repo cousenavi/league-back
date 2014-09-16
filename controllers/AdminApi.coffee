@@ -20,8 +20,8 @@ class RefereeApi
   #
   #
   info: (req, res) =>
-    req.checkRootAccess()
-    return {}
+    req.checkHeadAccess()
+    res.send {}
 
   #
   #

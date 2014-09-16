@@ -1,24 +1,29 @@
 $ ->
   templates.sections =  (user) ->
     html = ''
-    if user.role is 'head' or user.role is 'root'
+    if user.role is 'Head' or user.role is 'root'
       html += """
-          <a class='btn btn-block btn-info match' href="teams">Teams</a><br>
+          <a class='btn btn-block btn-info match' href="teams" disabled>Teams</a><br>
 """
 
-    if user.role is 'head' or user.role is 'root'
+    if user.role is 'Head' or user.role is 'root'
       html += """
-          <a class='btn btn-block btn-info match' href="players">Players</a><br>
+          <a class='btn btn-block btn-info match' href="players" disabled>Players</a><br>
 """
-    if user.role is 'head' or user.role is 'root'
+    if user.role is 'Head' or user.role is 'root'
       html += """
           <a class='btn btn-block btn-info match' href="games">Games</a><br>
 """
-    if user.role is 'head' or user.role is 'root'
+    if user.role is 'Head' or user.role is 'root'
       html += """
-          <a class='btn btn-block btn-info match' href="referees">Referrees</a><br>
-
+          <a class='btn btn-block btn-info match' href="referees" disabled>Referrees</a><br>
 """
+
+    if user.role is 'Head' or user.role is 'root'
+      html += """
+          <a class='btn btn-block btn-info match' href="places" disabled>Places</a><br>
+"""
+
     if user.role is 'root'
       html += """
           <a class='btn btn-block btn-info match' href="users">Users</a><br>
