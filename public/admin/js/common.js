@@ -31,6 +31,22 @@
     });
   };
 
+  window.fillData = function($el, model) {
+    $el.find('[data-value]').each(function() {
+      return $(this).val(model[$(this).attr('data-value')]);
+    });
+    $el.find('[data-select-id]').each(function() {
+      var val;
+      val = model[$(this).attr('data-select-id')];
+      return $(this).find('option').each(function() {
+        if ($(this).val() === val) {
+          return $(this).attr('selected', true);
+        }
+      });
+    });
+    return $el;
+  };
+
   window.extractData = function($el) {
     var data;
     data = {};
@@ -49,6 +65,12 @@
         });
         return data[key].push(obj);
       });
+    });
+    $el.find('[data-select-id]').each(function() {
+      return data[$(this).attr('data-select-id')] = $(this).find('option:selected').val();
+    });
+    $el.find('[data-select-value]').each(function() {
+      return data[$(this).attr('data-select-value')] = $(this).find('option:selected').html();
     });
     return data;
   };

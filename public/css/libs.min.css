@@ -34,7 +34,6 @@
     background-color: rgba(255, 0, 0, 0.67) !important ;
 }
 
-
 .playerEvent {
     min-width: 60px;
     margin: 5px;
@@ -69,4 +68,14 @@
     position: absolute;
     top: 0;
     right: 0;
+}
+
+.separation-row {
+    background: #e0e0e0;
+    border: 1px solid #aaa;
+}
+.separation-row td {
+    padding: 1px 5px 1px 5px !important;
+    font-weight: 900;
+    border: 1px solid #aaa  !important;
 }

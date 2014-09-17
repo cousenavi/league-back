@@ -1,26 +1,34 @@
 $ ->
   templates.games = (games) ->
-  console.log games
-  """
+    currDate = ""
+    """
       <button class="btn btn-block btn-success" id="addBtn" autofocus><span class="glyphicon glyphicon-plus"></span></button>
-      <table class="table table-hover">
-      #{("<tr>#{templates.hiddenModel(gm)}<td>#{gm.homeTeamName}</td><td>#{gm.awayTeamName}</td><td>#{pl.position}</td></tr>" for gm in games).join('')}
+      <table class="table">
+      #{( (if currDate isnt gm.date then templates.separationRow(currDate = gm.date) else '')+"<tr #{if !gm.homeTeamScore? then 'class=\'game-notstarted\'' else ''}>#{templates.hiddenModel(gm)}<td>#{gm.homeTeamName} - #{gm.awayTeamName}
+      #{if gm.homeTeamScore? then '<b>'+gm.homeTeamScore+'- '+gm.awayTeamScore+'</b>' else ''}
+      </td><td style='text-align: right'>#{gm.tourNumber}тур</td></tr>
+" for gm in games).join('')}
       </table>
   """
 
-  templates.modal = (game) -> """
+  templates.separationRow = (dt) ->
+    "<tr><td></td><td></td></tr><tr class='separation-row'><td>#{dt}</td></tr>"
+
+
+  templates.modal = (game, teams) -> """
 <div class="modal active" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
+        #{templates.hiddenModel(game)}
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title">#{if !game? then 'Добавление матча' else 'Редактирование матча'}</h4>
+        <h4 class="modal-title">#{if !game._id? then 'Добавление матча' else 'Редактирование матча'}</h4>
       </div>
-      <div class="modal-body">#{templates.modalBody(game)}</div>
+      <div class="modal-body">#{templates.modalBody(game, teams) }</div>
       <div class="modal-footer">
         <div class="row">
           <div class="col-xs-6  col-md-6 col-lg-6">
-                #{if game? then "<button id='#{player._id}' class='btn btn-danger delBtn' style='float: left'>delete</button>" else ''}
+                #{if game._id? then "<button id='#{game._id}' class='btn btn-danger delBtn' style='float: left'>delete</button>" else ''}
           </div>
           <div class="col-xs-6 col-md-6 col-lg-6">
                 <button class="btn btn-success addBtn" tabindex=4>save</button>
@@ -31,28 +39,26 @@ $ ->
   </div>
 </div>
 """
+
   templates.modalBody = (game, teams) -> """
     <div class="row">
-          <div class="col-xs-6  col-md-6 col-lg-6">
-              #{templates.modal}
+          <div class="col-xs-6 col-md-6 col-lg-6" data-select-id="homeTeamId" data-select-value="homeTeamName">
+            #{templates.teamSelect(teams)}
           </div>
-          <div class="col-xs-6 col-md-6 col-lg-6">
-            #{templates.teamSelect(teamSelect(teams))}
+          <div class="col-xs-6 col-md-6 col-lg-6" data-select-id="awayTeamId" data-select-value="awayTeamName">
+            #{templates.teamSelect(teams)}
           </div>
     </div><br>
 
     <div class="row">
-          <div class="col-xs-2  col-md-2 col-lg-2">
-                <input type="text" class="form-control" placeholder='тур'>
+          <div class="col-xs-5  col-md-5 col-lg-5">
+                <input type="text" data-value="tourNumber" class="form-control" placeholder='тур'>
           </div>
-          <div class="col-xs-6 col-md-6 col-lg-6">
-                <input type="text" class="form-control" placeholder='дата'>
-          </div>
-          <div class="col-xs-4 col-md-4 col-lg-4">
-                <input type="text" class="form-control" placeholder='время'>
+          <div class="col-xs-7 col-md-7 col-lg-7">
+                <input type="text" id="date" data-value="date" class="form-control" placeholder='дата'>
           </div>
     </div><br>
-
+<!--
     <div class="row">
           <div class="col-xs-6  col-md-6 col-lg-6">
             <select></select>
@@ -61,6 +67,7 @@ $ ->
             <select></select>
           </div>
     </div>
+-->
 """
 
   templates.teamSelect = (teams) ->
@@ -70,9 +77,24 @@ $ ->
 
   #==============================================================++#
 
-  $('#container').on('click', '#addBtn',  ->
-    $(templates.modal()).modal(show: true)
-    $('.modal [data-value=name]').focus()
+  $('body').on('click', '.addBtn', ->
+    console.log model = extractData($('.modal'))
+    request(
+      method: 'POST'
+      url: '/games/add'
+      params: model
+      success: (data) -> location.reload()
+    )
+  )
+
+  $('body').on('click', '.delBtn', ->
+    console.log id = $(@).attr('id')
+    request(
+      method: 'POST'
+      url: '/games/del'
+      params: {_id: id}
+      success: (data) -> location.reload()
+    )
   )
 
   #==============================================================++#
@@ -88,8 +110,30 @@ $ ->
       $.getJSON('/places')   #todo здесь тоже добавить проверку на принадлежность лиге
       $.getJSON('/referees') #todo здесь тоже добавить проверку на принадлежность лиге
       $.getJSON("/games?leagueId=#{user.leagueId}")
-    ).then( (teams, places, referees, games) ->
-      $('#container').html(
-        templates.games(games[0])
-      )
-    );
+    ).then(
+      (teams, places, referees, games) ->
+        teams = teams[0]
+        $('#container').on('click', '#addBtn',  ->
+          game = {leagueId: user.leagueId}
+          $modal = $(templates.modal(game, teams))
+          $modal.find('#date').datetimepicker({format: 'DD/MM/YY'})
+          $modal.modal(show: true)
+          $('.modal select:eq(0)').focus()
+
+        )
+        $('body').on('click', 'table .game-notstarted', ->
+          game = extractData $(@)
+          $modal = $(templates.modal(game, teams))
+          fillData($modal, game)
+          $modal.modal(show: true)
+          $("#date").datetimepicker(format: 'DD/MM/YY')
+        )
+
+        $('#container').html(
+          templates.games(games[0])
+        )
+      ,
+      (error) ->
+        sessionExpired()
+    )
+

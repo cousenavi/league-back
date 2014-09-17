@@ -40,6 +40,17 @@ window.request = (options) ->
       $('#container').prepend(window.templates.error(error.responseText))
   )
 
+window.fillData = ($el, model) ->
+  $el.find('[data-value]').each( ->
+    $(@).val(model[$(@).attr('data-value')])
+  )
+  $el.find('[data-select-id]').each( ->
+    val = model[$(@).attr('data-select-id')]
+    $(@).find('option').each( ->
+      if $(@).val() is val then $(@).attr('selected', true)
+    )
+  )
+  return $el
 window.extractData = ($el) ->
   data = {}
   $el.find('[data-value]').each( ->
@@ -55,6 +66,12 @@ window.extractData = ($el) ->
       )
       data[key].push(obj)
     )
+  )
+  $el.find('[data-select-id]').each( ->
+    data[$(@).attr('data-select-id')] = $(@).find('option:selected').val()
+  )
+  $el.find('[data-select-value]').each( ->
+    data[$(@).attr('data-select-value')] = $(@).find('option:selected').html()
   )
   return data
 

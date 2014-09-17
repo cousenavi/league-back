@@ -15,7 +15,7 @@ module.exports = ->
     time: String
 
 
-    placeId:      mongoose.Schema.Types.ObjectId
+    placeId:      {type: mongoose.Schema.Types.ObjectId, null: true}
     placeName:    String
 
     refereeId:    {type: mongoose.Schema.Types.ObjectId, null: true}
