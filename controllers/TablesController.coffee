@@ -369,13 +369,13 @@ class TablesController
             if gm.homeTeamScore > tops[gm.tourNumber].teamGoals
               tops[gm.tourNumber].teamGoals = gm.homeTeamScore
               summaries[gm.tourNumber].topScoredTeams = [{goals: gm.homeTeamScore, name: gm.homeTeamName, logo: gm.homeTeamLogo}]
-            else if gm.homeTeamScore is 0
+            else if gm.homeTeamScore is tops[gm.tourNumber].teamGoals
               summaries[gm.tourNumber].topScoredTeams.push {goals: gm.homeTeamScore, name: gm.homeTeamName, logo: gm.homeTeamLogo}
           if gm.awayTeamScore > 0
             if gm.awayTeamScore > tops[gm.tourNumber].teamGoals
               tops[gm.tourNumber].teamGoals = gm.awayTeamScore
               summaries[gm.tourNumber].topScoredTeams = [{goals: gm.awayTeamScore, teamName: gm.awayTeamName, logo: gm.awayTeamLogo}]
-            else if gm.awayTeamScore is 0
+            else if gm.awayTeamScore is tops[gm.tourNumber].teamGoals
               summaries[gm.tourNumber].topScoredTeams.push {goals: gm.awayTeamScore, teamName: gm.awayTeamName, logo: gm.awayTeamLogo}
           #
 
