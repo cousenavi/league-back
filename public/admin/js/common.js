@@ -119,6 +119,11 @@
     return location.href = '/admin';
   };
 
+  window.refSessionExpired = function() {
+    localStorage.setItem('loggedIn', null);
+    return location.href = '/referee';
+  };
+
   window.localStorageRead = function(key) {
     var val;
     val = localStorage.getItem(key);

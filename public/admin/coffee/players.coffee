@@ -16,7 +16,7 @@ $ ->
       <input type='hidden' data-value='teamId' value='#{player.teamId}'>
       <div class="row">
          <div class="col-xs-12 col-md-12 col-lg-12">
-            <input type="text" class="form-control" data-value='name' value="#{if player.name? then player.name else ''}" tabindex=1 style="text-transform:uppercase;" autofocus tabindex=1 placeholder='NAME'>
+            <input type="text" class="form-control" data-value='name' value="#{if player.name? then player.name else ''}" tabindex=1 style="text-transform:uppercase;"  tabindex=1 placeholder='NAME'>
          </div>
       </div><br>
       <div class="row">
@@ -70,6 +70,7 @@ $ ->
 
     $('body').on('click', '.addBtn', ->
       console.log model = extractData($('.modal'))
+      $('.modal').hide()
       request(
         method: 'POST'
         url: '/players/add'
@@ -79,6 +80,7 @@ $ ->
     )
     $('body').on('click', '.delBtn', ->
       console.log id = $(@).attr('id')
+      $('.modal').hide()
       request(
         method: 'POST'
         url: '/players/del'

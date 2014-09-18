@@ -15,7 +15,7 @@ $ ->
     "<tr><td></td><td></td></tr><tr class='separation-row'><td>#{dt}</td></tr>"
 
 
-  templates.modal = (game, teams) -> """
+  templates.modal = (game, teams, referees) -> """
 <div class="modal active" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -24,7 +24,7 @@ $ ->
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h4 class="modal-title">#{if !game._id? then 'Добавление матча' else 'Редактирование матча'}</h4>
       </div>
-      <div class="modal-body">#{templates.modalBody(game, teams) }</div>
+      <div class="modal-body">#{templates.modalBody(game, teams, referees) }</div>
       <div class="modal-footer">
         <div class="row">
           <div class="col-xs-6  col-md-6 col-lg-6">
@@ -40,7 +40,7 @@ $ ->
 </div>
 """
 
-  templates.modalBody = (game, teams) -> """
+  templates.modalBody = (game, teams, referees) -> """
     <div class="row">
           <div class="col-xs-6 col-md-6 col-lg-6" data-select-id="homeTeamId" data-select-value="homeTeamName">
             #{templates.teamSelect(teams)}
@@ -58,16 +58,16 @@ $ ->
                 <input type="text" id="date" data-value="date" class="form-control" placeholder='дата'>
           </div>
     </div><br>
-<!--
     <div class="row">
-          <div class="col-xs-6  col-md-6 col-lg-6">
-            <select></select>
+          <div class="col-xs-6  col-md-6 col-lg-6" data-select-id="refereeId" data-select-value="refereeName">
+            #{templates.refSelect(referees)}
           </div>
+<!--
           <div class="col-xs-6 col-md-6 col-lg-6">
             <select></select>
           </div>
-    </div>
 -->
+    </div>
 """
 
   templates.teamSelect = (teams) ->
@@ -75,10 +75,17 @@ $ ->
     html += ("<option value='#{tm._id}'>#{tm.name}</option>" for tm in teams)
     html += "</select>"
 
+  templates.refSelect = (referees) ->
+    html = "<select class='form-control'>"
+    html += "<option></option>"
+    html += ("<option value='#{ref._id}'>#{ref.name}</option>" for ref in referees)
+    html += "</select>"
+
   #==============================================================++#
 
   $('body').on('click', '.addBtn', ->
     console.log model = extractData($('.modal'))
+    $('.modal').hide()
     request(
       method: 'POST'
       url: '/games/add'
@@ -89,6 +96,7 @@ $ ->
 
   $('body').on('click', '.delBtn', ->
     console.log id = $(@).attr('id')
+    $('.modal').hide()
     request(
       method: 'POST'
       url: '/games/del'
@@ -112,10 +120,10 @@ $ ->
       $.getJSON("/games?leagueId=#{user.leagueId}")
     ).then(
       (teams, places, referees, games) ->
-        teams = teams[0]
+        teams = teams[0]; referees = referees[0]
         $('#container').on('click', '#addBtn',  ->
           game = {leagueId: user.leagueId}
-          $modal = $(templates.modal(game, teams))
+          $modal = $(templates.modal(game, teams, referees))
           $modal.find('#date').datetimepicker({format: 'DD/MM/YY'})
           $modal.modal(show: true)
           $('.modal select:eq(0)').focus()
@@ -123,7 +131,7 @@ $ ->
         )
         $('body').on('click', 'table .game-notstarted', ->
           game = extractData $(@)
-          $modal = $(templates.modal(game, teams))
+          $modal = $(templates.modal(game, teams, referees))
           fillData($modal, game)
           $modal.modal(show: true)
           $("#date").datetimepicker(format: 'DD/MM/YY')

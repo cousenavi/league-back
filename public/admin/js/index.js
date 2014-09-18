@@ -14,7 +14,7 @@
         html += "<a class='btn btn-block btn-info match' href=\"games\">Games</a><br>";
       }
       if (user.role === 'Head' || user.role === 'root') {
-        html += "<a class='btn btn-block btn-info match' href=\"referees\" disabled>Referrees</a><br>";
+        html += "<a class='btn btn-block btn-info match' href=\"referees\">Referrees</a><br>";
       }
       if (user.role === 'Head' || user.role === 'root') {
         html += "<a class='btn btn-block btn-info match' href=\"places\" disabled>Places</a><br>";

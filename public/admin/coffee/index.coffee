@@ -16,7 +16,7 @@ $ ->
 """
     if user.role is 'Head' or user.role is 'root'
       html += """
-          <a class='btn btn-block btn-info match' href="referees" disabled>Referrees</a><br>
+          <a class='btn btn-block btn-info match' href="referees">Referrees</a><br>
 """
 
     if user.role is 'Head' or user.role is 'root'

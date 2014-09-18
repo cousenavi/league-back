@@ -31,6 +31,7 @@ module.exports = (config) ->
       if req.session.user? && (req.session.user.role is 'root' or req.session.user.role is 'Head')
         return true
       res.status(403).send('Access denied')
+      throw new Error(403)
     req.checkAccessToLeague = (leagueId) ->
       if req.session.user?
         if req.session.user.role is 'root'

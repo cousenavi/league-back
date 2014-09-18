@@ -27,9 +27,11 @@ gulp.task('deploy-js', function() {
 });
 
 gulp.task('referee-js', function() {
-    return gulp.src([
-       'public/referee/*.coffee'
-    ]).pipe(gulp.dest('public/referee/compiled'))
+    return gulp.src('public/referee/coffee/*.coffee')
+        .pipe(coffee())
+        .pipe(gulp.dest('public/referee/js/'))
+        .pipe(uglify())
+        .pipe(notify({ message: 'Scripts task complete' }));
 });
 
 gulp.task('deploy-css', function() {

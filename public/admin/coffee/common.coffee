@@ -92,6 +92,10 @@ window.sessionExpired = () ->
   localStorage.setItem('user', null)
   location.href = '/admin'
 
+window.refSessionExpired = () ->
+  localStorage.setItem('loggedIn', null)
+  location.href = '/referee'
+
 window.localStorageRead = (key) ->
   val = localStorage.getItem(key)
   if val? && val isnt 'undefined'

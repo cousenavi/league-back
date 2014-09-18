@@ -1,35 +1,37 @@
 class RefereeApi
   login: (req, res) =>
-    req.app.models.Referee.findOne({login: req.login, password: req.password}, (err, model) ->
-      console.log model
+    req.app.models.Referee.findOne({login: req.body.login, password: req.body.password}, (err, model) =>
+      if model
+        req.session.user = model
+        @matches(req, res)
+      else
+        res.status(400)
+        res.send 'Incorrect Login/Password'
     )
-
-    res.send @getMatches(req, res)
 
   matches: (req, res) =>
-    res.send @getMatches(req, res)
-
-  getMatches: (req, res) ->
-    req.app.models.Game.find(
-      {refereeId: req.session.refereeId, ended: false}
+    filter = {refereeId: req.session.user._id+''}
+    fields = {homeTeamPlayers: 0, awayTeamPlayers: 0}
+    req.app.models.Game.find(filter, fields, (err, models) ->
+      res.send models
     )
 
-    [{_id: '123', homeTeamName: 'Millwall', awayTeamName: 'Wimbledon', date: '2015-01-01', time: '12:00', placeName: 'Прага'}]
-
   game: (req, res) ->
-    res.send {
-      homeTeam:
-        name: 'Millwall'
-        players: {
-          'ac132b8f':  {'number': 8, 'name': 'AVETISOV FEDOR'}
-          'ac132b80':  {'number': 15, 'name': 'BENIKSOV VLADIMIR'}
-        }
-      awayTeam:
-        name: 'Wimbledon'
-        players: {
-          'ac132b8q':  {'number': 13, 'name': 'MAKSMOV EUGENY'}
-        }
-    }
+    req.app.models.Game.findById(req.query._id, {homeTeamName: 1, homeTeamId: 1, awayTeamName: 1, awayTeamId: 1, refereeId: 1}, (err, game) ->
+      if game
+        if req.session.user and game.refereeId+'' is  req.session.user._id+''
+          req.app.models.Player.find({teamId: game.homeTeamId}, (err, models) ->
+            game.homeTeamPlayers = models
+            req.app.models.Player.find({teamId: game.awayTeamId}, (err, models) ->
+              game.awayTeamPlayers = models
+              res.send game
+            )
+          )
+        else
+          res.status(403).send("access denied")
+      else
+        res.status(500)
+    )
 
   logout: (req, res) ->
     res.send('ok')

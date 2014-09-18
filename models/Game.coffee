@@ -30,6 +30,6 @@ module.exports = ->
     homeTeamPlayers: Array
     awayTeamPlayers: Array
 
-    ended: Boolean
+    ended: {type: Boolean, default: false}
   )
   mongoose.model('games', gameSchema)

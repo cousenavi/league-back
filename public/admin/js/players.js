@@ -21,7 +21,7 @@
       player = player || {
         teamId: localStorageRead('user').teamId
       };
-      return "" + (player._id != null ? "<input type='hidden' data-value='_id' value='" + player._id + "'>" : "") + "\n<input type='hidden' data-value='teamId' value='" + player.teamId + "'>\n<div class=\"row\">\n   <div class=\"col-xs-12 col-md-12 col-lg-12\">\n      <input type=\"text\" class=\"form-control\" data-value='name' value=\"" + (player.name != null ? player.name : '') + "\" tabindex=1 style=\"text-transform:uppercase;\" autofocus tabindex=1 placeholder='NAME'>\n   </div>\n</div><br>\n<div class=\"row\">\n   <div class=\"col-xs-6 col-md-6 col-lg-6\" >\n      <select class=\"form-control\" id=\"positions\" data-value=\"position\" tabindex=\"2\">\n           " + ((function() {
+      return "" + (player._id != null ? "<input type='hidden' data-value='_id' value='" + player._id + "'>" : "") + "\n<input type='hidden' data-value='teamId' value='" + player.teamId + "'>\n<div class=\"row\">\n   <div class=\"col-xs-12 col-md-12 col-lg-12\">\n      <input type=\"text\" class=\"form-control\" data-value='name' value=\"" + (player.name != null ? player.name : '') + "\" tabindex=1 style=\"text-transform:uppercase;\"  tabindex=1 placeholder='NAME'>\n   </div>\n</div><br>\n<div class=\"row\">\n   <div class=\"col-xs-6 col-md-6 col-lg-6\" >\n      <select class=\"form-control\" id=\"positions\" data-value=\"position\" tabindex=\"2\">\n           " + ((function() {
         var _i, _len, _ref, _results;
         _ref = ['GK', 'CB', 'RB', 'LB', 'CM', 'LM', 'RM', 'ST'];
         _results = [];
@@ -69,6 +69,7 @@
     $('body').on('click', '.addBtn', function() {
       var model;
       console.log(model = extractData($('.modal')));
+      $('.modal').hide();
       return request({
         method: 'POST',
         url: '/players/add',
@@ -81,6 +82,7 @@
     $('body').on('click', '.delBtn', function() {
       var id;
       console.log(id = $(this).attr('id'));
+      $('.modal').hide();
       return request({
         method: 'POST',
         url: '/players/del',
