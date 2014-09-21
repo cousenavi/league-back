@@ -72,7 +72,7 @@ $ ->
                 <td>#{team.position}</td>
                 <td>#{
                     if team.logo? and team.logo isnt ''
-                      "<img style='width: 20px; height: 20px' src='/#{team.logo}'>&nbsp;"
+                      "<img style='width: 20px; height: 20px' src='#{team.logo}'>&nbsp;"
                     else
                       ''
                   }#{team.name}</td>
@@ -98,7 +98,7 @@ $ ->
           html += '<thead><th></th>'
           for team in table.teams
             if team.logo? and team.logo isnt ''
-              html += "<th><img style='width: 20px; height: 20px' src='#{team.logo}'></th>" 
+              html += "<th><img style='width: 20px; height: 20px' src='#{team.logo}'></th>"
             else
               html += "<th>#{team.name.charAt(0)}</th>"
           html += '</thead><tbody>'
