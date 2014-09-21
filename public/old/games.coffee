@@ -347,11 +347,8 @@ $ ->
           delete pl.goalsassists
           delete pl.yellowred
 
-
-      method = (if model._id is 'undefined' then 'add' else 'upd')
-
       delete model._id if model._id is 'undefined'
-      $.post("/games/#{method}", model, -> location.reload())
+      $.post("/games/add", model, -> location.reload())
     )
 
     $('body').on('click', '#delGame', ->
