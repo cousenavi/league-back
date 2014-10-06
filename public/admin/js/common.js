@@ -134,6 +134,15 @@
     }
   };
 
+  window.localStorageWrite = function(key, value) {
+    return localStorage.setItem(key, JSON.stringify(value));
+  };
+
+  String.prototype.repeat = function(num) {
+    num = num || 0;
+    return new Array(num + 1).join(this);
+  };
+
   $('body').on('click', '.modal .btn', function() {
     $('.modal').hide();
     return $('#container').html('');

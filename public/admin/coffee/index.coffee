@@ -3,7 +3,7 @@ $ ->
     html = ''
     if user.role is 'Head' or user.role is 'root'
       html += """
-          <a class='btn btn-block btn-info match' href="teams" disabled>Teams</a><br>
+          <a class='btn btn-block btn-info match' href="teams">Teams</a><br>
 """
 
     if user.role is 'Head' or user.role is 'root'

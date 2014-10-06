@@ -72,3 +72,60 @@
     font-weight: 900;
     border: 1px solid #aaa  !important;
 }
+
+.navbar {
+    height: 50px;
+    padding: 5px 10px 5px 10px;
+    text-align: center;
+    line-height: 35px;
+}
+
+.navbar, .navbar a {
+    color: #777;
+}
+.navbar a:hover {
+    text-decoration: none;
+    color: #555;
+    cursor: pointer;
+}
+
+.navbar-button {
+    font-size: 20pt;
+    line-height: 35px;
+}
+.navbar-right {
+    float: right;
+}
+.navbar-left {
+    float: left;
+}
+
+.ajaxLoad {
+    display: none;
+    text-align: center;
+    margin-bottom: 5px;
+    height: 40px;
+    line-height: 30px;
+}
+
+.roster .number {
+    font-size: 20pt;
+}
+.roster .name {
+    font-size: 16pt;
+}
+
+.roster .out {
+    background-color: #DDD;
+    color: #999;
+}
+
+.btn-logo {
+    height: 25px;
+    border: 1px solid #ccc;
+    cursor: default;
+    background: #f9f9f9;
+}
+.control-panel {
+    text-align: center;
+}

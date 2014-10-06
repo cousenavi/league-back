@@ -9,15 +9,19 @@ class RefereeApi
         res.send 'Incorrect Login/Password'
     )
 
+
   matches: (req, res) =>
-    filter = {refereeId: req.session.user._id+''}
-    fields = {homeTeamPlayers: 0, awayTeamPlayers: 0}
-    req.app.models.Game.find(filter, fields, (err, models) ->
-      res.send models
-    )
+    if !req.session.user? or !req.session.user._id?
+      res.status(403).send('Access denied')
+    else
+      filter = {refereeId: req.session.user._id+''}
+      fields = {homeTeamPlayers: 0, awayTeamPlayers: 0}
+      req.app.models.Game.find(filter, fields, (err, models) ->
+        res.send models
+      )
 
   game: (req, res) ->
-    req.app.models.Game.findById(req.query._id, {homeTeamName: 1, homeTeamId: 1, awayTeamName: 1, awayTeamId: 1, refereeId: 1}, (err, game) ->
+    req.app.models.Game.findById(req.query._id, {date: 1, time: 1, place: 1, homeTeamName: 1, homeTeamId: 1, awayTeamName: 1, awayTeamId: 1, refereeId: 1}, (err, game) ->
       if game
         if req.session.user and game.refereeId+'' is  req.session.user._id+''
           req.app.models.Player.find({teamId: game.homeTeamId}, (err, models) ->
@@ -27,6 +31,19 @@ class RefereeApi
               res.send game
             )
           )
+        else
+          res.status(403).send("access denied")
+      else
+        res.status(500)
+    )
+
+  save_game: (req, res) ->
+    req.app.models.Game.findById(req.body._id, (err, game) ->
+      if game
+        if req.session.user and game.refereeId+'' is  req.session.user._id+''
+            req.app.models.Game.findByIdAndUpdate(req.body._id, req.body, (err, model) ->
+              res.send 'ok'
+            )
         else
           res.status(403).send("access denied")
       else

@@ -5,7 +5,7 @@
       var html;
       html = '';
       if (user.role === 'Head' || user.role === 'root') {
-        html += "<a class='btn btn-block btn-info match' href=\"teams\" disabled>Teams</a><br>";
+        html += "<a class='btn btn-block btn-info match' href=\"teams\">Teams</a><br>";
       }
       if (user.role === 'Head' || user.role === 'root') {
         html += "<a class='btn btn-block btn-info match' href=\"players\" disabled>Players</a><br>";

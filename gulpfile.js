@@ -27,9 +27,10 @@ gulp.task('deploy-js', function() {
 });
 
 gulp.task('referee-js', function() {
-    return gulp.src('public/referee/coffee/*.coffee')
-        .pipe(coffee())
-        .pipe(gulp.dest('public/referee/js/'))
+    return gulp.src('public/newref/coffee/*.coffee')
+        .pipe(coffee({bare: true}))
+        .pipe(concat('index.js'))
+        .pipe(gulp.dest('public/newref/js/'))
         .pipe(uglify())
         .pipe(notify({ message: 'Scripts task complete' }));
 });
@@ -45,7 +46,7 @@ gulp.task('deploy-css', function() {
 
 
 gulp.task('watch', function() {
-    gulp.watch('public/referee/coffee/*.coffee', ['referee-js']);
+    gulp.watch('public/newref/coffee/*.coffee', ['referee-js']);
     gulp.watch('public/admin/coffee/*.coffee', ['deploy-js']);
     gulp.watch('public/admin/coffee/*.coffee', ['admin-scripts']);
 });

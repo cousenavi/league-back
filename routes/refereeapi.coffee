@@ -1,6 +1,6 @@
 module.exports = (app) ->
 
-  app.post '/login',          app.controllers.RefereeApi.login
-  app.get '/matches',          app.controllers.RefereeApi.matches
-  app.post '/logout',         app.controllers.RefereeApi.logout
-  app.get '/game',         app.controllers.RefereeApi.game
+  app.post '/refereeapi/login',          app.controllers.RefereeApi.login
+  app.get '/refereeapi/games',          app.controllers.RefereeApi.matches
+  app.post '/refereeapi/logout',         app.controllers.RefereeApi.logout
+  app.get '/refereeapi/game',         app.controllers.RefereeApi.game

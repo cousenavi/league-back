@@ -101,9 +101,17 @@ window.localStorageRead = (key) ->
   if val? && val isnt 'undefined'
     return JSON.parse(val)
   else return null
+
+window.localStorageWrite = (key, value) ->
+  localStorage.setItem(key, JSON.stringify(value))
+
+String.prototype.repeat = (num) ->
+  num = num || 0
+  return new Array( num + 1 ).join(@)
 #---------------------------------------------------------#
 
 $('body').on('click', '.modal .btn', ->
   $('.modal').hide()
   $('#container').html('')
 )
+
