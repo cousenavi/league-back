@@ -654,22 +654,26 @@ $('#container').on('click', '.player', function() {
     setPlayerStats($(this), 'played', played);
   }
   if (mode === 'goal') {
+    setPlayerStats($(this), 'played', true);
     setPlayerStats($(this), 'goals', {
       $inc: 1
     });
     view.actionIncrementScore($('#gameId').val(), $('#side').val());
   }
   if (mode === 'assist') {
+    setPlayerStats($(this), 'played', true);
     setPlayerStats($(this), 'assists', {
       $inc: 1
     });
   }
   if (mode === 'yellow') {
+    setPlayerStats($(this), 'played', true);
     setPlayerStats($(this), 'yellow', {
       $inc: 1
     });
   }
   if (mode === 'red') {
+    setPlayerStats($(this), 'played', true);
     return setPlayerStats($(this), 'red', {
       $inc: 1
     });

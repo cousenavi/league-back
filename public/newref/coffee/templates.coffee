@@ -149,19 +149,23 @@ setPlayerStats = ($pl, key, value) ->
 
 $('#container').on 'click', '.player', ->
   $(@).attr('disabled', true)
-  if mode is 'played'
+  if mode is 'played'   
     played = $(@).hasClass('out') #если сейчас стоит признак, что не играл, значит после изменения будет играющий
     setPlayerStats($(@), 'played', played)
 
   if mode is 'goal'
+    setPlayerStats($(@), 'played', true)
     setPlayerStats($(@), 'goals', {$inc: 1})
     view.actionIncrementScore($('#gameId').val(), $('#side').val())
 
   if mode is 'assist'
+    setPlayerStats($(@), 'played', true)
     setPlayerStats($(@), 'assists', {$inc: 1})
   if mode is 'yellow'
+    setPlayerStats($(@), 'played', true)
     setPlayerStats($(@), 'yellow', {$inc: 1})
   if mode is 'red'
+    setPlayerStats($(@), 'played', true)
     setPlayerStats($(@), 'red', {$inc: 1})
 
 $('#container').on 'click', '#refreshRoster', ->

@@ -121,7 +121,7 @@ class View
     @$container.html templates.roster gameId, side, @registry.games[gameId].teams[teamIndex]
 
   actionIncrementScore: (gameId, side) =>
-    #TODO TEMPORARY DISABLED!!!! 
+    #TODO TEMPORARY DISABLED!!!!
 #    teamIndex = if side is 'home' then 0 else 1
 #    @registry.games[gameId].teams[teamIndex].score++
 #    @registry.save()
