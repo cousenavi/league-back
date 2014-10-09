@@ -32,13 +32,11 @@ class GameAdapter
     serverModel.homeTeamScore = localModel.teams[0].score
     serverModel.homeTeamPlayers = localModel.teams[0].players
     serverModel.homeTeamRefereeMark = localModel.teams[0].refereeMark
-    serverModel.awayTeamId = localModel.teams[0]._id
-    serverModel.awayTeamName = localModel.teams[0].name
-    serverModel.awayTeamLogo = localModel.teams[0].logo
-    serverModel.awayTeamScore = localModel.teams[0].score
-    serverModel.awayTeamPlayers = localModel.teams[0].players
-    serverModel.awayTeamRefereeMark = localModel.teams[0].refereeMark
+    serverModel.awayTeamId = localModel.teams[1]._id
+    serverModel.awayTeamName = localModel.teams[1].name
+    serverModel.awayTeamLogo = localModel.teams[1].logo
+    serverModel.awayTeamScore = localModel.teams[1].score
+    serverModel.awayTeamPlayers = localModel.teams[1].players
+    serverModel.awayTeamRefereeMark = localModel.teams[1].refereeMark
 
-    delete serverModel.teams
-
-    return localModel
+    return serverModel

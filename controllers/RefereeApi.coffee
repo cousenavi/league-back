@@ -21,7 +21,7 @@ class RefereeApi
       )
 
   game: (req, res) ->
-    req.app.models.Game.findById(req.query._id, {date: 1, time: 1, place: 1, homeTeamName: 1, homeTeamId: 1, awayTeamName: 1, awayTeamId: 1, refereeId: 1}, (err, game) ->
+    req.app.models.Game.findById(req.query._id, (err, game) ->
       if game
         if req.session.user and game.refereeId+'' is  req.session.user._id+''
           req.app.models.Player.find({teamId: game.homeTeamId}, (err, models) ->
@@ -31,6 +31,7 @@ class RefereeApi
               res.send game
             )
           )
+
         else
           res.status(403).send("access denied")
       else
@@ -42,12 +43,14 @@ class RefereeApi
       if game
         if req.session.user and game.refereeId+'' is  req.session.user._id+''
             req.app.models.Game.findByIdAndUpdate(req.body._id, req.body, (err, model) ->
+              if err
+                console.log err
               res.send 'ok'
             )
         else
           res.status(403).send("access denied")
       else
-        res.status(500)
+        res.status(500).send('error')
     )
 
   logout: (req, res) ->

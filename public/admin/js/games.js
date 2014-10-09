@@ -9,7 +9,7 @@
         _results = [];
         for (_i = 0, _len = games.length; _i < _len; _i++) {
           gm = games[_i];
-          _results.push((currDate !== gm.date ? templates.separationRow(currDate = gm.date) : '') + ("<tr " + (gm.homeTeamScore == null ? 'class=\'game-notstarted\'' : '') + ">" + (templates.hiddenModel(gm)) + "<td>" + gm.homeTeamName + " - " + gm.awayTeamName + " " + (gm.homeTeamScore != null ? '<b>' + gm.homeTeamScore + '- ' + gm.awayTeamScore + '</b>' : '') + " </td><td style='text-align: right'>" + gm.tourNumber + "тур</td></tr>"));
+          _results.push((currDate !== gm.date ? templates.separationRow(currDate = gm.date) : '') + ("<tr " + (gm.homeTeamScore == null ? 'class=\'game-notstarted\'' : 'class=\'game-ended\'') + ">" + (templates.hiddenModel(gm)) + "<td>" + gm.homeTeamName + " - " + gm.awayTeamName + " " + (gm.homeTeamScore != null ? '<b>' + gm.homeTeamScore + '- ' + gm.awayTeamScore + '</b>' : '') + " </td><td style='text-align: right'>" + gm.tourNumber + "тур</td></tr>"));
         }
         return _results;
       })()).join('')) + "\n</table>";
@@ -119,6 +119,11 @@
           return $("#date").datetimepicker({
             format: 'DD/MM/YY'
           });
+        });
+        $('body').on('click', 'table .game-ended', function() {
+          var game;
+          game = extractData($(this));
+          return location.href = "/admin/game/?" + game._id;
         });
         return $('#container').html(templates.games(games[0]));
       }, function(error) {

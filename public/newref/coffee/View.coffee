@@ -120,6 +120,11 @@ class View
     @registry.save()
     @$container.html templates.roster gameId, side, @registry.games[gameId].teams[teamIndex]
 
+  actionIncrementScore: (gameId, side) =>
+    teamIndex = if side is 'home' then 0 else 1
+    @registry.games[gameId].teams[teamIndex].score++
+    @registry.save()
+
   actionUndo: (gameId, side) =>
     teamIndex = if side is 'home' then 0 else 1
     @registry.restoreRosterState(gameId, side)
@@ -136,4 +141,4 @@ class View
   actionEndGame: (id) =>
     game = @registry.games[id]
 #    game.ended = true
-    @registry.saveGame game, => @viewGamesList
+    @registry.saveGame game, => @actionLoadGames()

@@ -4,7 +4,7 @@ $ ->
     """
       <button class="btn btn-block btn-success" id="addBtn" autofocus><span class="glyphicon glyphicon-plus"></span></button>
       <table class="table">
-      #{( (if currDate isnt gm.date then templates.separationRow(currDate = gm.date) else '')+"<tr #{if !gm.homeTeamScore? then 'class=\'game-notstarted\'' else ''}>#{templates.hiddenModel(gm)}<td>#{gm.homeTeamName} - #{gm.awayTeamName}
+      #{( (if currDate isnt gm.date then templates.separationRow(currDate = gm.date) else '')+"<tr #{if !gm.homeTeamScore? then 'class=\'game-notstarted\'' else 'class=\'game-ended\'' }>#{templates.hiddenModel(gm)}<td>#{gm.homeTeamName} - #{gm.awayTeamName}
       #{if gm.homeTeamScore? then '<b>'+gm.homeTeamScore+'- '+gm.awayTeamScore+'</b>' else ''}
       </td><td style='text-align: right'>#{gm.tourNumber}тур</td></tr>
 " for gm in games).join('')}
@@ -136,6 +136,11 @@ $ ->
           $modal.modal(show: true)
           $("#date").datetimepicker(format: 'DD/MM/YY')
         )
+        $('body').on('click', 'table .game-ended', ->
+          game = extractData $(@)
+          location.href = "/admin/game/?#{game._id}"
+        )
+
 
         $('#container').html(
           templates.games(games[0])

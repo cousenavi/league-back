@@ -47,14 +47,13 @@ GameAdapter = (function() {
     serverModel.homeTeamScore = localModel.teams[0].score;
     serverModel.homeTeamPlayers = localModel.teams[0].players;
     serverModel.homeTeamRefereeMark = localModel.teams[0].refereeMark;
-    serverModel.awayTeamId = localModel.teams[0]._id;
-    serverModel.awayTeamName = localModel.teams[0].name;
-    serverModel.awayTeamLogo = localModel.teams[0].logo;
-    serverModel.awayTeamScore = localModel.teams[0].score;
-    serverModel.awayTeamPlayers = localModel.teams[0].players;
-    serverModel.awayTeamRefereeMark = localModel.teams[0].refereeMark;
-    delete serverModel.teams;
-    return localModel;
+    serverModel.awayTeamId = localModel.teams[1]._id;
+    serverModel.awayTeamName = localModel.teams[1].name;
+    serverModel.awayTeamLogo = localModel.teams[1].logo;
+    serverModel.awayTeamScore = localModel.teams[1].score;
+    serverModel.awayTeamPlayers = localModel.teams[1].players;
+    serverModel.awayTeamRefereeMark = localModel.teams[1].refereeMark;
+    return serverModel;
   };
 
   return GameAdapter;
@@ -223,9 +222,10 @@ Registry = (function() {
     return this.request({
       method: 'POST',
       url: "save_game",
-      data: this.adapter.toServer(game),
+      params: this.adapter.toServer(game),
       success: (function(_this) {
         return function() {
+          delete _this.rosterStatesStack[game._id];
           return callback();
         };
       })(this)
@@ -280,6 +280,7 @@ View = (function() {
     this.actionEndGame = __bind(this.actionEndGame, this);
     this.actionSaveGame = __bind(this.actionSaveGame, this);
     this.actionUndo = __bind(this.actionUndo, this);
+    this.actionIncrementScore = __bind(this.actionIncrementScore, this);
     this.actionSetPlayerStats = __bind(this.actionSetPlayerStats, this);
     this.actionSetGameStats = __bind(this.actionSetGameStats, this);
     this.actionLoadGame = __bind(this.actionLoadGame, this);
@@ -445,6 +446,13 @@ View = (function() {
     return this.$container.html(templates.roster(gameId, side, this.registry.games[gameId].teams[teamIndex]));
   };
 
+  View.prototype.actionIncrementScore = function(gameId, side) {
+    var teamIndex;
+    teamIndex = side === 'home' ? 0 : 1;
+    this.registry.games[gameId].teams[teamIndex].score++;
+    return this.registry.save();
+  };
+
   View.prototype.actionUndo = function(gameId, side) {
     var teamIndex;
     teamIndex = side === 'home' ? 0 : 1;
@@ -465,7 +473,7 @@ View = (function() {
     game = this.registry.games[id];
     return this.registry.saveGame(game, (function(_this) {
       return function() {
-        return _this.viewGamesList;
+        return _this.actionLoadGames();
       };
     })(this));
   };
@@ -654,6 +662,7 @@ $('#container').on('click', '.player', function() {
     setPlayerStats($(this), 'goals', {
       $inc: 1
     });
+    view.actionIncrementScore($('#gameId').val(), $('#side').val());
   }
   if (mode === 'assist') {
     setPlayerStats($(this), 'assists', {

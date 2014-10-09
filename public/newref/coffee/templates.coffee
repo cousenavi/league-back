@@ -155,6 +155,8 @@ $('#container').on 'click', '.player', ->
 
   if mode is 'goal'
     setPlayerStats($(@), 'goals', {$inc: 1})
+    view.actionIncrementScore($('#gameId').val(), $('#side').val())
+
   if mode is 'assist'
     setPlayerStats($(@), 'assists', {$inc: 1})
   if mode is 'yellow'

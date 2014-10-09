@@ -131,8 +131,9 @@ class Registry
     @request(
       method: 'POST'
       url: "save_game"
-      data: @adapter.toServer(game)
+      params: @adapter.toServer(game)
       success: =>
+        delete @rosterStatesStack[game._id]
         callback()
     )
 
