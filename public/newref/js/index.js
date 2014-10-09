@@ -446,12 +446,7 @@ View = (function() {
     return this.$container.html(templates.roster(gameId, side, this.registry.games[gameId].teams[teamIndex]));
   };
 
-  View.prototype.actionIncrementScore = function(gameId, side) {
-    var teamIndex;
-    teamIndex = side === 'home' ? 0 : 1;
-    this.registry.games[gameId].teams[teamIndex].score++;
-    return this.registry.save();
-  };
+  View.prototype.actionIncrementScore = function(gameId, side) {};
 
   View.prototype.actionUndo = function(gameId, side) {
     var teamIndex;
