@@ -65,7 +65,9 @@
         _results = [];
         for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
           pl = _ref2[_k];
-          _results.push("#" + pl.number + " " + pl.name);
+          if (pl.played === "true") {
+            _results.push("#" + pl.number + " " + pl.name);
+          }
         }
         return _results;
       })()).join(', ');
@@ -116,10 +118,24 @@
         _results = [];
         for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
           pl = _ref2[_k];
-          _results.push("#" + pl.number + " " + pl.name);
+          if (pl.played === "true") {
+            _results.push("#" + pl.number + " " + pl.name);
+          }
         }
         return _results;
       })()).join(', ');
+    };
+    templates.refs = function(refs, game) {
+      var html, id, ref;
+      html = '<br><div><select id="refs">';
+      for (id in refs) {
+        ref = refs[id];
+        html += "<option id='" + ref._id + "'>" + ref.name + "</option>";
+      }
+      html += '<option></option></select>';
+      html += "<button id='saveRef'>ok</button>";
+      html += templates.hiddenModel(game);
+      return html += '</div>';
     };
     user = localStorageRead('user');
     if (user == null) {
@@ -133,9 +149,33 @@
     }
     if (user.role === 'Head') {
       gameId = location.search.substr(1);
-      return $.getJSON("/games/" + gameId, function(game) {
+      $.getJSON("/games/" + gameId, function(game) {
         console.log(game);
-        return $('#container').html(templates.game(game));
+        $('#container').html(templates.game(game));
+        return $.getJSON("/referees?leagueId=" + user.leagueId, function(refs) {
+          return $('#container').append(templates.refs(refs, game));
+        });
+      });
+      return $('#container').on('click', '#saveRef', function() {
+        var game, id, model, name;
+        model = extractData($(this).parent());
+        id = $('#refs option:selected').attr('id');
+        name = $('#refs option:selected').html();
+        game = {
+          _id: model._id,
+          leagueId: model.leagueId,
+          date: model.date
+        };
+        game.refereeId = id;
+        game.refereeName = name;
+        return request({
+          method: 'POST',
+          url: '/games/add',
+          params: game,
+          success: function(data) {
+            return location.reload();
+          }
+        });
       });
     }
   });
