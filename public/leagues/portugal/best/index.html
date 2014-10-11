@@ -11,6 +11,8 @@
 <body>
 
 <div id="bp"></div>
-<script>$('#bp').bestplayers('54009eb17336983c24342ed9', 3)</script>
+<script>
+    var tour = location.search.substr(1);
+    $('#bp').bestplayers('54009eb17336983c24342ed9', tour)</script>
 </body>
 </html>
