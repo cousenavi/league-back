@@ -6,7 +6,7 @@ class TeamController extends require('./AbstractCrudController')
     req.checkAccessToLeague(req.query.leagueId)
     filter = if req.query.leagueId? then {leagueId: req.query.leagueId} else {} #todo временное решение для старого интерфейса. Убрать
 
-    @model(req).find(, (err, models) ->
+    @model(req).find(filter, (err, models) ->
       res.send models
     )
 
