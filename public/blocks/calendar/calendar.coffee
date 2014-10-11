@@ -68,6 +68,9 @@
         </div>
 """
 
+  $('body').on('click', '.summary tr', ->
+    $(@).hide()
+  )
 
   $.fn.calendar = (leagueId,tourNumber) ->
     $.getJSON("/games/?leagueId=#{leagueId}&showPlayers=1&tourNumber=#{tourNumber}", (games) =>
