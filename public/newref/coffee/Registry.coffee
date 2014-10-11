@@ -35,6 +35,20 @@ class Registry
     if (rosterStatesStack = localStorageRead('ref_roster_stack')) then @rosterStatesStack = rosterStatesStack
 
   ##
+  # спрашиваем у сервера, сохранил ли он сессию, потом смотрим, всё ли в порядке с нашим локал стораджем
+  checkAuthentication: (callback, fallback) =>
+    @request(
+      method: 'GET'
+      url: 'session_status'
+      success: (isSessionActive) =>
+        if isSessionActive && @user.authorized
+          callback()
+        else
+          @clean()
+          fallback()
+    )
+
+  ##
   #
   save: ->
     localStorageWrite('ref_games', @games)
@@ -64,6 +78,8 @@ class Registry
         @save()
         callback()
     )
+
+
 
   ##
   # разлогиниваем юзера, убираем всю загруженную игру об играх

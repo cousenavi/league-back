@@ -2,7 +2,7 @@ module.exports = (config) ->
   express = require 'express'
   app = express()
 
-  app.use(express.static(__dirname + '/public'));
+  app.use(express.static(__dirname + '/public', {maxAge: 300}));
 
   cookieParser = require('cookie-parser')
   session      = require('express-session')
@@ -70,7 +70,7 @@ module.exports = (config) ->
   load = require('express-load')
   load('models').then('controllers').then('routes').into(app)
 
-  #todo бред какой-то. Нельзя нормально получить доступ к объекту?
+#  todo бред какой-то. Нельзя нормально получить доступ к объекту?
   app.controllers.TablesController.app = app
 
   app.on 'event:result_added', app.controllers.TablesController.onResultAdded

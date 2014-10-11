@@ -121,11 +121,25 @@
 }
 
 .btn-logo {
-    height: 25px;
+    height: 72px;
+    width: 72px;
     border: 1px solid #ccc;
     cursor: default;
     background: #f9f9f9;
 }
 .control-panel {
     text-align: center;
+}
+
+.btn-list {
+    min-height: 45px;
+}
+
+#ownGoalCounter {
+    position: absolute;
+    margin-top: 5px;
+    margin-left: 8px;
+    color: rgb(192, 54, 54);
+    font-size: 12pt;
+    font-weight: 900;
 }

@@ -3,30 +3,21 @@
     var user;
     templates.sections = function(user) {
       var html;
-      html = '';
-      if (user.role === 'Head' || user.role === 'root') {
-        html += "<a class='btn btn-block btn-info match' href=\"teams\">Teams</a><br>";
-      }
-      if (user.role === 'Head' || user.role === 'root') {
-        html += "<a class='btn btn-block btn-info match' href=\"players\" disabled>Players</a><br>";
-      }
-      if (user.role === 'Head' || user.role === 'root') {
-        html += "<a class='btn btn-block btn-info match' href=\"games\">Games</a><br>";
-      }
-      if (user.role === 'Head' || user.role === 'root') {
-        html += "<a class='btn btn-block btn-info match' href=\"referees\">Referrees</a><br>";
-      }
-      if (user.role === 'Head' || user.role === 'root') {
-        html += "<a class='btn btn-block btn-info match' href=\"places\" disabled>Places</a><br>";
-      }
       if (user.role === 'root') {
-        html += "<a class='btn btn-block btn-info match' href=\"users\">Users</a><br>";
+        html = "<a class='btn btn-block btn-info btn-list' href=\"leagues\" tabindex='1'>Leagues</a>\n<a class='btn btn-block btn-info btn-list' href=\"heads\" tabindex='2'>Heads</a>";
       }
+      if (user.role === 'Head') {
+        html = "<a class='btn btn-block btn-info btn-list' href=\"games\" tabindex='1'>Games</a>\n<a class='btn btn-block btn-info btn-list' href=\"teams\" tabindex='2'>Teams</a>\n<a class='btn btn-block btn-info btn-list' href=\"referees\" tabindex='3'>Referees</a>";
+      }
+      if (user.role === 'Capitan') {
+        html = "";
+      }
+      html += '<a class="btn btn-block btn-success btn-list" id="logoutBtn" tabindex="3">Logout</a>';
       return html;
     };
     templates.login = function() {
       var login;
-      return "<div id=\"loginForm\">\n<input type=\"text\" data-value=\"login\" class=\"form-control\"\nplaceholder='login' autocomplete='true'\n" + ((login = getCookie('login')) ? "value=\"" + login + "\"" : '') + "><br>\n<input type=\"password\" data-value=\"password\" class=\"form-control\" placeholder='password' autocomplete='true'><br>\n<button id=\"loginBtn\" class=\"btn btn-success btn-block\">Go!</button>\n </div>";
+      return "<div id=\"loginForm\">\n<input type=\"text\" data-value=\"login\" class=\"form-control\"\nplaceholder='login' autocomplete='true' autofocus\n" + ((login = getCookie('login')) ? "value=\"" + login + "\"" : '') + "><br>\n<input type=\"password\" data-value=\"password\" class=\"form-control\" placeholder='password' autocomplete='true'><br>\n<button id=\"loginBtn\" class=\"btn btn-success btn-block\">Go!</button>\n </div>";
     };
     $('body').on('login', function(event, user) {
       if (user.role === 'Captain') {
@@ -34,6 +25,9 @@
       } else {
         return $('#container').html(templates.sections(user));
       }
+    });
+    $('#container').on('click', '#logoutBtn', function() {
+      return sessionExpired();
     });
     $('#container').on('click', '#loginBtn', function() {
       var model;

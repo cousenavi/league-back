@@ -103,6 +103,7 @@ Registry = (function() {
     this.login = __bind(this.login, this);
     this.setUserStatus = __bind(this.setUserStatus, this);
     this.setGameStats = __bind(this.setGameStats, this);
+    this.checkAuthentication = __bind(this.checkAuthentication, this);
     this.request = __bind(this.request, this);
     var rosterStatesStack, user;
     this.adapter = new GameAdapter();
@@ -116,6 +117,23 @@ Registry = (function() {
       this.rosterStatesStack = rosterStatesStack;
     }
   }
+
+  Registry.prototype.checkAuthentication = function(callback, fallback) {
+    return this.request({
+      method: 'GET',
+      url: 'session_status',
+      success: (function(_this) {
+        return function(isSessionActive) {
+          if (isSessionActive && _this.user.authorized) {
+            return callback();
+          } else {
+            _this.clean();
+            return fallback();
+          }
+        };
+      })(this)
+    });
+  };
 
   Registry.prototype.save = function() {
     localStorageWrite('ref_games', this.games);
@@ -300,11 +318,15 @@ View = (function() {
   }
 
   View.prototype.render = function() {
-    if (!this.registry.user.authorized) {
-      return this.viewLogin();
-    } else {
-      return this.viewGamesList();
-    }
+    return this.registry.checkAuthentication((function(_this) {
+      return function() {
+        return _this.viewGamesList();
+      };
+    })(this), (function(_this) {
+      return function() {
+        return _this.viewLogin();
+      };
+    })(this));
   };
 
   View.prototype.viewLogin = function() {
@@ -503,7 +525,7 @@ window.templates.ajaxLoader = '<div class="ajaxLoad"><img src="/img/sprite/ajax-
 
 window.templates.login = function() {
   var login;
-  return "  <div id=\"loginForm\">\n  <input type=\"text\" data-value=\"login\" class=\"form-control\" placeholder='login'  " + ((login = getCookie('login')) ? "value=\"" + login + "\"" : '') + "><br>\n  <input type=\"password\" data-value=\"password\" class=\"form-control\" placeholder='password'><br>\n  <button id=\"loginBtn\" class=\"btn btn-success btn-block\">Go!</button>\n</div>";
+  return "  <div id=\"loginForm\">\n  <input type=\"text\" data-value=\"login\" autofocus class=\"form-control\" placeholder='login'  " + ((login = getCookie('login')) ? "value=\"" + login + "\"" : '') + "><br>\n  <input type=\"password\" data-value=\"password\" class=\"form-control\" placeholder='password'><br>\n  <button id=\"loginBtn\" class=\"btn btn-success btn-block\">Go!</button>\n</div>";
 };
 
 $('#container').on('click', '#loginBtn', function() {
@@ -522,7 +544,7 @@ window.templates.games = function(games) {
     _results = [];
     for (key in games) {
       m = games[key];
-      _results.push("<button class='btn btn-block btn-info match' id='" + m._id + "'class='match'>" + m.teams[0].name + " <br> " + m.teams[1].name + "<br><span class='smallText'>" + m.date + " " + (m.time != null ? m.time : '') + " " + (m.placeName != null ? m.placeName : '') + "</span></button><br>");
+      _results.push("<button class='btn btn-block btn-info btn-list match' id='" + m._id + "'class='match'>" + m.teams[0].name + "- " + m.teams[1].name + "<br><span class='smallText'>" + m.date + " " + (m.time != null ? m.time : '') + " " + (m.placeName != null ? m.placeName : '') + "</span></button><br>");
     }
     return _results;
   })()).join('');
@@ -547,7 +569,7 @@ window.templates.game = function(game) {
   html = templates.menu(menuCaption, 'toGamesList', 'refreshGame');
   html += templates.ajaxLoader;
   html += "<input type='hidden' id='gameId' value='" + game._id + "'>";
-  return html += "<button class='btn btn-block btn-info' id=\"toProtocol\" data-side=\"home\">" + game.teams[0].name + " - протокол</button>\n<button class='btn btn-block btn-info' id=\"toProtocol\" data-side=\"away\">" + game.teams[1].name + " - протокол</button>\n<button class='btn btn-block btn-info' id=\"homeChoise\">" + game.teams[0].name + " - выбор</button>\n<button class='btn btn-block btn-info' id=\"awayChoise\">" + game.teams[1].name + " - выбор</button>\n<button class='btn btn-block btn-success' id=\"endMatch\">завершить матч</button>";
+  return html += "<button class='btn btn-block btn-info' id=\"toProtocol\" data-side=\"home\">" + game.teams[0].name + " - протокол</button>\n<button class='btn btn-block btn-info' id=\"toProtocol\" data-side=\"away\">" + game.teams[1].name + " - протокол</button>\n<button class='btn btn-block btn-success' id=\"endMatch\">завершить матч</button>";
 };
 
 $('#container').on('click', '#toGamesList', function() {
@@ -585,12 +607,12 @@ window.templates.roster = function(gameId, side, team) {
   html += templates.ajaxLoader;
   html += "<input type='hidden' id='gameId' value='" + gameId + "'>";
   html += "<input type='hidden' id='side' value='" + side + "'>";
-  html += "<div class=\"control-panel\">\n  <img class='btn btn-logo active' id=\"playedBtn\" src=\"/img/sprite/foot/shirt.png\">\n  <img class='btn btn-logo' id=\"goalBtn\" src=\"/img/sprite/foot/ball.png\">\n  <img class='btn btn-logo' id=\"passBtn\" src=\"/img/sprite/foot/assist.png\">\n  <img class='btn btn-logo' id=\"yellowBtn\" src=\"/img/sprite/foot/yellow_card.png\">\n  <img class='btn btn-logo' id=\"redBtn\" src=\"/img/sprite/foot/red_card.png\">\n  <img class='btn btn-logo' id=\"undoBtn\" src=\"/img/sprite/foot/undo.png\">\n</div><br>";
+  html += "<div class=\"control-panel\">\n\n\n  <img class='btn btn-logo active' id=\"playedBtn\" src=\"/img/sprite/foot/shirt.png\">\n  <img class='btn btn-logo' id=\"goalBtn\" src=\"/img/sprite/foot/ball.png\">\n  <img class='btn btn-logo' id=\"passBtn\" src=\"/img/sprite/foot/assist.png\">\n  <img class='btn btn-logo' id=\"yellowBtn\" src=\"/img/sprite/foot/yellow_card.png\">\n  <img class='btn btn-logo' id=\"redBtn\" src=\"/img/sprite/foot/red_card.png\">\n  <span style=\"position:relative\"><span id=\"ownGoalCounter\">1</span><img class='btn btn-logo' id=\"owngoal\" src=\"/img/sprite/foot/owngoal.png\"></span><br>\n  <img class='btn btn-logo' id=\"undoBtn\" src=\"/img/sprite/foot/undo.png\">\n</div><br>";
   html += '<div class="roster">';
   _ref = team.players;
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {
     pl = _ref[_i];
-    html += "<button class='btn btn-block btn-default player " + (pl.played ? '' : 'out') + "' id='" + pl._id + "'> <span class='number'>" + pl.number + "</span> <span class='name'>" + (formatPlayerName(pl.name)) + "</span> <div> " + ('<img style="height: 25px" src="/img/sprite/foot/ball.png">'.repeat(pl.goals)) + " " + ('<img style="height: 25px" src="/img/sprite/foot/assist.png">'.repeat(pl.assists)) + " " + (pl.yellow === 1 ? '<img style="height: 25px" src="/img/sprite/foot/yellow_card.png">' : pl.yellow === 2 ? '<img style="height: 25px" src="/img/sprite/foot/red_card_2yellow.png">' : '') + " " + (pl.red === 1 ? '<img style="height: 25px" src="/img/sprite/foot/red_card.png">' : '') + " </div> </button>";
+    html += "<button class='btn btn-block btn-default player " + (pl.played ? '' : 'out') + "' id='" + pl._id + "'> <span class='number'>" + pl.number + "</span> <span class='name'>" + (formatPlayerName(pl.name)) + "</span> <div> " + ('<img style="height: 25px; width: 25px;" src="/img/sprite/foot/ball.png">'.repeat(pl.goals)) + " " + ('<img style="height: 25px; <width: 25px;" src="/img/sprite/foot/assist.png">'.repeat(pl.assists)) + " " + (pl.yellow === 1 ? '<img style="height: 25px" src="/img/sprite/foot/yellow_card.png">' : pl.yellow === 2 ? '<img style="height: 25px" src="/img/sprite/foot/red_card_2yellow.png">' : '') + " " + (pl.red === 1 ? '<img style="height: 25px" src="/img/sprite/foot/red_card.png">' : '') + " </div> </button>";
   }
   return html += '</div>';
 };

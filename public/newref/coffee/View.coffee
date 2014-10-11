@@ -7,10 +7,10 @@ class View
   ##
   #
   render: =>
-    if !@registry.user.authorized
-      @viewLogin()
-    else
-      @viewGamesList()
+    @registry.checkAuthentication(
+      => @viewGamesList()
+      => @viewLogin()
+    )
 
   ##
   #

@@ -1,7 +1,12 @@
 module.exports = (app) ->
 
-  app.post '/adminapi/login',  app.controllers.AdminApi.login
-  app.get '/adminapi/info',  app.controllers.AdminApi.info
-  app.get '/adminapi/users',  app.controllers.AdminApi.users
-  app.post '/adminapi/add_user',  app.controllers.AdminApi.addUser
-  app.post '/adminapi/del_user',  app.controllers.AdminApi.delUser
+  prefix = '/adminapi/'
+  
+  app.post prefix+'login',     app.controllers.AdminApi.login
+  app.get prefix+'info',       app.controllers.AdminApi.info
+
+
+  app.get prefix+'users',      app.controllers.AdminApi.users
+  app.get prefix+'heads',      app.controllers.AdminApi.heads
+  app.post prefix+'add_user',  app.controllers.AdminApi.addUser
+  app.post prefix+'del_user',  app.controllers.AdminApi.delUser

@@ -12,7 +12,7 @@ window.templates.ajaxLoader =  '<div class="ajaxLoad"><img src="/img/sprite/ajax
 
 window.templates.login = -> """
     <div id="loginForm">
-    <input type="text" data-value="login" class="form-control" placeholder='login'  #{ if login = getCookie('login') then "value=\"#{login}\"" else '' }><br>
+    <input type="text" data-value="login" autofocus class="form-control" placeholder='login'  #{ if login = getCookie('login') then "value=\"#{login}\"" else '' }><br>
     <input type="password" data-value="password" class="form-control" placeholder='password'><br>
     <button id="loginBtn" class="btn btn-success btn-block">Go!</button>
   </div>
@@ -28,7 +28,7 @@ $('#container').on 'click', '#loginBtn', ->
 window.templates.games = (games) ->
   html = templates.menu('Выберите матч', 'logout', 'refreshGames')
   html += templates.ajaxLoader
-  html += ("<button class='btn btn-block btn-info match' id='#{m._id}'class='match'>#{m.teams[0].name} <br> #{m.teams[1].name}<br><span class='smallText'>#{m.date} #{if m.time? then m.time else ''} #{if m.placeName? then m.placeName else ''}</span></button><br>" for key, m of games).join('')
+  html += ("<button class='btn btn-block btn-info btn-list match' id='#{m._id}'class='match'>#{m.teams[0].name}- #{m.teams[1].name}<br><span class='smallText'>#{m.date} #{if m.time? then m.time else ''} #{if m.placeName? then m.placeName else ''}</span></button><br>" for key, m of games).join('')
 
 $('#container').on 'click', '.match', ->
   view.viewGame($(@).attr('id'))
@@ -49,10 +49,11 @@ window.templates.game = (game) ->
   html += """
   <button class='btn btn-block btn-info' id="toProtocol" data-side="home">#{game.teams[0].name} - протокол</button>
   <button class='btn btn-block btn-info' id="toProtocol" data-side="away">#{game.teams[1].name} - протокол</button>
-  <button class='btn btn-block btn-info' id="homeChoise">#{game.teams[0].name} - выбор</button>
-  <button class='btn btn-block btn-info' id="awayChoise">#{game.teams[1].name} - выбор</button>
   <button class='btn btn-block btn-success' id="endMatch">завершить матч</button>
 """
+
+#  <button class='btn btn-block btn-info' id="homeChoise">#{game.teams[0].name} - выбор</button>
+#  <button class='btn btn-block btn-info' id="awayChoise">#{game.teams[1].name} - выбор</button>
 
 $('#container').on 'click', '#toGamesList', ->
   view.viewLoadedGamesList()
@@ -85,11 +86,14 @@ window.templates.roster = (gameId, side, team) ->
   html += "<input type='hidden' id='side' value='#{side}'>"
   html += """
 <div class="control-panel">
+
+
   <img class='btn btn-logo active' id="playedBtn" src="/img/sprite/foot/shirt.png">
   <img class='btn btn-logo' id="goalBtn" src="/img/sprite/foot/ball.png">
   <img class='btn btn-logo' id="passBtn" src="/img/sprite/foot/assist.png">
   <img class='btn btn-logo' id="yellowBtn" src="/img/sprite/foot/yellow_card.png">
   <img class='btn btn-logo' id="redBtn" src="/img/sprite/foot/red_card.png">
+  <span style="position:relative"><span id="ownGoalCounter">1</span><img class='btn btn-logo' id="owngoal" src="/img/sprite/foot/owngoal.png"></span><br>
   <img class='btn btn-logo' id="undoBtn" src="/img/sprite/foot/undo.png">
 </div><br>
 """
@@ -100,8 +104,8 @@ window.templates.roster = (gameId, side, team) ->
                <span class='number'>#{pl.number}</span>
                <span class='name'>#{formatPlayerName(pl.name)}</span>
                <div>
-     #{'<img style="height: 25px" src="/img/sprite/foot/ball.png">'.repeat(pl.goals)}
-#{'<img style="height: 25px" src="/img/sprite/foot/assist.png">'.repeat(pl.assists)}
+     #{'<img style="height: 25px; width: 25px;" src="/img/sprite/foot/ball.png">'.repeat(pl.goals)}
+#{'<img style="height: 25px; <width: 25px;" src="/img/sprite/foot/assist.png">'.repeat(pl.assists)}
 #{if pl.yellow is 1 then '<img style="height: 25px" src="/img/sprite/foot/yellow_card.png">' else if pl.yellow is 2 then '<img style="height: 25px" src="/img/sprite/foot/red_card_2yellow.png">' else '' }
 #{if pl.red is 1 then  '<img style="height: 25px" src="/img/sprite/foot/red_card.png">' else '' }
     </div>

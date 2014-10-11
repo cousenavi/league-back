@@ -32,6 +32,14 @@ class RefereeApi
         res.send models
     )
 
+  ##
+  # возвращаем список глав лиг
+  heads: (req, res) =>
+    req.checkRootAccess()
+    req.app.models.User.find({role: 'Head'}, (err, models) ->
+      res.send models
+    )
+
   #
   #
   #

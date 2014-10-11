@@ -1,39 +1,29 @@
 $ ->
   templates.sections =  (user) ->
-    html = ''
-    if user.role is 'Head' or user.role is 'root'
-      html += """
-          <a class='btn btn-block btn-info match' href="teams">Teams</a><br>
-"""
-
-    if user.role is 'Head' or user.role is 'root'
-      html += """
-          <a class='btn btn-block btn-info match' href="players" disabled>Players</a><br>
-"""
-    if user.role is 'Head' or user.role is 'root'
-      html += """
-          <a class='btn btn-block btn-info match' href="games">Games</a><br>
-"""
-    if user.role is 'Head' or user.role is 'root'
-      html += """
-          <a class='btn btn-block btn-info match' href="referees">Referrees</a><br>
-"""
-
-    if user.role is 'Head' or user.role is 'root'
-      html += """
-          <a class='btn btn-block btn-info match' href="places" disabled>Places</a><br>
-"""
-
     if user.role is 'root'
-      html += """
-          <a class='btn btn-block btn-info match' href="users">Users</a><br>
+      html = """
+         <a class='btn btn-block btn-info btn-list' href="leagues" tabindex='1'>Leagues</a>
+         <a class='btn btn-block btn-info btn-list' href="heads" tabindex='2'>Heads</a>
 """
-    html
+    if user.role is 'Head'
+      html = """
+        <a class='btn btn-block btn-info btn-list' href="games" tabindex='1'>Games</a>
+        <a class='btn btn-block btn-info btn-list' href="teams" tabindex='2'>Teams</a>
+        <a class='btn btn-block btn-info btn-list' href="referees" tabindex='3'>Referees</a>
+"""
+
+    if user.role is 'Capitan'
+      html = """
+"""
+
+    html += '<a class="btn btn-block btn-success btn-list" id="logoutBtn" tabindex="3">Logout</a>'
+
+    return html
 
   templates.login = -> """
     <div id="loginForm">
     <input type="text" data-value="login" class="form-control"
-    placeholder='login' autocomplete='true'
+    placeholder='login' autocomplete='true' autofocus
     #{ if login = getCookie('login') then "value=\"#{login}\"" else '' }><br>
     <input type="password" data-value="password" class="form-control" placeholder='password' autocomplete='true'><br>
     <button id="loginBtn" class="btn btn-success btn-block">Go!</button>
@@ -45,6 +35,10 @@ $ ->
       location.href = 'players'
     else
       $('#container').html(templates.sections(user))
+  )
+
+  $('#container').on('click', '#logoutBtn', ->
+    sessionExpired()
   )
 
   $('#container').on('click', '#loginBtn', ->
