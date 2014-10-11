@@ -65,7 +65,7 @@
           </div>
           <div class="col-xs-3 col-md-3 col-lg-3 teamName" >#{game.awayTeamName} #{if game.awayTeamPlayers? then computePlayers(game.awayTeamPlayers) else ''}</div>
           <div class="col-xs-2 col-md-2 col-lg-2"><img src ="/#{game.awayTeamLogo}"></div>
-        </div>
+        </div><
 """
 
   $('body').on('click', '.summary tr', ->
