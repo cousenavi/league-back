@@ -21,6 +21,7 @@ $ ->
     return data
 
   $('body').on('change', 'select', (e) ->
+    setCookie('leagueId', @value)
     name = $(e.target).find('option:selected').html()
     id = $(e.target).attr('id')
     $(e.target).parent().find("[data-target='#{id}']").val(name)
@@ -245,8 +246,10 @@ $ ->
     $.getJSON('/places')
     $.getJSON('/referees')
   ).then((leagues, teams, places, referees) ->
+    leagueId = getCookie('leagueId')
+
     $('#leaguesSelect').html(
-      ("<option value='#{league._id}'>#{league.name}</option>" for league in leagues[0]).join('')
+      ("<option value='#{league._id}' #{if league._id is leagueId then 'selected' else ''}>#{league.name}</option>" for league in leagues[0]).join('')
     ).on('change', ->
         loadGamesHtml(@value).then((html) ->
           $('#list').html(html)
@@ -356,4 +359,17 @@ $ ->
       $.post( '/games/del',{_id: model._id}, -> location.reload())
     )
   )
+
+  setCookie = (name, value, options) ->
+    options = {} if !options?
+    value = encodeURIComponent(value)
+    cookie = "#{name}=#{value}"
+    for key, value of options
+      cookie += "; #{key}=#{value}"
+    document.cookie = cookie
+
+  getCookie = (name) ->
+    console.log document.cookie
+    kvs = (keyval.split('=') for keyval in document.cookie.split('; '))
+    (kv[1] for kv in kvs when kv[0] is name)[0]
 

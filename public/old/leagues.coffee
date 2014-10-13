@@ -1,5 +1,5 @@
 $ ->
-  $.getJSON('leagues', (leagues) ->
+  $.getJSON('/leagues', (leagues) ->
     for leg in leagues
 
       imgsrc = if leg.logo? then leg.logo else ''
