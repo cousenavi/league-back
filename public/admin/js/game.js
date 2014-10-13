@@ -27,7 +27,7 @@
         for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
           pl = _ref2[_k];
           if (pl.goals > 0) {
-            _results.push("#" + pl.number + " " + pl.name + " " + (pl.goals > 1 ? "(x" + pl.goals + ")" : '') + " ");
+            _results.push("#" + (pl.number != null ? pl.number : '') + " " + pl.name + " " + (pl.goals > 1 ? "(x" + pl.goals + ")" : '') + " ");
           }
         }
         return _results;
@@ -40,7 +40,7 @@
         for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
           pl = _ref2[_k];
           if (pl.assists > 0) {
-            _results.push("#" + pl.number + " " + pl.name + " " + (pl.assists > 1 ? "(x" + pl.assists + ")" : '') + " ");
+            _results.push("#" + (pl.number != null ? pl.number : '') + " " + pl.name + " " + (pl.assists > 1 ? "(x" + pl.assists + ")" : '') + " ");
           }
         }
         return _results;
@@ -53,7 +53,7 @@
         for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
           pl = _ref2[_k];
           if (pl.yellow > 0 || pl.red > 0) {
-            _results.push("#" + pl.number + " " + pl.name + " (" + (pl.yellow === '1' ? 'жк' : pl.yellow === '2' ? '2жк' : '') + " " + (pl.red ? 'кк' : '') + ")  ");
+            _results.push("#" + (pl.number != null ? pl.number : '') + " " + pl.name + " (" + (pl.yellow === '1' ? 'жк' : pl.yellow === '2' ? '2жк' : '') + " " + (pl.red ? 'кк' : '') + ")  ");
           }
         }
         return _results;
@@ -66,7 +66,7 @@
         for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
           pl = _ref2[_k];
           if (pl.played === "true") {
-            _results.push("#" + pl.number + " " + pl.name);
+            _results.push("#" + (pl.number != null ? pl.number : '') + " " + pl.name);
           }
         }
         return _results;
@@ -80,7 +80,7 @@
         for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
           pl = _ref2[_k];
           if (pl.goals > 0) {
-            _results.push("#" + pl.number + " " + pl.name + " " + (pl.goals > 1 ? "(x" + pl.goals + ")" : '') + " ");
+            _results.push("#" + (pl.number != null ? pl.number : '') + " " + pl.name + " " + (pl.goals > 1 ? "(x" + pl.goals + ")" : '') + " ");
           }
         }
         return _results;
@@ -93,7 +93,7 @@
         for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
           pl = _ref2[_k];
           if (pl.assists > 0) {
-            _results.push("#" + pl.number + " " + pl.name + " " + (pl.assists > 1 ? "(x" + pl.assists + ")" : '') + " ");
+            _results.push("#" + (pl.number != null ? pl.number : '') + " " + pl.name + " " + (pl.assists > 1 ? "(x" + pl.assists + ")" : '') + " ");
           }
         }
         return _results;
@@ -106,7 +106,7 @@
         for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
           pl = _ref2[_k];
           if (pl.yellow > 0 || pl.red > 0) {
-            _results.push("#" + pl.number + " " + pl.name + " (" + (pl.yellow === '1' ? 'жк' : pl.yellow === '2' ? '2жк' : '') + " " + (pl.red ? 'кк' : '') + ")  ");
+            _results.push("#" + (pl.number != null ? pl.number : '') + " " + pl.name + " (" + (pl.yellow === '1' ? 'жк' : pl.yellow === '2' ? '2жк' : '') + " " + (pl.red ? 'кк' : '') + ")  ");
           }
         }
         return _results;
@@ -119,7 +119,7 @@
         for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
           pl = _ref2[_k];
           if (pl.played === "true") {
-            _results.push("#" + pl.number + " " + pl.name);
+            _results.push("#" + (pl.number != null ? pl.number : '') + " " + pl.name);
           }
         }
         return _results;
