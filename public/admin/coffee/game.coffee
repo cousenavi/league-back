@@ -10,22 +10,22 @@ $ ->
     html = "<h3>#{game.homeTeamName} - #{game.awayTeamName} #{game.homeTeamScore}:#{game.awayTeamScore}</h3>"
     html += "<b>#{game.homeTeamName}: </b>"
     html += "<br><b>Голы: </b>"
-    html += ("##{pl.number} #{pl.name} #{if pl.goals > 1 then "(x#{pl.goals})" else ''} "for pl in game.homeTeamPlayers when pl.goals > 0).join(', ')
+    html += ("##{if pl.number? then pl.number else ''} #{pl.name} #{if pl.goals > 1 then "(x#{pl.goals})" else ''} "for pl in game.homeTeamPlayers when pl.goals > 0).join(', ')
     html += "<br><b>Передачи: </b>"
-    html += ("##{pl.number} #{pl.name} #{if pl.assists > 1 then "(x#{pl.assists})" else ''} "for pl in game.homeTeamPlayers when pl.assists > 0).join(', ')
+    html += ("##{if pl.number? then pl.number else ''} #{pl.name} #{if pl.assists > 1 then "(x#{pl.assists})" else ''} "for pl in game.homeTeamPlayers when pl.assists > 0).join(', ')
     html += "<br><b>Карточки: </b>"
-    html += ("##{pl.number} #{pl.name} (#{if pl.yellow is '1' then 'жк' else if pl.yellow is '2' then '2жк' else ''} #{if pl.red then 'кк' else ''})  "for pl in game.homeTeamPlayers when pl.yellow > 0 or pl.red > 0).join(', ')
+    html += ("##{if pl.number? then pl.number else ''} #{pl.name} (#{if pl.yellow is '1' then 'жк' else if pl.yellow is '2' then '2жк' else ''} #{if pl.red then 'кк' else ''})  "for pl in game.homeTeamPlayers when pl.yellow > 0 or pl.red > 0).join(', ')
     html += "<br><b>Игравшие: </b>"
-    html += ("##{pl.number} #{pl.name}" for pl in game.homeTeamPlayers when pl.played is "true").join(', ')
+    html += ("##{if pl.number? then pl.number else ''} #{pl.name}" for pl in game.homeTeamPlayers when pl.played is "true").join(', ')
     html += "<br><br><b>#{game.awayTeamName}: </b>"
     html += "<br><b>Голы: </b>"
-    html += ("##{pl.number} #{pl.name} #{if pl.goals > 1 then "(x#{pl.goals})" else ''} "for pl in game.awayTeamPlayers when pl.goals > 0).join(', ')
+    html += ("##{if pl.number? then pl.number else ''} #{pl.name} #{if pl.goals > 1 then "(x#{pl.goals})" else ''} "for pl in game.awayTeamPlayers when pl.goals > 0).join(', ')
     html += "<br><b>Передачи: </b>"
-    html += ("##{pl.number} #{pl.name} #{if pl.assists > 1 then "(x#{pl.assists})" else ''} "for pl in game.awayTeamPlayers when pl.assists > 0).join(', ')
+    html += ("##{if pl.number? then pl.number else ''} #{pl.name} #{if pl.assists > 1 then "(x#{pl.assists})" else ''} "for pl in game.awayTeamPlayers when pl.assists > 0).join(', ')
     html += "<br><b>Карточки: </b>"
-    html += ("##{pl.number} #{pl.name} (#{if pl.yellow is '1' then 'жк' else if pl.yellow is '2' then '2жк' else ''} #{if pl.red then 'кк' else ''})  "for pl in game.awayTeamPlayers when pl.yellow > 0 or pl.red > 0).join(', ')
+    html += ("##{if pl.number? then pl.number else ''} #{pl.name} (#{if pl.yellow is '1' then 'жк' else if pl.yellow is '2' then '2жк' else ''} #{if pl.red then 'кк' else ''})  "for pl in game.awayTeamPlayers when pl.yellow > 0 or pl.red > 0).join(', ')
     html += "<br><b>Игравшие: </b>"
-    html += ("##{pl.number} #{pl.name}" for pl in game.awayTeamPlayers when pl.played is "true").join(', ')
+    html += ("##{if pl.number? then pl.number else ''} #{pl.name}" for pl in game.awayTeamPlayers when pl.played is "true").join(', ')
 
 
   #todo TEMPORARY!!!
