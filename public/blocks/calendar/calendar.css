@@ -24,14 +24,26 @@
     font-size: 24pt;
 }
 
+#summaryhead {
+    text-align: center;
+}
+
+.summary thead img {
+    height: 40px;
+}
+
 .summary tbody img {
     height: 20px;
+}
+
+.summary th {
+    font-size: 16pt;
 }
 
 .summary td:nth-child(1){
     width: 300px;
 }
 
-.summary th:nth-child(2) {
-    font-size: 24pt;
+.summary .recordTour {
+    font-size: 90%;
 }

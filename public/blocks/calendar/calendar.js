@@ -8,7 +8,7 @@
       },
       stats: function(stats) {
         var pl, tm;
-        return "<table class=\"table table-striped summary\">\n  <thead>\n  <th><img src=\"/" + stats.leagueLogo + "\"></th>\n  <th>Tour# " + stats.tourNumber + "</th>\n  </thead>\n  <tbody>\n    <tr><td><b>Сыграно матчей</b></td><td>" + stats.played + "</td></tr>\n    <tr><td><b>Забито голов</b></td><td>" + stats.scored + "</td></tr>\n    <tr><td><b>Показано жёлтых</b></td><td>" + stats.yellow + "</td></tr>\n    <tr><td><b>Показано красных</b></td><td>" + stats.red + "</td></tr>\n    <tr><td><b>Забили больше всех</b></td><td>" + (((function() {
+        return "<table class=\"table table-striped summary\">\n  <thead>\n  <th></th>\n  <th>в туре</th>\n  <th>рекорд</th>\n  </thead>\n  <tbody>\n    <tr><td><b>Сыграно матчей</b></td><td>" + stats.played + "</td><td></td></tr>\n    <tr><td><b>Забито голов</b></td><td>" + stats.scored + "</td><td>" + stats.records.scored.val + " <span class=\"recordTour\">(" + stats.records.scored.tour + " тур)</span></td></tr>\n    <tr><td><b>Показано жёлтых</b></td><td>" + stats.yellow + "</td><td></td></tr>\n    <tr><td><b>Показано красных</b></td><td>" + stats.red + "</td><td></td></tr>\n    <tr><td><b>Забили больше всех</b></td>\n        <td>" + (((function() {
           var _i, _len, _ref, _results;
           _ref = stats.topScoredTeams;
           _results = [];
@@ -17,13 +17,31 @@
             _results.push("<img src='/" + tm.logo + "'> " + tm.name + " (" + tm.goals + ")");
           }
           return _results;
-        })()).join(', ')) + "</td></tr>\n    <tr><td><b>Пропустили меньше всех</b></td><td>" + (((function() {
+        })()).join(', ')) + "</td>\n        <td>" + stats.records.topScoredTeams.goals + ": " + (((function() {
+          var _i, _len, _ref, _results;
+          _ref = stats.records.topScoredTeams.teams;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            tm = _ref[_i];
+            _results.push("<img src='/" + tm.logo + "'> " + tm.name + " <span class='recordTour'>(" + tm.tour + " тур)</span>");
+          }
+          return _results;
+        })()).join(', ')) + "</td>\n    </tr>\n    <tr><td><b>Пропустили меньше всех</b></td>\n        <td>" + (((function() {
           var _i, _len, _ref, _results;
           _ref = stats.lessConceededTeams;
           _results = [];
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             tm = _ref[_i];
             _results.push("<img src='/" + tm.logo + "' > " + tm.name + " (" + tm.goals + ")");
+          }
+          return _results;
+        })()).join(', ')) + "</td>\n        <td>" + stats.records.lessConceededTeams.goals + ": " + (((function() {
+          var _i, _len, _ref, _results;
+          _ref = stats.records.lessConceededTeams.teams;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            tm = _ref[_i];
+            _results.push("<img src='/" + tm.logo + "'> " + tm.name + " <span class='recordTour'>(" + tm.tour + " тур)</span>");
           }
           return _results;
         })()).join(', ')) + "</td></tr>\n    <tr><td><b>Самая грубая команда</b></td><td>" + (((function() {
@@ -35,7 +53,7 @@
             _results.push("<img src='/" + tm.logo + "' > " + tm.name + " (" + tm.yellow + " + " + tm.red + ")");
           }
           return _results;
-        })()).join(', ')) + "</td></tr>\n    <tr><td><b>Голеодор тура</b></td><td>" + (((function() {
+        })()).join(', ')) + "</td><td></td></tr>\n    <tr><td><b>Голеодор тура</b></td>\n        <td>" + (((function() {
           var _i, _len, _ref, _results;
           _ref = stats.topGoalscorers;
           _results = [];
@@ -44,7 +62,16 @@
             _results.push("<img src='/" + pl.teamLogo + "'> " + pl.name + " (" + pl.goals + ")");
           }
           return _results;
-        })()).join(', ')) + "</td></tr>\n    <tr><td><b>Ассистент тура</b></td><td>" + (((function() {
+        })()).join(', ')) + "</td>\n        <td>" + stats.records.goalscorers.goals + ": " + (((function() {
+          var _i, _len, _ref, _results;
+          _ref = stats.records.goalscorers.players;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            pl = _ref[_i];
+            _results.push("<img src='/" + pl.logo + "'> " + pl.name + " <span class='recordTour'>(" + pl.tour + " тур)</span>");
+          }
+          return _results;
+        })()).join(', ')) + "</td></tr>\n    </tr>\n    <tr><td><b>Ассистент тура</b></td>\n        <td>" + (((function() {
           var _i, _len, _ref, _results;
           _ref = stats.topAssistants;
           _results = [];
@@ -53,7 +80,16 @@
             _results.push("<img src='/" + pl.teamLogo + "'> " + pl.name + " (" + pl.assists + ")");
           }
           return _results;
-        })()).join(', ')) + "</td></tr>\n  </tbody>\n</table>";
+        })()).join(', ')) + "</td>\n        <td>" + stats.records.assistants.assists + ": " + (((function() {
+          var _i, _len, _ref, _results;
+          _ref = stats.records.assistants.players;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            pl = _ref[_i];
+            _results.push("<img src='/" + pl.logo + "'> " + pl.name + " <span class='recordTour'>(" + pl.tour + " тур)</span>");
+          }
+          return _results;
+        })()).join(', ')) + "</td></tr>\n</tr>\n    <tr><td><b>Серия побед</b></td><td></td><td></td></tr>\n    <tr><td><b>Серия без поражений</b></td><td></td><td></td></tr>\n    <tr><td><b>Голевая серия</b></td><td></td><td></td></tr>\n  </tbody>\n</table>";
       },
       row: function(game) {
         var computePlayers;

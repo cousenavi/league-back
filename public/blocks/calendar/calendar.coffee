@@ -8,30 +8,37 @@
     stats: (stats) -> """
       <table class="table table-striped summary">
         <thead>
-        <th><img src="/#{stats.leagueLogo}"></th>
-        <th>Tour# #{stats.tourNumber}</th>
+        <th></th>
+        <th>в туре</th>
+        <th>рекорд</th>
         </thead>
         <tbody>
-          <tr><td><b>Сыграно матчей</b></td><td>#{stats.played}</td></tr>
-          <tr><td><b>Забито голов</b></td><td>#{stats.scored}</td></tr>
-          <tr><td><b>Показано жёлтых</b></td><td>#{stats.yellow}</td></tr>
-          <tr><td><b>Показано красных</b></td><td>#{stats.red}</td></tr>
-          <tr><td><b>Забили больше всех</b></td><td>#{("<img src='/#{tm.logo}'> #{tm.name} (#{tm.goals})"for tm in stats.topScoredTeams).join(', ')}</td></tr>
-          <tr><td><b>Пропустили меньше всех</b></td><td>#{("<img src='/#{tm.logo}' > #{tm.name} (#{tm.goals})"for tm in stats.lessConceededTeams).join(', ')}</td></tr>
-          <tr><td><b>Самая грубая команда</b></td><td>#{("<img src='/#{tm.logo}' > #{tm.name} (#{tm.yellow} + #{tm.red})" for tm in stats.mostRudeTeams).join(', ')}</td></tr>
-          <tr><td><b>Голеодор тура</b></td><td>#{("<img src='/#{pl.teamLogo}'> #{pl.name} (#{pl.goals})"for pl in stats.topGoalscorers).join(', ')}</td></tr>
-          <tr><td><b>Ассистент тура</b></td><td>#{("<img src='/#{pl.teamLogo}'> #{pl.name} (#{pl.assists})"for pl in stats.topAssistants).join(', ')}</td></tr>
+          <tr><td><b>Сыграно матчей</b></td><td>#{stats.played}</td><td></td></tr>
+          <tr><td><b>Забито голов</b></td><td>#{stats.scored}</td><td>#{stats.records.scored.val} <span class="recordTour">(#{stats.records.scored.tour} тур)</span></td></tr>
+          <tr><td><b>Показано жёлтых</b></td><td>#{stats.yellow}</td><td></td></tr>
+          <tr><td><b>Показано красных</b></td><td>#{stats.red}</td><td></td></tr>
+          <tr><td><b>Забили больше всех</b></td>
+              <td>#{("<img src='/#{tm.logo}'> #{tm.name} (#{tm.goals})"for tm in stats.topScoredTeams).join(', ')}</td>
+              <td>#{stats.records.topScoredTeams.goals}: #{("<img src='/#{tm.logo}'> #{tm.name} <span class='recordTour'>(#{tm.tour} тур)</span>"for tm in stats.records.topScoredTeams.teams).join(', ')}</td>
+          </tr>
+          <tr><td><b>Пропустили меньше всех</b></td>
+              <td>#{("<img src='/#{tm.logo}' > #{tm.name} (#{tm.goals})"for tm in stats.lessConceededTeams).join(', ')}</td>
+              <td>#{stats.records.lessConceededTeams.goals}: #{("<img src='/#{tm.logo}'> #{tm.name} <span class='recordTour'>(#{tm.tour} тур)</span>"for tm in stats.records.lessConceededTeams.teams).join(', ')}</td></tr>
+          <tr><td><b>Самая грубая команда</b></td><td>#{("<img src='/#{tm.logo}' > #{tm.name} (#{tm.yellow} + #{tm.red})" for tm in stats.mostRudeTeams).join(', ')}</td><td></td></tr>
+          <tr><td><b>Голеодор тура</b></td>
+              <td>#{("<img src='/#{pl.teamLogo}'> #{pl.name} (#{pl.goals})"for pl in stats.topGoalscorers).join(', ')}</td>
+              <td>#{stats.records.goalscorers.goals}: #{("<img src='/#{pl.logo}'> #{pl.name} <span class='recordTour'>(#{pl.tour} тур)</span>"for pl in stats.records.goalscorers.players).join(', ')}</td></tr>
+          </tr>
+          <tr><td><b>Ассистент тура</b></td>
+              <td>#{("<img src='/#{pl.teamLogo}'> #{pl.name} (#{pl.assists})"for pl in stats.topAssistants).join(', ')}</td>
+              <td>#{stats.records.assistants.assists}: #{("<img src='/#{pl.logo}'> #{pl.name} <span class='recordTour'>(#{pl.tour} тур)</span>"for pl in stats.records.assistants.players).join(', ')}</td></tr>
+</tr>
+          <tr><td><b>Серия побед</b></td><td></td><td></td></tr>
+          <tr><td><b>Серия без поражений</b></td><td></td><td></td></tr>
+          <tr><td><b>Голевая серия</b></td><td></td><td></td></tr>
         </tbody>
       </table>
 """
-      #todo:
-      # серия побед
-      # серия ничьих
-      # серия поражений
-      # голевая серия: Ivanov (3 матча подряд, 7 голов)
-      # неуёмный ассистент: Petrov (2 матча подряд, 3 передачи)
-      # непрбиваемый: Sidorov (5 сухих матчей)
-
 
 
     row: (game) ->

@@ -374,9 +374,9 @@ class TablesController
           if gm.awayTeamScore > 0
             if gm.awayTeamScore > tops[gm.tourNumber].teamGoals
               tops[gm.tourNumber].teamGoals = gm.awayTeamScore
-              summaries[gm.tourNumber].topScoredTeams = [{goals: gm.awayTeamScore, teamName: gm.awayTeamName, logo: gm.awayTeamLogo}]
+              summaries[gm.tourNumber].topScoredTeams = [{goals: gm.awayTeamScore, name: gm.awayTeamName, logo: gm.awayTeamLogo}]
             else if gm.awayTeamScore is tops[gm.tourNumber].teamGoals
-              summaries[gm.tourNumber].topScoredTeams.push {goals: gm.awayTeamScore, teamName: gm.awayTeamName, logo: gm.awayTeamLogo}
+              summaries[gm.tourNumber].topScoredTeams.push {goals: gm.awayTeamScore, name: gm.awayTeamName, logo: gm.awayTeamLogo}
           #
 
           if gm.homeTeamScore?
@@ -394,7 +394,7 @@ class TablesController
           teamYellow = teamRed = 0
           teamYellow += (if pl.yellow > 0 then parseInt(pl.yellow) else 0) for pl in gm.homeTeamPlayers
           teamRed    += (if pl.red > 0 then parseInt(pl.red) else 0) for pl in gm.homeTeamPlayers
-          if teamYellow + 2*teamRed is tops[gm.tourNumber].teamRude
+          if tops[gm.tourNumber].teamRude > 0 and teamYellow + 2*teamRed is tops[gm.tourNumber].teamRude
             summaries[gm.tourNumber].mostRudeTeams.push {name: gm.homeTeamName, logo: gm.homeTeamLogo, yellow: teamYellow, red: teamRed}
           else if  teamYellow + 2*teamRed > tops[gm.tourNumber].teamRude
             summaries[gm.tourNumber].mostRudeTeams =  [{name: gm.homeTeamName, logo: gm.homeTeamLogo, yellow: teamYellow, red: teamRed}]
@@ -403,7 +403,7 @@ class TablesController
           teamYellow = teamRed = 0
           teamYellow += (if pl.yellow > 0 then parseInt(pl.yellow) else 0) for pl in gm.awayTeamPlayers
           teamRed    += (if pl.red > 0 then parseInt(pl.red) else 0) for pl in gm.awayTeamPlayers
-          if teamYellow + 2*teamRed is tops[gm.tourNumber].teamRude
+          if tops[gm.tourNumber].teamRude > 0 and teamYellow + 2*teamRed is tops[gm.tourNumber].teamRude
             summaries[gm.tourNumber].mostRudeTeams.push {name: gm.awayTeamName, logo: gm.awayTeamName, yellow: teamYellow, red: teamRed}
           else if  teamYellow + 2*teamRed > tops[gm.tourNumber].teamRude
             summaries[gm.tourNumber].mostRudeTeams =  [{name: gm.awayTeamName, logo: gm.awayTeamName, yellow: teamYellow, red: teamRed}]
@@ -449,7 +449,53 @@ class TablesController
 
 
 
+        #todo вряд ли нужно так уж денормализовать таблицу и хранить рекорды в каждом обзоре. Скорее сделать новую сущность и вытягивать отдельным запросом
+        records = {
+          scored: {val: 0, tour: 0}
+          topScoredTeams: {goals: 0, teams: []}
+          lessConceededTeams: {goals: 10000, teams: []}
+          goalscorers: {goals: 0, players: []}
+          assistants: {assists: 0, players: []}
+        }
         for tourNumber, summary of summaries
+          summary.topScoredTeams = summary.topScoredTeams || []
+          summary.lessConceededTeams = summary.lessConceededTeams|| []
+          summary.topGoalscorers = summary.topGoalscorers || []
+          summary.topAssistants = summary.topAssistants || []
+
+          if summary.scored > records.scored.val then records.scored = {val: summary.scored, tour: tourNumber}
+          for team in summary.topScoredTeams
+            if team.goals > records.topScoredTeams.goals
+              records.topScoredTeams  = {goals: team.goals, teams: [{logo: team.logo, name: team.name, tour: tourNumber}]}
+            else if team.goals is records.topScoredTeams.goals
+              records.topScoredTeams.teams.push {logo: team.logo, name: team.name, tour: tourNumber}
+
+
+          for team in summary.lessConceededTeams
+            if team.goals < records.lessConceededTeams.goals
+              records.lessConceededTeams  = {goals: team.goals, teams: [{logo: team.logo, name: team.name, tour: tourNumber}]}
+            else if team.goals is records.lessConceededTeams.goals
+              records.lessConceededTeams.teams.push {logo: team.logo, name: team.name, tour: tourNumber}
+
+          for pl in summary.topGoalscorers
+            if pl.goals > records.goalscorers.goals
+              records.goalscorers  = {goals: pl.goals, players: [{logo: pl.teamLogo, name: pl.name, tour: tourNumber}]}
+            else if pl.goals is records.lessConceededTeams.goals
+              records.lessConceededTeams.teams.push {logo: pl.teamLogo, name: pl.name, tour: tourNumber}
+
+          console.log 'qwe', summary
+
+          for pl in summary.topAssistants
+            if pl.assists > records.assistants.assists
+              records.assistants  = {assists: pl.assists, players: [{logo: pl.teamLogo, name: pl.name, tour: tourNumber}]}
+            else if pl.assists is records.assistants.assists
+              records.assistants.teams.push {logo: pl.teamLogo, name: pl.name, tour: tourNumber}
+
+
+
+        for tourNumber, summary of summaries
+          summary.records = records
+
           @app.models.TourSummary.findOneAndUpdate({leagueId: summary.leagueId, tourNumber: tourNumber}, {$set: summary}, {upsert: true}, (err, models) ->
             console.log "tour summary. Error: #{err}, RowCount: #{models}"
             )

@@ -26,6 +26,7 @@ module.exports = ->
     topWinStrikes: Array
     topLoseStrikes: Array
 
+    records: mongoose.Schema.Types.Mixed
 
   )
 
