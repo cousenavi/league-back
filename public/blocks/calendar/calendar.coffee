@@ -33,9 +33,15 @@
               <td>#{("<img src='/#{pl.teamLogo}'> #{pl.name} (#{pl.assists})"for pl in stats.topAssistants).join(', ')}</td>
               <td>#{stats.records.assistants.assists}: #{("<img src='/#{pl.logo}'> #{pl.name} <span class='recordTour'>(#{pl.tour} тур)</span>"for pl in stats.records.assistants.players).join(', ')}</td></tr>
 </tr>
-          <tr><td><b>Серия побед</b></td><td></td><td></td></tr>
-          <tr><td><b>Серия без поражений</b></td><td></td><td></td></tr>
-          <tr><td><b>Голевая серия</b></td><td></td><td></td></tr>
+          <tr><td><b>Серия без поражений</b></td>
+            <td>#{stats.records.formsRecords.withoutLoses.games}: #{("<img src='/#{tm.logo}'> #{tm.name}"for tm in stats.records.formsRecords.withoutLoses.teams).join(', ')}</td>
+            <td>#{stats.records.formsRecords.withoutLosesBest.games}: #{("<img src='/#{tm.logo}'> #{tm.name}"for tm in stats.records.formsRecords.withoutLosesBest.teams).join(', ')}</td>
+          </tr>
+          <tr><td><b>Серия без побед</b></td>
+     <td>#{stats.records.formsRecords.withoutWins.games}: #{("<img src='/#{tm.logo}'> #{tm.name}"for tm in stats.records.formsRecords.withoutWins.teams).join(', ')}</td>
+            <td>#{stats.records.formsRecords.withoutWinsBest.games}: #{("<img src='/#{tm.logo}'> #{tm.name}"for tm in stats.records.formsRecords.withoutWinsBest.teams).join(', ')}</td>
+
+</tr>
         </tbody>
       </table>
 """

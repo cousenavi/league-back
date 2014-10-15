@@ -27,6 +27,7 @@ module.exports = ->
     topLoseStrikes: Array
 
     records: mongoose.Schema.Types.Mixed
+    formRecords: mongoose.Schema.Types.Mixed
 
   )
 

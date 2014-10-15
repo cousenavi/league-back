@@ -342,8 +342,76 @@ class TablesController
       )
     )
 
+  ##
+  # private
+  # Прокручиваем все игры, чтобы определить серии побед и поражений
+  defineFormsRecords = (games) ->
+    teamsForm = {}
+    for gm in games
+      if gm.homeTeamScore?
+        if !teamsForm[gm.homeTeamId] then teamsForm[gm.homeTeamId] = {name: gm.homeTeamName, logo: gm.homeTeamLogo, form: []}
+        if !teamsForm[gm.awayTeamId] then teamsForm[gm.awayTeamId] = {name: gm.awayTeamName, logo: gm.awayTeamLogo, form: []}
+
+        if gm.homeTeamScore > gm.awayTeamScore
+          teamsForm[gm.homeTeamId].form.push('w')
+          teamsForm[gm.awayTeamId].form.push('l')
+        else if gm.homeTeamScore < gm.awayTeamScore
+          teamsForm[gm.homeTeamId].form.push('l')
+          teamsForm[gm.awayTeamId].form.push('w')
+        else if  gm.homeTeamScore is gm.awayTeamScore
+          teamsForm[gm.homeTeamId].form.push('d')
+          teamsForm[gm.awayTeamId].form.push('d')
+
+    formsRecords = {
+      withoutLoses: {games: 0, teams: []},
+      withoutWins:  {games: 0, teams: []}
+      withoutLosesBest: {games: 0, teams: []},
+      withoutWinsBest:  {games: 0, teams: []}
+    }
+    #прокручиваем форму команд чтобы определить, у кого рекордная серия побед и поражений
+    for teamId, team of teamsForm
+      nolose = 0; noloseBest = 0
+      nowin = 0; nowinBest = 0
+      for res in team.form
+        if res isnt 'l'
+          nolose++
+          if nolose > noloseBest then noloseBest = nolose
+        else
+          if nolose > noloseBest then noloseBest = nolose
+          nolose = 0
+
+        if res isnt 'w'
+          nowin++
+          if nowin > nowinBest then nowinBest = nowin
+        else
+          if nowin > nowinBest then nowinBest = nowin
+          nowin = 0
+
+      if nolose > formsRecords.withoutLoses.games
+        formsRecords.withoutLoses = {games: nolose, teams: [{name: team.name, logo: team.logo}]}
+      else if nolose is formsRecords.withoutLoses.games
+        formsRecords.withoutLoses.teams.push  {name: team.name, logo: team.logo}
+
+      if noloseBest > formsRecords.withoutLosesBest.games
+        formsRecords.withoutLosesBest = {games: noloseBest, teams: [{name: team.name, logo: team.logo}]}
+      else if noloseBest is formsRecords.withoutLosesBest.games
+        formsRecords.withoutLosesBest.teams.push  {name: team.name, logo: team.logo}
+
+      if nowin > formsRecords.withoutWins.games
+        formsRecords.withoutWins = {games: nowin, teams: [{name: team.name, logo: team.logo}]}
+      else if nowin is formsRecords.withoutWins.games
+        formsRecords.withoutWins.teams.push  {name: team.name, logo: team.logo}
+
+      if nowinBest > formsRecords.withoutWinsBest.games
+        formsRecords.withoutWinsBest = {games: nowinBest, teams: [{name: team.name, logo: team.logo}]}
+      else if nowinBest is formsRecords.withoutWinsBest.games
+        formsRecords.withoutWinsBest.teams.push  {name: team.name, logo: team.logo}
+
+    return formsRecords
+
+
   updateTourSummary: (game) ->
-    @app.models.Game.find({leagueId: game.leagueId}, (err, models) =>
+    @app.models.Game.find({leagueId: game.leagueId}).sort(datetime: 'asc').exec( (err, models) =>
       @app.models.League.findById(game.leagueId, (err, league) =>
         summaries = {}
         tops = {}
@@ -451,6 +519,7 @@ class TablesController
 
         #todo вряд ли нужно так уж денормализовать таблицу и хранить рекорды в каждом обзоре. Скорее сделать новую сущность и вытягивать отдельным запросом
         records = {
+          formsRecords: defineFormsRecords(models)
           scored: {val: 0, tour: 0}
           topScoredTeams: {goals: 0, teams: []}
           lessConceededTeams: {goals: 10000, teams: []}
@@ -462,6 +531,7 @@ class TablesController
           summary.lessConceededTeams = summary.lessConceededTeams|| []
           summary.topGoalscorers = summary.topGoalscorers || []
           summary.topAssistants = summary.topAssistants || []
+          summary.formRecords = defineFormsRecords(models.filter((gm) -> gm.tourNumber <= tourNumber))
 
           if summary.scored > records.scored.val then records.scored = {val: summary.scored, tour: tourNumber}
           for team in summary.topScoredTeams
@@ -483,14 +553,12 @@ class TablesController
             else if pl.goals is records.lessConceededTeams.goals
               records.lessConceededTeams.teams.push {logo: pl.teamLogo, name: pl.name, tour: tourNumber}
 
-          console.log 'qwe', summary
 
           for pl in summary.topAssistants
             if pl.assists > records.assistants.assists
               records.assistants  = {assists: pl.assists, players: [{logo: pl.teamLogo, name: pl.name, tour: tourNumber}]}
             else if pl.assists is records.assistants.assists
               records.assistants.teams.push {logo: pl.teamLogo, name: pl.name, tour: tourNumber}
-
 
 
         for tourNumber, summary of summaries
