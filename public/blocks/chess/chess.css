@@ -1,5 +1,14 @@
+#chesswrapper {
+    padding: 10px;
+}
+
+table {
+    font-size: 12pt;
+    border: 2px solid #ddd !important;
+    font-family: Verdana;
+}
+
 table img {
-    width: 20px;
     height: 20px;
 }
 
@@ -12,10 +21,26 @@ table td:nth-child(n+2), table th{
     font-weight: 900;
 }
 
+table th {
+    border: 1px solid #ddd;
+}
+
+table td:nth-child(2n), table th:nth-child(2n), table tr:nth-child(2n-1) {
+    background: rgba(249, 245, 245, 0.18);
+}
+
+table td:nth-child(1), table th:nth-child(1) {
+    border-right: 2px solid #ddd !important;
+}
+
 table .red {
-    color: #c60000;
+    color: #B83A2A;
 }
 
 table .green {
-    color: #006700;
+    color:  #2A932A;
+}
+
+table .gray {
+    color: #646262;
 }

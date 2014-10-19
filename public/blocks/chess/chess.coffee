@@ -5,7 +5,7 @@
     #--
     table: (heads, rows) ->
       """
-        <table class="table"><thead><th></th>#{heads.join('')}</thead><tbody>#{rows.join('')}</tbody></table>
+        <div id="chesswrapper"><table class="table"><thead><th></th>#{heads.join('')}</thead><tbody>#{rows.join('')}</tbody></table></div>
 """
     #--
     head: (teamLogo) ->
@@ -16,11 +16,11 @@
     #--
     cell: (team, gm) ->
       if team._id is gm.opponent
-        '<td class="active"><img src="/leagues/portugal/logo/league.png"></td>'
+        '<td><img src="/leagues/portugal/logo/league.png"></td>'
       else
         html = ''
         for m in gm.matches
-          color = (if m.scored > m.conceeded then 'green' else if m.scored < m.conceeded then 'red' else 'yellow')
+          color = (if m.scored > m.conceeded then 'green' else if m.scored < m.conceeded then 'red' else 'gray')
           html += "<div class='#{color}'>#{m.scored}:#{m.conceeded}</div>"
         "<td>#{html}</td>"
 #------------------------------------------------------------------------------------------------#
