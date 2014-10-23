@@ -71,15 +71,14 @@ module.exports = (config) ->
   load('models').then('controllers').then('routes').into(app)
 
 #  todo бред какой-то. Нельзя нормально получить доступ к объекту?
-#  app.controllers.TablesController.app = app
+  app.controllers.TablesController.app = app
 
   StatsCompiler = require './tools/StatsCompiler.coffee'
   GameAdapter   = require './tools/GameAdapter.coffee'
   statsCompiler = new StatsCompiler(app, new GameAdapter())
 
   app.on 'event:result_added', statsCompiler.onResultAdded
-
-  #app.on 'event:result_added', app.controllers.TablesController.onResultAdded
+  app.on 'event:result_added', app.controllers.TablesController.onResultAdded
   return app
 
 
