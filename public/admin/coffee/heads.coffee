@@ -30,11 +30,14 @@ $ ->
           <div class="modal-body">#{templates.modalBody() }</div>
           <div class="modal-footer">
             <div class="row">
-              <div class="col-xs-6  col-md-6 col-lg-6">
-                    #{if user._id? then "<button id='#{user._id}' class='btn btn-danger delBtn' style='float: left'>delete</button>" else ''}
+              <div class="col-xs-4  col-md-4 col-lg-4">
+                    #{if user._id? then "<button id='#{user._id}' class='btn btn-danger delBtn' style='width: 100%'>delete</button>" else ''}
               </div>
-              <div class="col-xs-6 col-md-6 col-lg-6">
-                    <button class="btn btn-success addBtn" tabindex=4>save</button>
+              <div class="col-xs-4  col-md-4 col-lg-4">
+                    #{if user._id? then "<button id='#{user._id}' class='btn btn-info loginAsBtn' style='width: 100%'>login as</button>" else ''}
+              </div>
+              <div class="col-xs-4 col-md-4 col-lg-4">
+                    <button class="btn btn-success addBtn" tabindex=4 style='width: 100%'>save</button>
               </div>
             </div>
           </div>
@@ -80,6 +83,18 @@ $ ->
           success: () -> location.reload()
           error: -> sessionExpired()
         )
+    )
+
+    $('body').on('click', '.loginAsBtn', ->
+      console.log id = $(@).attr('id')
+      request(
+        method: 'POST'
+        url: '/adminapi/sublogin'
+        params: {_id: id}
+        success: (user) ->
+          localStorageWrite('user', user)
+          location.href = '/admin'
+      )
     )
 
     $('body').on('click', 'table tr', ->

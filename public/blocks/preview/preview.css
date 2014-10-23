@@ -1,0 +1,47 @@
+progress {
+    display:  inline;
+    background:  #fff;
+    height:  2rem;
+    position:  relative;
+    width: 45%;
+}
+progress:after {
+    font-family:  sans-serif;
+    color:  black;
+    content:  attr(value);
+    display:  block;
+    position:  absolute;
+    top:  0;
+    height:  2rem;
+    line-height:  2rem;
+}
+
+.progress-left:after {
+    left:  0.25em;
+}
+.progress-right:after {
+    right: 0.25em;
+}
+
+progress::-webkit-progress-bar {
+    background:  #fff;
+    border:  1px solid #f0f0f0;
+}
+progress::-webkit-progress-value {
+    background:  #2c90c6;
+}
+.progress-right::-moz-progress-bar {
+    background:  white;
+}
+
+.progress-left::-webkit-progress-bar {
+    background:  #2c90c6;
+    border:  1px solid #f0f0f0;
+}
+.progress-left::-webkit-progress-value {
+    background:  white;
+}
+.progress-left::-moz-progress-bar {
+    background:  #2c90c6;
+    
+}  

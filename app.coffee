@@ -23,34 +23,34 @@ module.exports = (config) ->
 
   app.use (req, res, next) ->
     req.checkRootAccess = ->
-      if req.session.user? && req.session.user.role is 'root'
+      if req.session.user? && req.session.user.current.role is 'root'
         return true
       res.status(403).send('Access denied').end()
       throw new Error(403)
     req.checkHeadAccess = ->
-      if req.session.user? && (req.session.user.role is 'root' or req.session.user.role is 'Head')
+      if req.session.user? && (req.session.user.current.role is 'root' or req.session.user.current.role is 'Head')
         return true
       res.status(403).send('Access denied')
       throw new Error(403)
     req.checkAccessToLeague = (leagueId) ->
       if req.session.user?
-        if req.session.user.role is 'root'
+        if req.session.user.current.role is 'root'
           return true
-        else if req.session.user.role is 'Head' and req.session.user.leagueId+'' is leagueId+''
+        else if req.session.user.current.role is 'Head' and req.session.user.current.leagueId+'' is leagueId+''
           return true
       res.status(403).send('Access denied')
       throw new Error(403)
 
     req.checkAccessToTeam = (teamId) ->
       if req.session.user?
-        if req.session.user.role is 'root'
+        if req.session.user.current.role is 'root'
           return true
         else
           req.app.models.Team.findById(teamId, (err, team) ->
 
-            if req.session.user.role is 'Head' and req.session.user.leagueId is team.leagueId
+            if req.session.user.current.role is 'Head' and req.session.user.current.leagueId is team.leagueId
               return true
-            else if req.session.user.role is 'Captain' and req.session.user.teamId is team._id+''
+            else if req.session.user.current.role is 'Captain' and req.session.user.current.teamId is team._id+''
               return true
             else
               res.status(403).send('Access denied').end()
@@ -71,9 +71,15 @@ module.exports = (config) ->
   load('models').then('controllers').then('routes').into(app)
 
 #  todo бред какой-то. Нельзя нормально получить доступ к объекту?
-  app.controllers.TablesController.app = app
+#  app.controllers.TablesController.app = app
 
-  app.on 'event:result_added', app.controllers.TablesController.onResultAdded
+  StatsCompiler = require './tools/StatsCompiler.coffee'
+  GameAdapter   = require './tools/GameAdapter.coffee'
+  statsCompiler = new StatsCompiler(app, new GameAdapter())
+
+  app.on 'event:result_added', statsCompiler.onResultAdded
+
+  #app.on 'event:result_added', app.controllers.TablesController.onResultAdded
   return app
 
 

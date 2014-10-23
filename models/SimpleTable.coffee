@@ -3,7 +3,8 @@ module.exports = ->
   mongoose = require 'mongoose'
 
   simpleTableSchema = new mongoose.Schema(
-    leagueId: mongoose.Schema.Types.ObjectId
+    leagueId: mongoose.Schema.Types.ObjectId,
+    date: String,
     teams: Array
   )
 

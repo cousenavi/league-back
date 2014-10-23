@@ -1,33 +1,105 @@
-table tbody td:nth-child(1) {
-    width: 15px;
-}
-table tbody td:nth-child(n+3) {
-    width: 50px;
-}
+    table tbody{
+        border: 1px solid #ddd;
+        border-top: 0;
+    }
 
-table tbody td:nth-child(n+10) {
-    font-weight: 900;
-}
-table tbody td:nth-child(n+11) {
-    width: 110px;
-}
+    table th{
+        border: 0 !important;
+    }
 
-table tbody tr:nth-child(n+1) {
-    background: url(/img/sprite/gold.png);
-}
+    table td {
+        height: 35px !important;
+        line-height: 35px !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        position: relative;
+    }
 
-table tbody tr:nth-child(n+2) {
-    background: url(/img/sprite/silver.png);
-}
-
-table tbody tr:nth-child(n+3) {
-    background: url(/img/sprite/bronze.png);
-}
-table tbody tr:nth-child(n+4) {
-    background: rgba(26, 178, 255, 0.04);
-}
+    table .position {
+        font-size: 13pt;
+    }
+    table .logo {
+        height: 20px;
+        width: 20px;
+    }
 
 
-table tbody tr:nth-child(n+15) {
-    background: rgba(255, 3, 21, 0.20);
-}
+    table tbody td:nth-child(1) {
+        font-size: 10pt;
+
+    }
+    table tbody td:nth-child(2) {
+        font-size: 12pt;
+    }
+    table tbody td:nth-child(n+3) {
+        width: 50px;
+    }
+
+    table tbody td:nth-child(n+10) {
+        font-weight: 900;
+    }
+    table tbody td:nth-child(n+11) {
+        width: 110px;
+    }
+
+    table tbody tr:nth-child(n+1) {
+        background: -moz-linear-gradient(top,  rgba(252,245,186,0.5) 0%, rgba(241,218,54,0.5) 84%, rgba(239,219,86,0.5) 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,245,186,0.5)), color-stop(84%,rgba(241,218,54,0.5)), color-stop(100%,rgba(239,219,86,0.5))); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top,  rgba(252,245,186,0.5) 0%,rgba(241,218,54,0.5) 84%,rgba(239,219,86,0.5) 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top,  rgba(252,245,186,0.5) 0%,rgba(241,218,54,0.5) 84%,rgba(239,219,86,0.5) 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top,  rgba(252,245,186,0.5) 0%,rgba(241,218,54,0.5) 84%,rgba(239,219,86,0.5) 100%); /* IE10+ */
+        background: linear-gradient(to bottom,  rgba(252,245,186,0.5) 0%,rgba(241,218,54,0.5) 84%,rgba(239,219,86,0.5) 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80fcf5ba', endColorstr='#80efdb56',GradientType=0 ); /* IE6-9 */
+
+    }
+
+    table tbody tr:nth-child(n+2) {
+        background: -moz-linear-gradient(top,  rgba(238,238,238,0.4) 0%, rgba(187,187,187,0.4) 80%, rgba(204,204,204,0.4) 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(238,238,238,0.4)), color-stop(80%,rgba(187,187,187,0.4)), color-stop(100%,rgba(204,204,204,0.4))); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top,  rgba(238,238,238,0.4) 0%,rgba(187,187,187,0.4) 80%,rgba(204,204,204,0.4) 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top,  rgba(238,238,238,0.4) 0%,rgba(187,187,187,0.4) 80%,rgba(204,204,204,0.4) 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top,  rgba(238,238,238,0.4) 0%,rgba(187,187,187,0.4) 80%,rgba(204,204,204,0.4) 100%); /* IE10+ */
+        background: linear-gradient(to bottom,  rgba(238,238,238,0.4) 0%,rgba(187,187,187,0.4) 80%,rgba(204,204,204,0.4) 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66eeeeee', endColorstr='#66cccccc',GradientType=0 ); /* IE6-9 */
+
+    }
+
+    table tbody tr:nth-child(n+3) {
+        background: -moz-linear-gradient(top,  rgba(243,226,199,0.2) 0%, rgba(193,158,103,0.2) 50%, rgba(182,141,76,0.2) 80%, rgba(233,212,179,0.2) 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(243,226,199,0.2)), color-stop(50%,rgba(193,158,103,0.2)), color-stop(80%,rgba(182,141,76,0.2)), color-stop(100%,rgba(233,212,179,0.2))); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top,  rgba(243,226,199,0.2) 0%,rgba(193,158,103,0.2) 50%,rgba(182,141,76,0.2) 80%,rgba(233,212,179,0.2) 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top,  rgba(243,226,199,0.2) 0%,rgba(193,158,103,0.2) 50%,rgba(182,141,76,0.2) 80%,rgba(233,212,179,0.2) 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top,  rgba(243,226,199,0.2) 0%,rgba(193,158,103,0.2) 50%,rgba(182,141,76,0.2) 80%,rgba(233,212,179,0.2) 100%); /* IE10+ */
+        background: linear-gradient(to bottom,  rgba(243,226,199,0.2) 0%,rgba(193,158,103,0.2) 50%,rgba(182,141,76,0.2) 80%,rgba(233,212,179,0.2) 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#33f3e2c7', endColorstr='#33e9d4b3',GradientType=0 ); /* IE6-9 */
+
+    }
+    table tbody tr:nth-child(n+4) {
+        background: -moz-linear-gradient(top,  rgba(242,255,255,0.2) 0%, rgba(208,229,244,0.2) 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(242,255,255,0.2)), color-stop(100%,rgba(208,229,244,0.2))); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top,  rgba(242,255,255,0.2) 0%,rgba(208,229,244,0.2) 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top,  rgba(242,255,255,0.2) 0%,rgba(208,229,244,0.2) 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top,  rgba(242,255,255,0.2) 0%,rgba(208,229,244,0.2) 100%); /* IE10+ */
+        background: linear-gradient(to bottom,  rgba(242,255,255,0.2) 0%,rgba(208,229,244,0.2) 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#33f2ffff', endColorstr='#33d0e5f4',GradientType=0 ); /* IE6-9 */
+
+    }
+
+    table .arrow {
+        display: inline-block;
+        height: 16px;
+        width: 16px;
+        background: url(/img/sprite/arrows.png);
+        background-size: 130px;
+        position: absolute;
+        top: 7px;
+    }
+
+    table .arrow.gd  { background-position-x: 0}
+    table .arrow.gh  { background-position-x: -19px}
+    table .arrow.gv  { background-position-x: -55px}
+    table .arrow.rh  { background-position-x: -37px}
+    table .arrow.rv  { background-position-x: -75px}
+    table .arrow.yh  { background-position-x: -94px}
+    table .arrow.rd  { background-position-x: -112px}
+

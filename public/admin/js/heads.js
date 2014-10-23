@@ -28,7 +28,7 @@
         })()) + "\n</select>";
       };
       templates.modal = function(user) {
-        return "<div class=\"modal active\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n  <div class=\"modal-dialog\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        " + (templates.hiddenModel(user)) + "\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">X</button>\n        <h4 class=\"modal-title\">" + (user._id == null ? 'Добавление главы лиги' : 'Редактирование главы лиги') + "</h4>\n      </div>\n      <div class=\"modal-body\">" + (templates.modalBody()) + "</div>\n      <div class=\"modal-footer\">\n        <div class=\"row\">\n          <div class=\"col-xs-6  col-md-6 col-lg-6\">\n                " + (user._id != null ? "<button id='" + user._id + "' class='btn btn-danger delBtn' style='float: left'>delete</button>" : '') + "\n          </div>\n          <div class=\"col-xs-6 col-md-6 col-lg-6\">\n                <button class=\"btn btn-success addBtn\" tabindex=4>save</button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>";
+        return "<div class=\"modal active\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n  <div class=\"modal-dialog\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        " + (templates.hiddenModel(user)) + "\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">X</button>\n        <h4 class=\"modal-title\">" + (user._id == null ? 'Добавление главы лиги' : 'Редактирование главы лиги') + "</h4>\n      </div>\n      <div class=\"modal-body\">" + (templates.modalBody()) + "</div>\n      <div class=\"modal-footer\">\n        <div class=\"row\">\n          <div class=\"col-xs-4  col-md-4 col-lg-4\">\n                " + (user._id != null ? "<button id='" + user._id + "' class='btn btn-danger delBtn' style='width: 100%'>delete</button>" : '') + "\n          </div>\n          <div class=\"col-xs-4  col-md-4 col-lg-4\">\n                " + (user._id != null ? "<button id='" + user._id + "' class='btn btn-info loginAsBtn' style='width: 100%'>login as</button>" : '') + "\n          </div>\n          <div class=\"col-xs-4 col-md-4 col-lg-4\">\n                <button class=\"btn btn-success addBtn\" tabindex=4 style='width: 100%'>save</button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>";
       };
       user = localStorageRead('user');
       if ((user == null) || user.role !== 'root') {
@@ -87,6 +87,21 @@
             }
           });
         }
+      });
+      $('body').on('click', '.loginAsBtn', function() {
+        var id;
+        console.log(id = $(this).attr('id'));
+        return request({
+          method: 'POST',
+          url: '/adminapi/sublogin',
+          params: {
+            _id: id
+          },
+          success: function(user) {
+            localStorageWrite('user', user);
+            return location.href = '/admin';
+          }
+        });
       });
       return $('body').on('click', 'table tr', function() {
         var $modal;

@@ -30,7 +30,7 @@
           _results.push("<option " + (pos === player.position ? 'selected' : '') + ">" + pos + "</option> ");
         }
         return _results;
-      })()) + "\n      </select>\n   </div>\n   <div class=\"col-xs-6 col-md-6 col-lg-6\" >\n      <input type=\"text\" class=\"form-control\" data-value='number'  style='text-align: center' tabindex='3' value=\"" + (player.number != null ? player.number : '') + "\" placeholder='№'>\n   </div>\n</div>";
+      })()) + "\n      </select>\n   </div>\n   <div class=\"col-xs-6 col-md-6 col-lg-6\" >\n      <input type=\"number\" min=\"0\" max=\"1000\" class=\"form-control\" data-value='number'  style='text-align: center' tabindex='3' value=\"" + (player.number != null ? player.number : '') + "\" placeholder='№'>\n   </div>\n</div>";
     };
     templates.popupFooter = function(player) {
       return "<div class=\"row\">\n  <div class=\"col-xs-6  col-md-6 col-lg-6\">\n        " + (player != null ? "<button id='" + player._id + "' class='btn btn-danger delBtn' style='float: left'>delete</button>" : '') + "\n  </div>\n  <div class=\"col-xs-6 col-md-6 col-lg-6\">\n        <button class=\"btn btn-success addBtn\" tabindex=4>save</button>\n  </div>\n</div>";

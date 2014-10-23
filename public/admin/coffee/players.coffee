@@ -28,7 +28,7 @@ $ ->
             </select>
          </div>
          <div class="col-xs-6 col-md-6 col-lg-6" >
-            <input type="text" class="form-control" data-value='number'  style='text-align: center' tabindex='3' value="#{if player.number? then player.number else ''}" placeholder='№'>
+            <input type="number" min="0" max="1000" class="form-control" data-value='number'  style='text-align: center' tabindex='3' value="#{if player.number? then player.number else ''}" placeholder='№'>
          </div>
       </div>
   """

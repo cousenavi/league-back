@@ -8,8 +8,15 @@
     <link rel="stylesheet" href="./index.css">
 </head>
 <body>
-        <div id="st" style="min-width: 800px"></div>
-        <script>$('#st').table('54009eb17336983c24342ed9')</script>
+        <div id="st" style="min-width: 800px; padding: 10px;"></div>
+        <script>
+            $.getJSON('/tables/simple_table_keys?leagueId=54009eb17336983c24342ed9', function(keys) {
+                dts = location.search.substr(1).split('-');
+                dt= dts[0];
+                compDt = dts[1];
+                $('#st').table('54009eb17336983c24342ed9', dt, compDt)
+            });
+        </script>
     </div>
 </body>
 </html>

@@ -7,7 +7,7 @@
         html = "<a class='btn btn-block btn-info btn-list' href=\"leagues\" tabindex='1'>Leagues</a>\n<a class='btn btn-block btn-info btn-list' href=\"heads\" tabindex='2'>Heads</a>";
       }
       if (user.role === 'Head') {
-        html = "<a class='btn btn-block btn-info btn-list' href=\"games\" tabindex='1'>Games</a>\n<a class='btn btn-block btn-info btn-list' href=\"teams\" tabindex='2'>Teams</a>\n<a class='btn btn-block btn-info btn-list' href=\"referees\" tabindex='3'>Referees</a>";
+        html = "<a class='btn btn-block btn-info btn-list' href=\"games\" tabindex='1'>Games</a>\n<a class='btn btn-block btn-info btn-list' href=\"teams\" tabindex='2'>Teams</a>\n<a class='btn btn-block btn-info btn-list' href=\"referees\" tabindex='3'>Referees</a>\n<a class='btn btn-block btn-info btn-list' href=\"referees\" tabindex='3'>Captains</a>";
       }
       if (user.role === 'Capitan') {
         html = "";
@@ -27,7 +27,14 @@
       }
     });
     $('#container').on('click', '#logoutBtn', function() {
-      return sessionExpired();
+      return request({
+        url: '/adminapi/logout',
+        method: 'GET',
+        success: function(user) {
+          localStorageWrite('user', user);
+          return location.href = '/admin';
+        }
+      });
     });
     $('#container').on('click', '#loginBtn', function() {
       var model;
@@ -38,7 +45,7 @@
         method: 'POST',
         params: model,
         success: function(user) {
-          localStorage.setItem('user', JSON.stringify(user));
+          localStorageWrite('user', user);
           return $('body').trigger('login', [user]);
         },
         error: function(error) {

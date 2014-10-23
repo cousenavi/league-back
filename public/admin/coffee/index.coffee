@@ -10,6 +10,7 @@ $ ->
         <a class='btn btn-block btn-info btn-list' href="games" tabindex='1'>Games</a>
         <a class='btn btn-block btn-info btn-list' href="teams" tabindex='2'>Teams</a>
         <a class='btn btn-block btn-info btn-list' href="referees" tabindex='3'>Referees</a>
+        <a class='btn btn-block btn-info btn-list' href="referees" tabindex='3'>Captains</a>
 """
 
     if user.role is 'Capitan'
@@ -38,7 +39,13 @@ $ ->
   )
 
   $('#container').on('click', '#logoutBtn', ->
-    sessionExpired()
+    request(
+      url: '/adminapi/logout',
+      method: 'GET',
+      success: (user) ->
+        localStorageWrite('user', user)
+        location.href = '/admin'
+    )
   )
 
   $('#container').on('click', '#loginBtn', ->
@@ -49,7 +56,7 @@ $ ->
       method: 'POST',
       params: model,
       success: (user) ->
-        localStorage.setItem('user', JSON.stringify(user))
+        localStorageWrite('user', user)
         $('body').trigger('login', [user])
       error: (error) ->
         $('#loginBtn').html('Go!')

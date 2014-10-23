@@ -1,6 +1,5 @@
 class TablesController
   onResultAdded: (game) =>
-    @updateSimleTable(game)
     @updateChessTable(game)
     @updateClimbingChart(game)
     @updateTopPlayers(game)
@@ -87,86 +86,6 @@ class TablesController
       )
     )
 
-  ###
-    Самая простая таблица
-  ###
-  updateSimleTable: (game) =>
-    Game = @app.models.Game
-    Team = @app.models.Team
-
-    Game.find(leagueId: game.leagueId).sort(datetime: 'asc').exec((err, games) =>
-      Team.find(leagueId: game.leagueId, (err, teams) =>
-
-        records = {}
-        for team in teams
-          records[team._id] =
-            name: team.name
-            logo: team.logo
-            _id: team._id
-            position: 0
-            played: 0
-            won: 0
-            draw: 0
-            lost: 0
-            score: 0
-            goalsScored: 0
-            goalsConceded: 0
-            form: []
-
-        games = (game for game in games when game.homeTeamScore?)
-
-        for game in games
-
-          records[game.homeTeamId].played += 1
-          records[game.homeTeamId].goalsScored   += game.homeTeamScore
-          records[game.homeTeamId].goalsConceded += game.awayTeamScore
-          records[game.homeTeamId].won +=  (if game.homeTeamScore > game.awayTeamScore then 1 else 0)
-          records[game.homeTeamId].draw +=  (if game.homeTeamScore == game.awayTeamScore then 1 else 0)
-          records[game.homeTeamId].lost +=  (if game.homeTeamScore < game.awayTeamScore then 1 else 0)
-          records[game.homeTeamId].score += (if game.homeTeamScore > game.awayTeamScore then 3 else
-                                              if game.homeTeamScore == game.awayTeamScore then 1 else 0)
-          records[game.homeTeamId].form.push(
-            (if game.homeTeamScore > game.awayTeamScore then 'W' else
-              if game.homeTeamScore is game.awayTeamScore then 'D' else 'L')
-          )
-
-          records[game.awayTeamId].played += 1
-          records[game.awayTeamId].goalsScored   += game.awayTeamScore
-          records[game.awayTeamId].goalsConceded += game.homeTeamScore
-          records[game.awayTeamId].won +=  (if game.homeTeamScore < game.awayTeamScore then 1 else 0)
-          records[game.awayTeamId].draw +=  (if game.homeTeamScore == game.awayTeamScore then 1 else 0)
-          records[game.awayTeamId].lost +=  (if game.homeTeamScore > game.awayTeamScore then 1 else 0)
-          records[game.awayTeamId].score += (if game.homeTeamScore < game.awayTeamScore then 3 else
-            if game.homeTeamScore == game.awayTeamScore then 1 else 0)
-          records[game.awayTeamId].form.push(
-            (if game.homeTeamScore > game.awayTeamScore then 'L' else
-              if game.homeTeamScore is game.awayTeamScore then 'D' else 'W')
-          )
-
-        records = (record for id, record of records)
-
-        records.sort( (a, b) ->
-            if a.score > b.score then return -1
-            if a.score < b.score then return 1
-            if (a.goalsScored - a.goalsConceded) > (b.goalsScored - b.goalsConceded) then return -1
-            if (a.goalsScored - a.goalsConceded) < (b.goalsScored - b.goalsConceded) then return 1
-            if a.goalsScored > b.goalsScored then return -1
-            if a.goalsScored < b.goalsScored then return 1
-            return 0
-          )
-
-        for record, position in records
-          record.position = position + 1 #потому что нумерация с нуля
-
-        Model = @app.models.SimpleTable
-        Model.findOne(leagueId: game.leagueId, (err, model) ->
-          if  model?
-            Model.update({_id: model._id}, teams: records, (err, num) -> console.log err, num)
-          else
-            (new Model(leagueId: game.leagueId, teams: records)).save()
-        )
-
-      ))
 
   updateTopPlayers: (game) ->
     Game = @app.models.Game
@@ -578,12 +497,44 @@ class TablesController
       res.send model
     )
 
+  ##
+  # получаем ключи, по которым можно запросить таблицы
+  getSimpleTableKeys: (req, res) ->
+    req.app.models.SimpleTable.find(leagueId: req.query.leagueId, {date: 1}, (err, models) ->
+      dts = (m.date for m in models)
+      dts.sort((a,b) ->
+        dtA = a.split('/'); dtB = b.split('/')
+        if dtA[2]*1000+dtA[1]*32+dtA[0] > dtB[2]*1000+dtB[1]*32+dtB[0] then return 1 else return -1
+      )
+      res.send dts
+    )
+
+  ##
+  # простая таблица
   getSimpleTable: (req, res) ->
     Model = req.app.models.SimpleTable
 
-    Model.findOne(req.query, (err, model) ->
-      res.send model
+    Model.findOne({leagueId: req.query.leagueId, date: req.query.dt}, (err, table) ->
+      if err or !table
+        res.status(400).send('no table found')
+      else
+        if req.query.compare_with_dt?
+          Model.findOne({leagueId: req.query.leagueId, date: req.query.compare_with_dt}, (err, tableToCompare) ->
+            if err or !tableToCompare
+              res.status(400).send('no table to compare found')
+            else
+
+              for tmC in tableToCompare.teams
+                for tm in table.teams
+                  if tm._id is tmC._id
+                    tm.diff = tmC.position - tm.position
+
+              res.send table
+          )
+        else
+          res.send table
     )
+
 
   getChessTable: (req, res) ->
     Model = req.app.models.ChessTable
