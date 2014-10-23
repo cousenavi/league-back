@@ -110,7 +110,7 @@ class StatsCompiler
 
       async.each((r for dt, r of records), updateTable, () =>
         console.log 'simpleTable successfully updated'
-        process.exit(0)
+        #process.exit(0)
       )
 
 module.exports = StatsCompiler
