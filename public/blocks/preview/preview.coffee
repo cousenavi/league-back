@@ -43,7 +43,7 @@
     <tr>
         <td><progress max="#{pr.teams[0].played}" value="#{pr.teams[0].lost}" class="r red"></progress></td>
         <td>поражения</td>
-        <td><progress max="#{pr.teams[1].played}" value="#{pr.teams[0].lost}" class="l red"></progress></td>
+        <td><progress max="#{pr.teams[1].played}" value="#{pr.teams[1].lost}" class="l red"></progress></td>
     </tr>
 
     <tr>

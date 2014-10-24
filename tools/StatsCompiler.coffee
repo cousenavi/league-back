@@ -37,7 +37,7 @@ class StatsCompiler
 
   ##
   # сортируем команды по набранным очкам, потом по разнице голов, потом по забитым
-  sortByPosition = (a,b) ->
+  sortByPosition: (a,b) ->
       if a.score > b.score then return -1
       if a.score < b.score then return 1
       if (a.scored - a.conceded) > (b.scored - b.conceded) then return -1
@@ -156,23 +156,17 @@ class StatsCompiler
 
 
       updateTable = (record, callback) =>
-        @app.models.SimpleTable.findOne({leagueId: record.leagueId, date: record.dt}, (err, simpleTable) =>
-          if err then throw 'Cannot update SimpleTable: '+err
-          if simpleTable?
-            @app.models.SimpleTable.update({_id: simpleTable._id}, {teams: record.teams}, (err, num) =>
-              if err then throw 'Cannot update SimpleTable'+err
-              callback()
-            )
-          else
-            (new @app.models.SimpleTable({leagueId: record.leagueId, date: record.dt, teams: record.teams})).save( (err) =>
-              if err then throw 'Cannot update SimpleTable'+err
-              callback()
-            )
-        )
+          (new @app.models.SimpleTable({leagueId: record.leagueId, date: record.dt, teams: record.teams})).save( (err) =>
+            if err then throw 'Cannot update SimpleTable'+err
+            callback()
+           )
 
-      async.each((r for dt, r of records), updateTable, () =>
-        console.log 'simpleTable successfully updated'
-        previewCallback(stagingTeamsState)
+      @app.models.SimpleTable.remove(leagueId: leagueId, (err) =>
+        if err then throw 'Cannot update GamePreview'+err
+        async.each((r for dt, r of records), updateTable, () =>
+          console.log 'simpleTable successfully updated'
+          previewCallback(stagingTeamsState)
+        )
       )
 
 
@@ -212,10 +206,10 @@ class StatsCompiler
         push: (pl) ->
           @players.push(pl)
           @players.sort((a, b) ->
-            if a.points > b.points then return -1
-            if a.points < b.points then return 1
             if a.goals > b.goals then return  -1
             if a.goals < b.goals then return 1
+            if a.points > b.points then return -1
+            if a.points < b.points then return 1
             return 0
           )
           if @players.length > 3
