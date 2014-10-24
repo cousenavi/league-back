@@ -270,7 +270,6 @@ class StatsCompiler
 
         async.each((r for dt, r of records), updatePreview, () =>
           console.log 'GamePreviews successfully updated'
-          #process.exit(0)
         )
 
     )
