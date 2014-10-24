@@ -107,7 +107,7 @@ class StatsCompiler
   # хранится запись таблицы по каждому дню, в который были игры
   ##
   simpleTable: (leagueId, previewCallback) =>
-    records = {} #объекты, которые будут записаны в базу
+
 #    @getGames leagueId, (games) => @getTeams leagueId, (teams) =>
 
 #      stagingTeamsState = {}
