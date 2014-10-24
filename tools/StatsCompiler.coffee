@@ -13,11 +13,11 @@ class StatsCompiler
   #
   onResultAdded: (game) =>
     leagueId = game.leagueId
-#    @topPlayers(leagueId, (players) =>
-#      @simpleTable(leagueId, (stagingTable) =>
-#        @gamePreview(leagueId, stagingTable, players)
-#      )
-#    )
+    @topPlayers(leagueId, (players) =>
+      @simpleTable(leagueId, (stagingTable) =>
+        @gamePreview(leagueId, stagingTable, players)
+      )
+    )
 
   ##
   # @private
@@ -46,11 +46,11 @@ class StatsCompiler
       if a.scored < b.scored then return 1
       return 0
 
-#
-#  ##
-#  # TODO COMPLETELY REFACTORING!!!
-#  # лучшие игроки
-#  topPlayers: (leagueId, stCallback) =>
+
+  ##
+  # TODO COMPLETELY REFACTORING!!!
+  # лучшие игроки
+  topPlayers: (leagueId, stCallback) =>
 #    @getGames leagueId, (games) => @getTeams leagueId, (teams) =>
 #
 #      mappedTeams = {}
@@ -98,15 +98,15 @@ class StatsCompiler
 #            )
 #        )
 #    )
-#
-#  ##
-#  # самая простая таблица
-#  # @model SimpleTable
-#  # @param leagueId
-#  # @param previewCallback вызов пересчёта превьюшек
-#  # хранится запись таблицы по каждому дню, в который были игры
-#  ##
-#  simpleTable: (leagueId, previewCallback) =>
+
+  ##
+  # самая простая таблица
+  # @model SimpleTable
+  # @param leagueId
+  # @param previewCallback вызов пересчёта превьюшек
+  # хранится запись таблицы по каждому дню, в который были игры
+  ##
+  simpleTable: (leagueId, previewCallback) =>
 #    records = {} #объекты, которые будут записаны в базу
 #    @getGames leagueId, (games) => @getTeams leagueId, (teams) =>
 #
@@ -174,16 +174,16 @@ class StatsCompiler
 #        console.log 'simpleTable successfully updated'
 #        previewCallback(stagingTeamsState)
 #      )
-#
-#
-#  ##
-#  # Превьюшки к ещё не сыгранным играм
-#  # @model GamePreview
-#  # @param leagueId
-#  # @param stagingTeamsState текущее состояние таблицы
-#  # @param players статсы по игрокам
-#  # хранится по каждой несыгранной игре, по сыгранным удаляются
-#  gamePreview: (leagueId, stagingTeamsState, players) =>
+
+
+  ##
+  # Превьюшки к ещё не сыгранным играм
+  # @model GamePreview
+  # @param leagueId
+  # @param stagingTeamsState текущее состояние таблицы
+  # @param players статсы по игрокам
+  # хранится по каждой несыгранной игре, по сыгранным удаляются
+  gamePreview: (leagueId, stagingTeamsState, players) =>
 #    @app.models.GamePreview.remove(leagueId: leagueId, (err) =>
 #      if err then throw 'Cannot update GamePreview'+err
 #
