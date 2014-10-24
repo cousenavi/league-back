@@ -12,40 +12,40 @@ class StatsCompiler
   # производим пересчёт статистики при обновлении игры
   #
   onResultAdded: (game) =>
-#    leagueId = game.leagueId
+    leagueId = game.leagueId
 #    @topPlayers(leagueId, (players) =>
 #      @simpleTable(leagueId, (stagingTable) =>
 #        @gamePreview(leagueId, stagingTable, players)
 #      )
 #    )
-#
-#  ##
-#  # @private
-#  #
-#  getTeams: (leagueId, callback) =>
-#    @app.models.Team.find leagueId: leagueId, (err, teams) =>
-#      if err then throw new Error 'Cannot update simple table'+err
-#      callback(teams)
-#  ##
-#  # @private
-#  #
-#  getGames: (leagueId, callback) =>
-#    @app.models.Game.find(leagueId: leagueId).sort(datetime: 'asc').exec (err, games) =>
-#      if err then throw new Error 'Cannot update simple table'+err
-#      callback(games)
-#
-#
-#  ##
-#  # сортируем команды по набранным очкам, потом по разнице голов, потом по забитым
-#  sortByPosition = (a,b) ->
-#      if a.score > b.score then return -1
-#      if a.score < b.score then return 1
-#      if (a.scored - a.conceded) > (b.scored - b.conceded) then return -1
-#      if (a.scored - a.conceded) < (b.scored - b.conceded) then return 1
-#      if a.scored > b.scored then return -1
-#      if a.scored < b.scored then return 1
-#      return 0
-#
+
+  ##
+  # @private
+  #
+  getTeams: (leagueId, callback) =>
+    @app.models.Team.find leagueId: leagueId, (err, teams) =>
+      if err then throw new Error 'Cannot update simple table'+err
+      callback(teams)
+  ##
+  # @private
+  #
+  getGames: (leagueId, callback) =>
+    @app.models.Game.find(leagueId: leagueId).sort(datetime: 'asc').exec (err, games) =>
+      if err then throw new Error 'Cannot update simple table'+err
+      callback(games)
+
+
+  ##
+  # сортируем команды по набранным очкам, потом по разнице голов, потом по забитым
+  sortByPosition = (a,b) ->
+      if a.score > b.score then return -1
+      if a.score < b.score then return 1
+      if (a.scored - a.conceded) > (b.scored - b.conceded) then return -1
+      if (a.scored - a.conceded) < (b.scored - b.conceded) then return 1
+      if a.scored > b.scored then return -1
+      if a.scored < b.scored then return 1
+      return 0
+
 #
 #  ##
 #  # TODO COMPLETELY REFACTORING!!!
