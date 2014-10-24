@@ -182,7 +182,9 @@ class StatsCompiler
       if err then throw 'Cannot update GamePreview'+err
 
       #убираем ключи id и проставляем позиции
-      teamsState = (tm for id, tm of stagingTeamsState)
+      teamsState = []
+      for id, tm of stagingTeamsState
+        teamsState.push(tm) if typeof(tm) isnt 'function'
       teamsState.sort(@sortByPosition)
 
       #определяем максимум забитых и пропущенных
