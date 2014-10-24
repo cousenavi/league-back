@@ -11,6 +11,7 @@
 
     preview: (pr) ->
       """
+<div id='prv'>
     <div id='head'>
         <div id='leagueName'>Amateur Portugal League</div><div id='tourNumber'>тур №#{pr.tourNumber}</div>
     </div>
@@ -21,7 +22,7 @@
         <td><img src="/#{pr.teams[0].logo}" ><br>#{pr.teams[0].name}</td>
         <td>
         </td>
-        <td><img src="http://hdlogo.files.wordpress.com/2011/09/acadc3a9mica-de-coimbra-logo.png" ><br>Academica</td>
+        <td><img src="/#{pr.teams[0].logo}" ><br>#{pr.teams[1].name}</td>
     </tr>
     <tr><td></td><td>&nbsp;</td><td></td></tr>
     <tr class='position'>
@@ -88,7 +89,7 @@
             <div id='date'>#{pr.date}</div>
             <div id='time'>#{pr.time}</div>
             стадион "#{pr.placeName}"
-        </div>
+        </div></div>
 """
 
   $.fn.preview = (leagueId) ->
