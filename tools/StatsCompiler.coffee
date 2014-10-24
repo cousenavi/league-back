@@ -8,10 +8,10 @@ class StatsCompiler
   ##
   constructor: (@app, @gameAdapter) ->
 
-#  ##
-#  # производим пересчёт статистики при обновлении игры
-#  #
-#  onResultAdded: (game) =>
+  ##
+  # производим пересчёт статистики при обновлении игры
+  #
+  onResultAdded: (game) =>
 #    leagueId = game.leagueId
 #    @topPlayers(leagueId, (players) =>
 #      @simpleTable(leagueId, (stagingTable) =>
