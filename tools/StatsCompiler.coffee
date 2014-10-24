@@ -107,7 +107,7 @@ class StatsCompiler
   # хранится запись таблицы по каждому дню, в который были игры
   ##
   simpleTable: (leagueId, previewCallback) =>
-
+    records = {} #объекты, которые будут записаны в базу
 #    @getGames leagueId, (games) => @getTeams leagueId, (teams) =>
 
 #      stagingTeamsState = {}
@@ -184,95 +184,95 @@ class StatsCompiler
   # @param players статсы по игрокам
   # хранится по каждой несыгранной игре, по сыгранным удаляются
   gamePreview: (leagueId, stagingTeamsState, players) =>
-    @app.models.GamePreview.remove(leagueId: leagueId, (err) =>
-      if err then throw 'Cannot update GamePreview'+err
-
-      #убираем ключи id и проставляем позиции
-      teamsState = (tm for id, tm of stagingTeamsState)
-      teamsState.sort(@sortByPosition)
-
-      #определяем максимум забитых и пропущенных
-      maxScored = 0; maxConceded = 0;
-      for tm in teamsState
-        maxScored = tm.scored if tm.scored > maxScored
-        maxConceded = tm.conceded if tm.conceded > maxConceded
-
-      tm.position = key + 1 for tm, key in teamsState when typeof(tm) isnt 'function'
-
-
-      #готовим информацию по трём лучшим Г+П в команде и всем остальным в сумме
-      PlInfo = (pl) ->
-        name= pl.name.split(' ')[0].toLowerCase()
-        name = name.toString().charAt(0).toUpperCase() + name.substr(1)
-        {name: name, goals: pl.goals, assists: pl.assists, points: pl.goals + pl.assists}
-
-      bestPlayersBlock = -> {
-        players: []
-        other: new PlInfo(name: 'other', goals: 0, assists: 0)
-        push: (pl) ->
-          @players.push(pl)
-          @players.sort((a, b) ->
-            if a.points > b.points then return -1
-            if a.points < b.points then return 1
-            if a.goals > b.goals then return  -1
-            if a.goals < b.goals then return 1
-            return 0
-          )
-          if @players.length > 3
-            plInfo = @players.pop()
-            @other.goals += plInfo.goals
-            @other.assists += plInfo.assists
-            @other.points += plInfo.points
-      }
-
-      mappedPlayers = {}
-      for pl in players
-        plInfo = new PlInfo(pl)
-        if !mappedPlayers[pl.teamId] then mappedPlayers[pl.teamId] = new bestPlayersBlock()
-        mappedPlayers[pl.teamId].push(plInfo)
-
-      for id, mp of mappedPlayers
-        mappedPlayers[id] = mp.players.concat(mp.other)
-
-      record = (game) ->
-        gameId: game._id
-        leagueId: game.leagueId
-        tourNumber: game.tourNumber
-        teams: []
-        placeName: game.placeName
-        refereeName: game.refereeName
-        date: game.date
-        time: game.time
-        maxScored: maxScored
-        maxConceded: maxConceded
-      records = {}
-
-      @getGames leagueId, (games) =>
-        for gm in games
-          if gm.homeTeamScore? then continue
-          @gameAdapter.toLocal(gm)
-          records[gm._id] = new record(gm)
-          for tm, key in gm.teams
-            for tmTbl in teamsState
-              if tm._id+'' is tmTbl._id+''
-                records[gm._id].teams[key] = {
-                    _id: tm._id,name: tm.name, logo: tmTbl.logo, position: tmTbl.position, form: tmTbl.form,
-                    won: tmTbl.won, draw: tmTbl.draw, lost: tmTbl.lost, played: tmTbl.played,
-                    scored: tmTbl.scored, conceded: tmTbl.conceded,
-                    players: mappedPlayers[tm._id]
-                  }
-
-        updatePreview = (record, callback) =>
-          (new @app.models.GamePreview(record)).save((err) ->
-            if err then throw new Error 'Cannot update gamePreview'+err
-            callback()
-          )
-
-        async.each((r for dt, r of records), updatePreview, () =>
-          console.log 'GamePreviews successfully updated'
-        )
-
-    )
+#    @app.models.GamePreview.remove(leagueId: leagueId, (err) =>
+#      if err then throw 'Cannot update GamePreview'+err
+#
+#      #убираем ключи id и проставляем позиции
+#      teamsState = (tm for id, tm of stagingTeamsState)
+#      teamsState.sort(@sortByPosition)
+#
+#      #определяем максимум забитых и пропущенных
+#      maxScored = 0; maxConceded = 0;
+#      for tm in teamsState
+#        maxScored = tm.scored if tm.scored > maxScored
+#        maxConceded = tm.conceded if tm.conceded > maxConceded
+#
+#      tm.position = key + 1 for tm, key in teamsState when typeof(tm) isnt 'function'
+#
+#
+#      #готовим информацию по трём лучшим Г+П в команде и всем остальным в сумме
+#      PlInfo = (pl) ->
+#        name= pl.name.split(' ')[0].toLowerCase()
+#        name = name.toString().charAt(0).toUpperCase() + name.substr(1)
+#        {name: name, goals: pl.goals, assists: pl.assists, points: pl.goals + pl.assists}
+#
+#      bestPlayersBlock = -> {
+#        players: []
+#        other: new PlInfo(name: 'other', goals: 0, assists: 0)
+#        push: (pl) ->
+#          @players.push(pl)
+#          @players.sort((a, b) ->
+#            if a.points > b.points then return -1
+#            if a.points < b.points then return 1
+#            if a.goals > b.goals then return  -1
+#            if a.goals < b.goals then return 1
+#            return 0
+#          )
+#          if @players.length > 3
+#            plInfo = @players.pop()
+#            @other.goals += plInfo.goals
+#            @other.assists += plInfo.assists
+#            @other.points += plInfo.points
+#      }
+#
+#      mappedPlayers = {}
+#      for pl in players
+#        plInfo = new PlInfo(pl)
+#        if !mappedPlayers[pl.teamId] then mappedPlayers[pl.teamId] = new bestPlayersBlock()
+#        mappedPlayers[pl.teamId].push(plInfo)
+#
+#      for id, mp of mappedPlayers
+#        mappedPlayers[id] = mp.players.concat(mp.other)
+#
+#      record = (game) ->
+#        gameId: game._id
+#        leagueId: game.leagueId
+#        tourNumber: game.tourNumber
+#        teams: []
+#        placeName: game.placeName
+#        refereeName: game.refereeName
+#        date: game.date
+#        time: game.time
+#        maxScored: maxScored
+#        maxConceded: maxConceded
+#      records = {}
+#
+#      @getGames leagueId, (games) =>
+#        for gm in games
+#          if gm.homeTeamScore? then continue
+#          @gameAdapter.toLocal(gm)
+#          records[gm._id] = new record(gm)
+#          for tm, key in gm.teams
+#            for tmTbl in teamsState
+#              if tm._id+'' is tmTbl._id+''
+#                records[gm._id].teams[key] = {
+#                    _id: tm._id,name: tm.name, logo: tmTbl.logo, position: tmTbl.position, form: tmTbl.form,
+#                    won: tmTbl.won, draw: tmTbl.draw, lost: tmTbl.lost, played: tmTbl.played,
+#                    scored: tmTbl.scored, conceded: tmTbl.conceded,
+#                    players: mappedPlayers[tm._id]
+#                  }
+#
+#        updatePreview = (record, callback) =>
+#          (new @app.models.GamePreview(record)).save((err) ->
+#            if err then throw new Error 'Cannot update gamePreview'+err
+#            callback()
+#          )
+#
+#        async.each((r for dt, r of records), updatePreview, () =>
+#          console.log 'GamePreviews successfully updated'
+#        )
+#
+#    )
 
 
 module.exports = StatsCompiler
