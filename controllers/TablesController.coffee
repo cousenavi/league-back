@@ -2,7 +2,6 @@ class TablesController
   onResultAdded: (game) =>
     @updateChessTable(game)
     @updateClimbingChart(game)
-    @updateTopPlayers(game)
     @updateBestPlayers(game)
     @updateTourSummary(game)
 
@@ -87,56 +86,6 @@ class TablesController
     )
 
 
-  updateTopPlayers: (game) ->
-    Game = @app.models.Game
-    Team = @app.models.Team
-    Player = @app.models.Player
-
-    Game.find(leagueId: game.leagueId, (err, games) =>
-      Team.find(leagueId: game.leagueId, (err, teams) =>
-
-        mappedTeams = {}
-        mappedTeams[t._id] = t for t in teams
-
-        Player.find(teamId: $in: teams, (err, players) =>
-          records = {}
-          for pl in players
-            records[pl._id] =
-              name: pl.name
-              teamLogo: mappedTeams[pl.teamId].logo
-              goals: 0
-              assists: 0
-              stars: 0
-              played: 0
-              yellow: 0
-              red: 0
-              points: 0
-
-          for gm in games
-            for pl in gm.homeTeamPlayers.concat(gm.awayTeamPlayers)
-              if records[pl._id]? #todo КОСТЫЛЬ АДСКИЙ! Продумать что делать если игрок удалён из заявки
-                records[pl._id].played++
-                records[pl._id].goals += parseInt(pl.goals) if pl.goals
-                records[pl._id].assists += parseInt(pl.assists) if pl.assists
-                records[pl._id].stars += Boolean(pl.star) if pl.star
-                records[pl._id].points += parseInt(pl.goals) if pl.goals
-                records[pl._id].points += parseInt(pl.assists) if pl.assists
-                records[pl._id].yellow += parseInt(pl.yellow) if pl.yellow
-                records[pl._id].red += parseInt(pl.red) if pl.red
-                records[pl._id].star += Boolean(pl.star) if pl.star
-
-          records = (record for id, record of records when record.played > 0)
-
-          Top = @app.models.TopPlayers
-          Top.findOne(leagueId: game.leagueId, (err, model) ->
-            if  model?
-              Top.update({_id: model._id}, players: records, (err, num) -> console.log err, num)
-            else
-              (new Top(leagueId: game.leagueId, players: records)).save(-> console.log err, num)
-          )
-        )
-      )
-    )
 
   updateBestPlayers: (game) =>
     Game = @app.models.Game
@@ -560,6 +509,11 @@ class TablesController
 
   getBestPlayers: (req, res) ->
     req.app.models.BestPlayers.find({leagueId: req.query.leagueId, tourNumber: req.query.tourNumber},  (err, model) ->
+      res.send model
+    )
+
+  getGamePreview: (req, res) ->
+    req.app.models.GamePreview.findOne(gameId: req.query.gameId, (err, model) ->
       res.send model
     )
 
