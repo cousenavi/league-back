@@ -185,6 +185,7 @@ progress.r:after {
     border: 5px solid #002951;
     border-radius: 5px;
     text-align: center;
+    margin: 10px;
 }
 
 #head {

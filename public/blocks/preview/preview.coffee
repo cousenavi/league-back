@@ -22,7 +22,7 @@
         <td><img src="/#{pr.teams[0].logo}" ><br>#{pr.teams[0].name}</td>
         <td>
         </td>
-        <td><img src="/#{pr.teams[0].logo}" ><br>#{pr.teams[1].name}</td>
+        <td><img src="/#{pr.teams[1].logo}" ><br>#{pr.teams[1].name}</td>
     </tr>
     <tr><td></td><td>&nbsp;</td><td></td></tr>
     <tr class='position'>
