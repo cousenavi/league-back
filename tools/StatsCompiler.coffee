@@ -51,53 +51,53 @@ class StatsCompiler
   # TODO COMPLETELY REFACTORING!!!
   # лучшие игроки
   topPlayers: (leagueId, stCallback) =>
-#    @getGames leagueId, (games) => @getTeams leagueId, (teams) =>
-#
-#      mappedTeams = {}
-#      mappedTeams[t._id] = t for t in teams
-#
-#      @app.models.Player.find(teamId: $in: teams, (err, players) =>
-#        records = {}
-#        for pl in players
-#          records[pl._id] =
-#            name: pl.name
-#            teamLogo: mappedTeams[pl.teamId].logo
-#            teamId: pl.teamId
-#            goals: 0
-#            assists: 0
-#            stars: 0
-#            played: 0
-#            yellow: 0
-#            red: 0
-#            points: 0
-#
-#        for gm in games
-#          for pl in gm.homeTeamPlayers.concat(gm.awayTeamPlayers)
-#            if records[pl._id]? #todo КОСТЫЛЬ АДСКИЙ! Продумать что делать если игрок удалён из заявки
-#              records[pl._id].played++
-#              records[pl._id].goals += parseInt(pl.goals) if pl.goals
-#              records[pl._id].assists += parseInt(pl.assists) if pl.assists
-#              records[pl._id].stars += Boolean(pl.star) if pl.star
-#              records[pl._id].points += parseInt(pl.goals) if pl.goals
-#              records[pl._id].points += parseInt(pl.assists) if pl.assists
-#              records[pl._id].yellow += parseInt(pl.yellow) if pl.yellow
-#              records[pl._id].red += parseInt(pl.red) if pl.red
-#              records[pl._id].star += Boolean(pl.star) if pl.star
-#
-#        records = (record for id, record of records when record.played > 0)
-#
-#        Top = @app.models.TopPlayers
-#        Top.findOne(leagueId: leagueId, (err, model) ->
-#          if  model?
-#            Top.update({_id: model._id}, players: records, (err, num) ->
-#              stCallback(records)
-#            )
-#          else
-#            (new Top(leagueId: leagueId, players: records)).save(->
-#              stCallback(records)
-#            )
-#        )
-#    )
+    @getGames leagueId, (games) => @getTeams leagueId, (teams) =>
+
+      mappedTeams = {}
+      mappedTeams[t._id] = t for t in teams
+
+      @app.models.Player.find(teamId: $in: teams, (err, players) =>
+        records = {}
+        for pl in players
+          records[pl._id] =
+            name: pl.name
+            teamLogo: mappedTeams[pl.teamId].logo
+            teamId: pl.teamId
+            goals: 0
+            assists: 0
+            stars: 0
+            played: 0
+            yellow: 0
+            red: 0
+            points: 0
+
+        for gm in games
+          for pl in gm.homeTeamPlayers.concat(gm.awayTeamPlayers)
+            if records[pl._id]? #todo КОСТЫЛЬ АДСКИЙ! Продумать что делать если игрок удалён из заявки
+              records[pl._id].played++
+              records[pl._id].goals += parseInt(pl.goals) if pl.goals
+              records[pl._id].assists += parseInt(pl.assists) if pl.assists
+              records[pl._id].stars += Boolean(pl.star) if pl.star
+              records[pl._id].points += parseInt(pl.goals) if pl.goals
+              records[pl._id].points += parseInt(pl.assists) if pl.assists
+              records[pl._id].yellow += parseInt(pl.yellow) if pl.yellow
+              records[pl._id].red += parseInt(pl.red) if pl.red
+              records[pl._id].star += Boolean(pl.star) if pl.star
+
+        records = (record for id, record of records when record.played > 0)
+
+        Top = @app.models.TopPlayers
+        Top.findOne(leagueId: leagueId, (err, model) ->
+          if  model?
+            Top.update({_id: model._id}, players: records, (err, num) ->
+              stCallback(records)
+            )
+          else
+            (new Top(leagueId: leagueId, players: records)).save(->
+              stCallback(records)
+            )
+        )
+    )
 
   ##
   # самая простая таблица
