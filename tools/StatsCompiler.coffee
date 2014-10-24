@@ -108,7 +108,7 @@ class StatsCompiler
   ##
   simpleTable: (leagueId, previewCallback) =>
     records = {} #объекты, которые будут записаны в базу
-    @getGames leagueId, (games) => @getTeams leagueId, (teams) =>
+#    @getGames leagueId, (games) => @getTeams leagueId, (teams) =>
 
 #      stagingTeamsState = {}
 #      for tm in teams
