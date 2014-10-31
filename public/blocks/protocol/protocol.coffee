@@ -57,7 +57,6 @@
           formatPlayersNames(homePlayers[0])
           formatPlayersNames(awayPlayers[0])
           @.append templates.protocol(gm, homePlayers[0], awayPlayers[0])
-          if games[i]? then loadGames(i+1)
         )
     )
 )(jQuery)
