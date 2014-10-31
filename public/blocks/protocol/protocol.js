@@ -5,7 +5,7 @@
       protocol: function(gm, homePl, awayPl) {
         var i;
         gm.leagueName = gm.leagueName || 'Amateurs Portugal League';
-        return "<div class=\"page\">\n<div class='statsWrap'>\n  <div id='head'>\n      <div id='leagueName'>Amateur Portugal League</div><div id='tourNumber'>тур №9</div>\n  </div>\n  <h1>" + gm.homeTeamName + " - " + gm.awayTeamName + "</h1>\n  <div>Счёт матча:  ___ : ___  (после первого тайма: ___ : ___)</div><br>\n  <table class=\"table\">\n  <thead>\n    <th>#</th><th>имя</th><th>Г + П</th><th>Ж + К</th><th>З + З</th>\n    <th>#</th><th>имя</th><th>Г + П</th><th>Ж + К</th><th>З + З</th>\n  </thead>\n  <tbody>\n    " + (((function() {
+        return "<div class=\"page\">\n<div class='statsWrap'>\n  <div id='head'>\n      <div id='leagueName'>Amateur Portugal League</div><div id='tourNumber'>тур №" + gm.tourNumber + "</div>\n  </div>\n  <h1>" + gm.homeTeamName + " - " + gm.awayTeamName + "</h1>\n  <div>Счёт матча:  ___ : ___  (после первого тайма: ___ : ___)</div><br>\n  <table class=\"table\">\n  <thead>\n    <th>#</th><th>имя</th><th>Г + П</th><th>Ж + К</th><th>З + З</th>\n    <th>#</th><th>имя</th><th>Г + П</th><th>Ж + К</th><th>З + З</th>\n  </thead>\n  <tbody>\n    " + (((function() {
           var _i, _ref, _ref1, _ref2, _ref3, _results;
           _results = [];
           for (i = _i = 0; _i <= 24; i = ++_i) {

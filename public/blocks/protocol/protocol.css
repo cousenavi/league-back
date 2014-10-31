@@ -1,6 +1,11 @@
+* {
+    margin: 0;
+    padding: 0;
+}
 .page {
+    margin: 0;
     width: 210mm;
-    height: 300mm;
+    height: 297mm;
 }
 .statsWrap {
     padding: 0;

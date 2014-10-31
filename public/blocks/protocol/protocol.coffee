@@ -8,7 +8,7 @@
 <div class="page">
 <div class='statsWrap'>
   <div id='head'>
-      <div id='leagueName'>Amateur Portugal League</div><div id='tourNumber'>тур №9</div>
+      <div id='leagueName'>Amateur Portugal League</div><div id='tourNumber'>тур №#{gm.tourNumber}</div>
   </div>
   <h1>#{gm.homeTeamName} - #{gm.awayTeamName}</h1>
   <div>Счёт матча:  ___ : ___  (после первого тайма: ___ : ___)</div><br>
