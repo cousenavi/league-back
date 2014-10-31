@@ -1,11 +1,12 @@
 * {
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 .page {
     margin: 0;
     width: 210mm;
     height: 297mm;
+    position: relative;
 }
 .statsWrap {
     padding: 0;
@@ -16,8 +17,10 @@
     border: 5px solid #000;
     width:185mm;
     height:253mm;
-    margin: 10mm;
     position: relative;
+    position: absolute;
+    top: 10mm;
+    left: 10mm;
 }
 
 @page { margin: 0; }

@@ -33,7 +33,8 @@
             <div id='time'>#{gm.time}</div>
             <div id='place'>стадион "#{gm.placeName}"</div>
   </div>
-  </div></div>
+  </div>
+</div>
 """
 
 
