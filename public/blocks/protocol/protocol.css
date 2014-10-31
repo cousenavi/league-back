@@ -1,0 +1,107 @@
+.statsWrap {
+    padding: 0;
+    border-radius: 5px;
+    text-align: center;
+    font-family: Verdana;
+    background-color: #fff;
+    border: 5px solid #000;
+    width:170mm;
+    height:245mm;
+    margin: 10mm;
+    position: relative;
+}
+
+@page { margin: 0; }
+
+.statsWrap #head {
+    width: 100%;
+    height: 45px;
+    line-height: 45px;
+    font-size: 16pt;
+    text-align: center;
+    padding: 0;
+    position: relative;
+    border-bottom: 3px solid #000;
+    border-radius: 5px 5px 0px 0px;
+}
+
+.statsWrap #head #leagueName {
+    background: transparent;
+    position: absolute;
+    left: 20px;
+}
+.statsWrap #head #tourNumber {
+    position: absolute;
+    right: 0;
+    padding-right: 20px;
+    padding-left: 20px;
+    border-left: 1px solid #000;
+    background: transparent;
+}
+.statsWrap #foot {
+    width: 100%;
+    height: 45px;
+    line-height: 45px;
+    font-size: 16pt;
+    text-align: center;
+    padding: 0;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    border-top: 3px solid #000;
+    border-radius: 0px 0px 5px 5px;
+}
+.statsWrap #foot div {
+    padding-right: 25px;
+    padding-left: 25px;
+}
+.statsWrap #foot #date {position: absolute; width:30mm; left: 0; border-right: 1px solid #000 }
+.statsWrap #foot #time {position: absolute; width: 20mm; right: 0; border-left: 1px solid #000}
+.statsWrap #foot #place {position: absolute; width: 80mm; left: 40mm;}
+
+.statsWrap .table {
+    width: 165mm;
+    height: 150mm;
+    border: 1px solid #000;
+    font-size: 9pt;
+    margin: 10px;
+    border-collapse: collapse;
+}
+.statsWrap .table tr {
+    border-bottom: 1px solid #000;
+}
+
+.statsWrap .table td:nth-child(n), .statsWrap .table th:nth-child(n) {
+    border-right: 1px solid #000;
+}
+.statsWrap .table td:nth-child(5n), .statsWrap .table th:nth-child(5n) {
+    border-right: 2px solid #000;
+    text-align: left;
+}
+.statsWrap .table td:nth-child(10n), .statsWrap .table th:nth-child(10n) {
+    border-right: 0;
+}
+
+.ev {
+    display: inline-block;
+    width: 20px;
+    height: 18px;
+    background-repeat: no-repeat;
+    background: url(http://localhost:3000/img/sprite/foot.png);
+    background-size: 170px;
+}
+.ev.goal { background-position-x: 0;}
+.ev.assist {background-position-x: -14px;}
+.ev.yellow {background-position-x: -26px;}
+.ev.red {background-position-x: -37px;}
+.ev.red2yellow {background-position-x: -50px;}
+.ev.injury {background-position-x: -62px;}
+.ev.star {background-position-x: -87px;}
+
+.help {
+    font-size: 8pt;
+}
+
+#signs {
+    font-size: 10pt;
+}

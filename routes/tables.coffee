@@ -9,4 +9,5 @@ module.exports = (app) ->
   app.get '/tables/top_players',       app.controllers.TablesController.getTopPlayers
   app.get '/tables/best_players',      app.controllers.TablesController.getBestPlayers
   app.get '/tables/tour_summary',      app.controllers.TablesController.getTourSummary
-  app.get '/tables/game_preview',      app.controllers.TablesController.getGamePreview
+
+  app.get '/tables/game_preview',       app.controllers.TablesController.getGamePreview

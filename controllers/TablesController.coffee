@@ -346,23 +346,6 @@ class TablesController
             tops[gm.tourNumber].teamRude = teamYellow + 2*teamRed
 
 
-          for pl in gm.homeTeamPlayers
-            summaries[gm.tourNumber].yellow += if pl.yellow then parseInt(pl.yellow) else 0
-            summaries[gm.tourNumber].red    += if pl.red then parseInt(pl.red) else 0
-            #
-            if pl.goals > 0
-              if pl.goals is tops[gm.tourNumber].goalscorer
-                summaries[gm.tourNumber].topGoalscorers.push({name: pl.name, teamLogo: gm.homeTeamLogo, goals: pl.goals} )
-              else if pl.goals > tops[gm.tourNumber].goalscorer
-                tops[gm.tourNumber].goalscorer = pl.goals
-                summaries[gm.tourNumber].topGoalscorers = [{name: pl.name, teamLogo: gm.homeTeamLogo, goals: pl.goals}]
-            #
-            if pl.assists > 0
-              if pl.assists is tops[gm.tourNumber].ass
-                summaries[gm.tourNumber].topAssistants.push({name: pl.name, teamLogo: gm.homeTeamLogo, assists: pl.assists} )
-              else if pl.assists > tops[gm.tourNumber].ass
-                tops[gm.tourNumber].ass = pl.assists
-                summaries[gm.tourNumber].topAssistants = [{name: pl.name, teamLogo: gm.homeTeamLogo, assists: pl.assists}]
 
           for pl in gm.awayTeamPlayers
             summaries[gm.tourNumber].yellow += if pl.yellow then parseInt(pl.yellow) else 0
