@@ -41,10 +41,7 @@
           return $.when($.getJSON("/players?teamId=" + gm.homeTeamId), $.getJSON("/players?teamId=" + gm.awayTeamId)).then(function(homePlayers, awayPlayers) {
             formatPlayersNames(homePlayers[0]);
             formatPlayersNames(awayPlayers[0]);
-            _this.append(templates.protocol(gm, homePlayers[0], awayPlayers[0]));
-            if (games[i] != null) {
-              return loadGames(i + 1);
-            }
+            return _this.append(templates.protocol(gm, homePlayers[0], awayPlayers[0]));
           });
         };
       })(this));
