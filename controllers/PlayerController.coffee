@@ -1,6 +1,6 @@
 class PlayerController extends require('./AbstractCrudController')
   getAll: (req, res) =>
-    if req.checkAccessToTeam(req.query.teamId)
+#    if req.checkAccessToTeam(req.query.teamId) TODO TEMPORARY DISABLED
       @model(req).find(req.query, (err, models) =>
         if err or !models?
           throw err

@@ -8,12 +8,13 @@ class GameController extends require('./AbstractCrudController')
     )
 
   getAll: (req, res) =>
-    if req.query.leagueId?
-      req.checkAccessToLeague(req.query.leagueId)
-    else if req.query.teamId?
-      req.checkAccessToTeam(req.query.teamId)
-    else
-      res.status(403).send('access denied')
+#    if req.query.leagueId?
+#      req.checkAccessToLeague(req.query.leagueId)
+#    else if req.query.teamId?
+#      req.checkAccessToTeam(req.query.teamId)
+#    else
+#      res.status(403).send('access denied')
+     #TODO TEMPORARY DISABLED
 
     if req.query.startDate?
       startDate = req.query.startDate

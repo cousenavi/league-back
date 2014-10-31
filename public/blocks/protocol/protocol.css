@@ -1,3 +1,7 @@
+.page {
+    width: 210mm;
+    height: 300mm;
+}
 .statsWrap {
     padding: 0;
     border-radius: 5px;
@@ -5,8 +9,8 @@
     font-family: Verdana;
     background-color: #fff;
     border: 5px solid #000;
-    width:170mm;
-    height:245mm;
+    width:185mm;
+    height:253mm;
     margin: 10mm;
     position: relative;
 }
@@ -60,7 +64,7 @@
 .statsWrap #foot #place {position: absolute; width: 80mm; left: 40mm;}
 
 .statsWrap .table {
-    width: 165mm;
+    width: 180mm;
     height: 150mm;
     border: 1px solid #000;
     font-size: 9pt;
