@@ -35,7 +35,7 @@
             _results.push($.when($.getJSON("/players?teamId=" + gm.homeTeamId), $.getJSON("/players?teamId=" + gm.awayTeamId)).then(function(homePlayers, awayPlayers) {
               formatPlayersNames(homePlayers[0]);
               formatPlayersNames(awayPlayers[0]);
-              return _this.html(templates.protocol(gm, homePlayers[0], awayPlayers[0]));
+              return _this.append(templates.protocol(gm, homePlayers[0], awayPlayers[0]));
             }));
           }
           return _results;

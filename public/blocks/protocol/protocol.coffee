@@ -49,7 +49,7 @@
           ).then( (homePlayers, awayPlayers) =>
             formatPlayersNames(homePlayers[0])
             formatPlayersNames(awayPlayers[0])
-            @.html templates.protocol(gm, homePlayers[0], awayPlayers[0])
+            @.append templates.protocol(gm, homePlayers[0], awayPlayers[0])
           )
     )
 )(jQuery)
