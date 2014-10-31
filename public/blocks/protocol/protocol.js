@@ -15,7 +15,7 @@
         })()).join('')) + "\n  </tbody>\n  </table>\n<span class=\"help\">Г+П: гол + пас, Ж+К: карточки, И+И: игрок матча (выбор своих) + (выбор соперника)<br>\nПримеры заполнения: 2+3; 1+0; 0+1</span>\n<br><br><br><br>\n<table id=\"signs\">\n<tr><td>__________________________</td><td>__________________________</td><td>____________________________</td></tr>\n<tr><td>главный судья</td><td>капитан " + gm.homeTeamName + "</td><td>капитан " + gm.awayTeamName + "</td></tr>\n</table>\n  <div id='foot'>\n            <div id='date'>" + gm.date + "</div>\n            <div id='time'>" + gm.time + "</div>\n            <div id='place'>стадион \"" + gm.placeName + "\"</div>\n  </div>\n  </div>\n</div>";
       }
     };
-    return $.fn.protocol = function(leagueId) {
+    return $.fn.protocol = function(gameId) {
       var formatPlayersNames;
       formatPlayersNames = function(players) {
         var firstName, lastName, pl, _i, _len;
@@ -36,22 +36,16 @@
           }
         });
       };
-      return $.getJSON('/games?leagueId=54009eb17336983c24342ed9&ended=false', (function(_this) {
-        return function(games) {
-          var loadGames;
-          loadGames = function(i) {
-            return $.when($.getJSON("/players?teamId=" + games[i].homeTeamId), $.getJSON("/players?teamId=" + games[i].awayTeamId)).then(function(homePlayers, awayPlayers) {
-              formatPlayersNames(homePlayers[0]);
-              formatPlayersNames(awayPlayers[0]);
-              _this.append(templates.protocol(games[i], homePlayers[0], awayPlayers[0]));
-              if (games[i] != null) {
-                return loadGames(i + 1);
-              }
-            });
-          };
-          if (games[0] != null) {
-            return loadGames(0);
-          }
+      return $.getJSON("/games/" + gameId, (function(_this) {
+        return function(gm) {
+          return $.when($.getJSON("/players?teamId=" + gm.homeTeamId), $.getJSON("/players?teamId=" + gm.awayTeamId)).then(function(homePlayers, awayPlayers) {
+            formatPlayersNames(homePlayers[0]);
+            formatPlayersNames(awayPlayers[0]);
+            _this.append(templates.protocol(gm, homePlayers[0], awayPlayers[0]));
+            if (games[i] != null) {
+              return loadGames(i + 1);
+            }
+          });
         };
       })(this));
     };

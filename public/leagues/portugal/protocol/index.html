@@ -10,7 +10,8 @@
 <body>
 <div id="protocols"></div>
 <script>
-    $('#protocols').protocol('54009eb17336983c24342ed9');
+    var gameId = location.search.substr(1);
+    $('#protocols').protocol(gameId);
 </script>
 </body>
 </html>

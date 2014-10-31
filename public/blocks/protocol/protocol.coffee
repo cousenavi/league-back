@@ -38,7 +38,7 @@
 """
 
 
-  $.fn.protocol = (leagueId) ->
+  $.fn.protocol = (gameId) ->
     formatPlayersNames = (players) ->
       for pl in players
         pl.name = pl.name.toLowerCase()
@@ -49,17 +49,15 @@
         pl.name = firstName+' '+lastName
       players.sort((a,b) -> if a.number > b.number then 1 else -1 )
 
-    $.getJSON('/games?leagueId=54009eb17336983c24342ed9&ended=false', (games) =>
-      loadGames = (i) =>
-          $.when(
-            $.getJSON("/players?teamId=#{games[i].homeTeamId}")
-            $.getJSON("/players?teamId=#{games[i].awayTeamId}")
-          ).then( (homePlayers, awayPlayers) =>
-            formatPlayersNames(homePlayers[0])
-            formatPlayersNames(awayPlayers[0])
-            @.append templates.protocol(games[i], homePlayers[0], awayPlayers[0])
-            if games[i]? then loadGames(i+1)
-          )
-      if games[0]? then loadGames(0)
+    $.getJSON("/games/#{gameId}", (gm) =>
+        $.when(
+          $.getJSON("/players?teamId=#{gm.homeTeamId}")
+          $.getJSON("/players?teamId=#{gm.awayTeamId}")
+        ).then( (homePlayers, awayPlayers) =>
+          formatPlayersNames(homePlayers[0])
+          formatPlayersNames(awayPlayers[0])
+          @.append templates.protocol(gm, homePlayers[0], awayPlayers[0])
+          if games[i]? then loadGames(i+1)
+        )
     )
 )(jQuery)
