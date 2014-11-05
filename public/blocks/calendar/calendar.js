@@ -2,9 +2,6 @@
   (function($) {
     var templates;
     templates = {
-      table: function(rows) {
-        return "" + (rows.join(''));
-      },
       stats: function(stats) {
         var pl, tm;
         return " <table class=\"table table-striped summary\">\n   <thead>\n   <th></th>\n   <th>в туре</th>\n   <th>рекорд</th>\n   </thead>\n   <tbody>\n     <tr><td><b>Сыграно матчей</b></td><td>" + stats.played + "</td><td></td></tr>\n     <tr><td><b>Забито голов</b></td><td>" + stats.scored + "</td><td>" + stats.records.scored.val + " <span class=\"recordTour\">(" + stats.records.scored.tour + " тур)</span></td></tr>\n     <tr><td><b>Показано жёлтых</b></td><td>" + stats.yellow + "</td><td></td></tr>\n     <tr><td><b>Показано красных</b></td><td>" + stats.red + "</td><td></td></tr>\n     <tr><td><b>Забили больше всех</b></td>\n         <td>" + (((function() {
@@ -126,6 +123,9 @@
           return _results;
         })()).join(', ')) + "</td>\n\n</tr>\n   </tbody>\n </table>";
       },
+      table: function(rows, tourNumber) {
+        return "<div id=\"prv\">\n  <div id='head'>\n      <div id='leagueName'>Amateur Portugal League</div><div id='tourNumber'>тур " + tourNumber + "</div>\n  </div>\n  " + (rows.join('')) + "\n</div>";
+      },
       row: function(game) {
         var computePlayers;
         computePlayers = function(protocol) {
@@ -162,7 +162,7 @@
           }
           return "<div class='players'>" + formattedPlayers + "</div>";
         };
-        return "<div class=\"row match\">\n  <div class=\"col-xs-2 col-md-2 col-lg-2\"><img src =\"/" + game.homeTeamLogo + "\"></div>\n  <div class=\"col-xs-3 col-md-3 col-lg-3 teamName\">" + game.homeTeamName + " " + (game.homeTeamPlayers != null ? computePlayers(game.homeTeamPlayers) : '') + "</div>\n  <div class=\"col-xs-2 col-md-2 col-lg-2 score\">\n    " + (game.homeTeamScore != null ? "" + game.homeTeamScore + " - " + game.awayTeamScore : (game.time != null ? game.date + " " + game.time : game.date)) + "\n  </div>\n  <div class=\"col-xs-3 col-md-3 col-lg-3 teamName\" >" + game.awayTeamName + " " + (game.awayTeamPlayers != null ? computePlayers(game.awayTeamPlayers) : '') + "</div>\n  <div class=\"col-xs-2 col-md-2 col-lg-2\"><img src =\"/" + game.awayTeamLogo + "\"></div>\n</div><";
+        return "<div class=\"row match\">\n  <div class=\"col-xs-2 col-md-2 col-lg-2\"><img src =\"/" + game.homeTeamLogo + "\"></div>\n  <div class=\"col-xs-3 col-md-3 col-lg-3 teamName\">" + game.homeTeamName + " " + (game.homeTeamPlayers != null ? computePlayers(game.homeTeamPlayers) : '') + "</div>\n  <div class=\"col-xs-2 col-md-2 col-lg-2 score\">\n    " + (game.homeTeamScore != null ? "" + game.homeTeamScore + " - " + game.awayTeamScore : (game.time != null ? game.date + " " + game.time : game.date)) + "\n  </div>\n  <div class=\"col-xs-3 col-md-3 col-lg-3 teamName\" >" + game.awayTeamName + " " + (game.awayTeamPlayers != null ? computePlayers(game.awayTeamPlayers) : '') + "</div>\n  <div class=\"col-xs-2 col-md-2 col-lg-2\"><img src =\"/" + game.awayTeamLogo + "\"></div>\n</div>";
       }
     };
     $('body').on('click', '.summary tr', function() {
@@ -172,7 +172,7 @@
       return $.getJSON("/games/?leagueId=" + leagueId + "&showPlayers=1&tourNumber=" + tourNumber, (function(_this) {
         return function(games) {
           var gm;
-          return _this.html((function() {
+          return _this.html(templates.table((function() {
             var _i, _len, _results;
             _results = [];
             for (_i = 0, _len = games.length; _i < _len; _i++) {
@@ -180,7 +180,7 @@
               _results.push(templates.row(gm));
             }
             return _results;
-          })());
+          })(), tourNumber));
         };
       })(this));
     };

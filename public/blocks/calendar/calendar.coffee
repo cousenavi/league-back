@@ -1,10 +1,5 @@
 ( ($) ->
   templates =
-    table: (rows) ->
-      """
-        #{rows.join('')}
-"""
-
     stats: (stats) -> """
       <table class="table table-striped summary">
         <thead>
@@ -46,6 +41,15 @@
       </table>
 """
 
+    table: (rows, tourNumber) ->
+      """
+<div id="prv">
+  <div id='head'>
+      <div id='leagueName'>Amateur Portugal League</div><div id='tourNumber'>тур #{tourNumber}</div>
+  </div>
+  #{rows.join('')}
+</div>
+"""
 
     row: (game) ->
       computePlayers =  (protocol) ->
@@ -78,7 +82,7 @@
           </div>
           <div class="col-xs-3 col-md-3 col-lg-3 teamName" >#{game.awayTeamName} #{if game.awayTeamPlayers? then computePlayers(game.awayTeamPlayers) else ''}</div>
           <div class="col-xs-2 col-md-2 col-lg-2"><img src ="/#{game.awayTeamLogo}"></div>
-        </div><
+        </div>
 """
 
   $('body').on('click', '.summary tr', ->
@@ -87,7 +91,7 @@
 
   $.fn.calendar = (leagueId,tourNumber) ->
     $.getJSON("/games/?leagueId=#{leagueId}&showPlayers=1&tourNumber=#{tourNumber}", (games) =>
-        @.html(templates.row(gm) for gm in games)
+        @.html(templates.table((templates.row(gm) for gm in games), tourNumber))
     )
 
   $.fn.stats = (leagueId, tourNumber) ->
