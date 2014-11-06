@@ -2,7 +2,24 @@
   (function($) {
     var templates;
     templates = {
-      field: function(players) {
+      playerAchievement: function(pl) {
+        var html;
+        html = '';
+        if (pl.goals) {
+          html += "&nbsp;<i class='ev goal'></i>" + pl.goals;
+        }
+        if (pl.assists) {
+          html += "&nbsp;<i class='ev assist'></i>" + pl.assists;
+        }
+        if (pl.star) {
+          html += "&nbsp;<i class='ev star'></i>";
+        }
+        return html;
+      },
+      player: function(pl) {
+        return "<tr>\n    <td style='width: 25px'><i class='logo'><img  src=\"/" + pl.teamLogo + "\"/></i></td>\n    <td>" + pl.firstName + "</td>\n    <td><i class='position'>" + pl.position + "</i>" + (templates.playerAchievement(pl)) + "</td>\n</tr>";
+      },
+      field: function(players, tourNumber) {
         var pl, _i, _len;
         for (_i = 0, _len = players.length; _i < _len; _i++) {
           pl = players[_i];
@@ -12,29 +29,29 @@
           pl.lastName = pl.name.split(' ')[1];
           pl.fullName = pl.firstName + ' ' + pl.lastName.charAt(0).toUpperCase() + pl.lastName.slice(1);
         }
-        return "    <div id='field'>\n" + (((function() {
+        return "<div id=\"prv\">\n  <div id='head'>\n      <div id='leagueName'>Amateur Portugal League</div><div id='tourNumber'>Тур №" + tourNumber + "</div>\n  </div>\n\n  <div id='field'>\n      " + (((function() {
           var _j, _len1, _results;
           _results = [];
           for (_j = 0, _len1 = players.length; _j < _len1; _j++) {
             pl = players[_j];
-            _results.push("<div class='player " + pl.position + "'><img src='/" + pl.teamLogo + "'><br>" + pl.firstName + "</div>");
+            _results.push("<div class='chip " + pl.position + "'><img src='/" + pl.teamLogo + "'/></div>");
           }
           return _results;
-        })()).join('')) + "\n    </div>\n\n    <table class=\"table table-striped\" id=\"statsTable\">\n    <thead><th>Name</th><th>Pos</th><th>G</th><th>A</th></thead>\n    " + (((function() {
+        })()).join('')) + "\n  </div>\n\n  <div id='players'>\n      <table>\n      " + (((function() {
           var _j, _len1, _results;
           _results = [];
           for (_j = 0, _len1 = players.length; _j < _len1; _j++) {
             pl = players[_j];
-            _results.push("<tr><td><img src='/" + pl.teamLogo + "'> " + pl.fullName + "</td><td>" + pl.position + "</td><td>" + pl.goals + "</td><td>" + pl.assists + "</td></tr>");
+            _results.push(templates.player(pl));
           }
           return _results;
-        })()).join('')) + "\n    </table>";
+        })()).join('')) + "\n      </table>\n      <div id='legend'>\n         <i class='ev goal'></i> - гол <i class='ev assist'></i>- пас <i class='ev star'></i> - игрок матча\n\n      </div>\n\n  </div>\n\n  <div style='clear:both'></div>\n\n\n</div>";
       }
     };
     return $.fn.bestplayers = function(leagueId, tourNumber) {
       return $.getJSON("/tables/best_players?leagueId=" + leagueId + "&tourNumber=" + tourNumber, (function(_this) {
         return function(bp) {
-          return _this.html(templates.field(bp[0].players));
+          return _this.html(templates.field(bp[0].players, tourNumber));
         };
       })(this));
     };

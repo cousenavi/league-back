@@ -1,74 +1,196 @@
-#field {
-    width: 375px;
-    height: 423px;
-    background: url(/img/sprite/field2.png);
-    position: absolute;
-}
-
-#field .player {
-    position: absolute;
-    font-size: 20pt;
-    width: 175px;
-    height: 25px;
+* {
+    font-family: Verdana;
+    background-color: #f9f9f9;
     text-align: center;
-    color: #efefef;
-    font-weight: 900;
 }
 
-#field .player img {
-    height: 40px;
+#prv {
+    padding: 0;
+    border: 5px solid #002951;
+    border-radius: 5px;
+    text-align: center;
+    width: 750px;
 }
 
-#field .ST {
-    margin-top: 2%;
-    margin-left: 0;
+#head {
+    background: rgb(253,255,255); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(253,255,255,1) 0%, rgba(217,237,247,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(253,255,255,1)), color-stop(100%,rgba(217,237,247,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(253,255,255,1) 0%,rgba(217,237,247,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(253,255,255,1) 0%,rgba(217,237,247,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(253,255,255,1) 0%,rgba(217,237,247,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(253,255,255,1) 0%,rgba(217,237,247,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fdffff', endColorstr='#d9edf7',GradientType=0 ); /* IE6-9 */
+}
+
+#head {
     width: 100%;
+    height: 45px;
+    line-height: 45px;
+    font-size: 16pt;
+    text-align: center;
+    padding: 0;
+    position: relative;
+    border-bottom: 3px solid #002951;
+    border-radius: 5px 5px 0px 0px;
 }
 
-#field .LM {
-    margin-top: 15%;
-    left: 0;
-}
-
-#field .RM {
-    margin-top: 15%;
-    right: 0;
-}
-
-#field .CM {
-    margin-top: 40%;
-    margin-left: 0;
-    width: 100%;
-}
-
-#field .LB {
-    margin-top: 56%;
-    left: 0;
-}
-#field .RB {
-    margin-top: 56%;
-    right: 0;
-}
-
-#field .CB {
-    margin-top: 72%;
-    margin-left: 0;
-    width: 100%;
-}
-#field .GK {
-    margin-top: 92%;
-    margin-left: 0;
-    width: 100%;
-}
-
-#statsTable {
-    width: 375px;
-    height: 423px;
-    margin-left: 385px;
+#head #leagueName {
+    background: transparent;
     position: absolute;
-    border-bottom: 1px solid #ddd;
+    left: 20px;
+}
+#head #tourNumber {
+    position: absolute;
+    right: 0;
+    width: 100px;
+    border-left: 1px solid #002951;
+    background: transparent;
 }
 
-#statsTable img {
-    height: 20px;
+.ev {
+    display: inline-block;
+    width: 14px;
+    height: 13px;
+    background-repeat: no-repeat;
+    background: url(http://localhost:3000/img/sprite/foot.png);
+    background-size: 125px;
+}
+.ev.goal { background-position-x: 0;}
+.ev.assist {background-position-x: -15px;}
+.ev.yellow {background-position-x: -28px;}
+.ev.red {background-position-x: -37px;}
+.ev.red2yellow {background-position-x: -50px;}
+.ev.injury {background-position-x: -62px;}
+.ev.star {background-position-x: -97px;}
+.ev.star-own {background-position-x: -111px;}
+
+table td:nth-child(1n) {
+    width: 400px;
+    text-align: left;
+    padding-left: 25px;
+}
+table td:nth-child(2n) {
+    width: 100px;
+    text-align: center;
+    padding: 0;
+}
+
+table {
+    padding: 0;
+}
+
+#field {
+    display: inline-block;
+    height: 400px;
+    width: 300px;
+    background: rgb(180,227,145);
+    float: left;
+    margin: 10px;
+    border: 1px solid #777;
+    position: relative;
+}
+
+#players {
+    display:inline-block;
+    height: 420px;
+    width: 405px;
+    float: right;
+    margin-top: 10px;
+    position: relative;
+    text-align: left;
+    font-size: 16pt;
+    line-height: 31px;
+}
+
+.logo {
+    padding: 5px;
+    width: 25px;
+    display: inline-block;
+}
+
+.logo img {
+    height: 16pt;
+    background: transparent;
+}
+
+.position {
+    background: #DCF3F4;
+    padding: 5px;
+    font-style: normal;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 10pt;
+}
+
+#players table td{
+    width: 30px;
+    padding: 0;
+    text-align: left;
+    height: 34px;
+    line-height: 34px;
+}
+#players table td:nth-child(2n){
+    padding-right: 5px;
+}
+#players table td:nth-child(3n){
+    padding: 0;
+    width: 200px;
+    font-size: 12pt;
+}
+
+#field .chip {
+    margin-left: -.5em;
+    position: absolute;
+    z-index: 1;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    line-height: 1em;
+    vertical-align: middle;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 1px 1px rgba(255,255,255,.3);
+    font-size: 300%;
+    font-weight: 900;
+    color: #000;
+    border-radius: 100%;
+    background: rgb(144,142,105) linear-gradient(rgb(185,181,151), rgb(144,142,105));
+    box-shadow:
+    inset 0 -2px 1px rgba(0,0,0,.5),
+    inset 0 2px 1px rgba(255,255,255,.9),
+    0 4px 4px rgba(0,0,0,.9);
+}
+#field .chip:after{
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 12%;
+    left: 12%;
+    right: 12%;
+    bottom: 12%;
+    border-radius: 100%;
+    background: #f0f0f0;
+    box-shadow:
+    inset 0 2px 1px rgba(0,0,0,.5),
+    inset 0 -2px 1px rgba(255,255,255,.3);
+}
+#field .chip img {
+    background: transparent;
+    height: 25px;
+    padding-bottom: 6px;
+
+}
+
+.chip.ST {left: 50%; top: 3%;}
+.chip.LM {left: 20%; top: 18%;}
+.chip.RM {left: 80%; top: 18%;}
+.chip.CM {left: 50%; top: 38%;}
+.chip.LB {left: 20%; top: 55%;}
+.chip.RB {left: 80%; top: 55%;}
+.chip.CB {left: 50%; top: 68%;}
+.chip.GK {left: 50%; top: 85%;}
+
+#legend {
+    font-size: 10pt;
 }
