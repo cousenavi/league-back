@@ -15,6 +15,7 @@ class StatsCompiler
     leagueId = game.leagueId
     @topPlayers(leagueId, (players) =>
       @simpleTable(leagueId, (stagingTable) =>
+        @chessTable(leagueId, stagingTable)
         @gamePreview(leagueId, stagingTable, players)
       )
     )
@@ -269,6 +270,51 @@ class StatsCompiler
         )
 
     )
+
+  ##
+  # шахматка
+  # @model ChessTable
+  # @param leagueId
+  # @param stagingTable
+  chessTable: (leagueId, stagingTable) ->
+    @getGames leagueId, (games) =>
+      #убираем ключи id и проставляем позиции
+      teamsState = []
+      for id, tm of stagingTable
+        teamsState.push(tm) if typeof(tm) isnt 'function'
+      teamsState.sort(@sortByPosition)
+
+      records = {}
+      for team, pos in teamsState
+        records[team._id] =
+          name: team.name
+          _id: team.id
+          logo: team.logo
+          position: pos+1
+          games: {}
+
+        for tm in teamsState
+          records[team._id].games[tm._id] = []
+
+      games = (game for game in games when game.homeTeamScore?)
+
+      for game in games
+        records[game.homeTeamId].games[game.awayTeamId].push({'scored': game.homeTeamScore, 'conceeded': game.awayTeamScore})
+        records[game.awayTeamId].games[game.homeTeamId].push({'scored': game.awayTeamScore, 'conceeded': game.homeTeamScore})
+
+      #todo вот этот кусок с двойной сортировкой проверить и переписать
+      records = (record for id, record of records)
+      for t in records
+        t.games = ({opponent: id, matches: g} for id, g of t.games)
+
+      @app.models.ChessTable.remove(leagueId: leagueId, (err) =>
+        if err then throw 'Cannot update ChessTable'+err
+      )
+
+      (new @app.models.ChessTable(leagueId: game.leagueId, teams: records)).save((err) ->
+          if err then throw new Error 'Cannot update ChessTable'+err
+          console.log 'ChessTable successfully updated'
+      )
 
 
 module.exports = StatsCompiler

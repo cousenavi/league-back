@@ -1,6 +1,5 @@
 class TablesController
   onResultAdded: (game) =>
-    @updateChessTable(game)
     @updateClimbingChart(game)
     @updateBestPlayers(game)
     @updateTourSummary(game)
@@ -43,48 +42,6 @@ class TablesController
         )
       )
     )
-
-  ###
-    Шахматка
-  ###
-  updateChessTable: (game) =>
-    Game = @app.models.Game
-    Team = @app.models.Team
-
-    Game.find(leagueId: game.leagueId).sort(datetime: 'asc').exec((err, games) =>
-      Team.find(leagueId: game.leagueId, (err, teams) =>
-        records = {}
-        for team in teams
-          records[team._id] =
-            name: team.name
-            _id: team.id
-            logo: team.logo
-            games: {}
-
-          for tm in teams
-            records[team._id].games[tm._id] = []
-
-        games = (game for game in games when game.homeTeamScore?)
-
-        for game in games
-          records[game.homeTeamId].games[game.awayTeamId].push({'scored': game.homeTeamScore, 'conceeded': game.awayTeamScore})
-          records[game.awayTeamId].games[game.homeTeamId].push({'scored': game.awayTeamScore, 'conceeded': game.homeTeamScore})
-
-        records = (record for id, record of records)
-        records.sort((a,b) -> if a._id > b._id then 1 else - 1)
-        for t in records
-          t.games = ({opponent: id, matches: g} for id, g of t.games).sort((a,b) -> if a.opponent > b.opponent then 1 else - 1)
-
-        Model = @app.models.ChessTable
-        Model.findOne(leagueId: game.leagueId, (err, model) ->
-          if  model?
-            Model.update({_id: model._id}, teams: records, (err, num) -> console.log err, num)
-          else
-            (new Model(leagueId: game.leagueId, teams: records)).save()
-        )
-      )
-    )
-
 
 
   updateBestPlayers: (game) =>
