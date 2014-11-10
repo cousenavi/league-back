@@ -16,7 +16,7 @@
     #--
     cell: (team, gm) ->
       if team._id is gm.opponent
-        '<td><img src="/leagues/portugal/logo/league.png"></td>'
+        "<td class='empty'></td>"
       else
         html = ''
         for m in gm.matches
@@ -29,8 +29,6 @@
     $.getJSON('/tables/chess_table', {leagueId: leagueId}, (table) =>
 
         heads = (templates.head(tm.logo) for tm in table.teams)
-
-        console.log table.teams
 
         rows = (templates.row(tm, (templates.cell(tm, gm) for gm in tm.games)) for tm in table.teams )
 

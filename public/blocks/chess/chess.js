@@ -14,7 +14,7 @@
       cell: function(team, gm) {
         var color, html, m, _i, _len, _ref;
         if (team._id === gm.opponent) {
-          return '<td><img src="/leagues/portugal/logo/league.png"></td>';
+          return "<td class='empty'></td>";
         } else {
           html = '';
           _ref = gm.matches;
@@ -43,7 +43,6 @@
             }
             return _results;
           })();
-          console.log(table.teams);
           rows = (function() {
             var _i, _len, _ref, _results;
             _ref = table.teams;

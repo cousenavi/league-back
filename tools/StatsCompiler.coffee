@@ -288,7 +288,7 @@ class StatsCompiler
       for team, pos in teamsState
         records[team._id] =
           name: team.name
-          _id: team.id
+          _id: team._id
           logo: team.logo
           position: pos+1
           games: {}
