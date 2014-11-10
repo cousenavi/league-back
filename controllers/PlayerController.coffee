@@ -6,8 +6,9 @@ class PlayerController extends require('./AbstractCrudController')
           throw err
 
         models.sort( (a, b) ->
-          priority = ['GK', 'CB', 'LB', 'RB', 'CM', 'LM', 'RM', 'ST']
-          if priority.indexOf(a.position) > priority.indexOf(b.position) then 1 else -1
+#          priority = ['GK', 'CB', 'LB', 'RB', 'CM', 'LM', 'RM', 'ST']
+#          if priority.indexOf(a.position) > priority.indexOf(b.position) then 1 else -1
+          if a.number > b.number then 1 else -1
         )
 
         res.send models
