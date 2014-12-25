@@ -1,6 +1,7 @@
 ( ($) ->
   templates =
     playerAchievement: (pl) ->
+      console.log pl
       html = ''
       if pl.goals then html += "&nbsp;<i class='ev goal'></i>#{pl.goals}"
       if pl.assists then html += "&nbsp;<i class='ev assist'></i>#{pl.assists}"

@@ -13,7 +13,6 @@
     border: 5px solid #000;
     width:185mm;
     height:253mm;
-    position: relative;
     position: absolute;
     top: 10mm;
     left: 10mm;
@@ -104,7 +103,7 @@
 .ev.red {background-position-x: -37px;}
 .ev.red2yellow {background-position-x: -50px;}
 .ev.injury {background-position-x: -62px;}
-.ev.star {background-position-x: -87px;}
+.ev.star {background-position-x: 38px;}
 
 .help {
     font-size: 8pt;

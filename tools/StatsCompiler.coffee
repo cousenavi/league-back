@@ -124,6 +124,14 @@ class StatsCompiler
             if operator is '$set' then @[tmId][key] = value
             if operator is '$push' then @[tmId][key].push(value)
 
+
+      #лишения команд очков. todo ЭТО ДИКИЙ ХАРДКОД
+      # нужно переписать на нормальную модель, управляющуюся из админки
+      #учесть, что сейчас дата решения должна совпадать с датой игры команды
+      penalties = [
+        {teamId: '5401ba131e8dbfb20f63f43a', points: -4, date: '01/11/14' }
+      ]
+
       for gm in games
         if !gm.homeTeamScore? then continue
         @gameAdapter.toLocal(gm)
@@ -140,6 +148,13 @@ class StatsCompiler
               score: {$inc: (if res is 'w' then 3 else if res is 'd' then 1 else 0)}
 #            }
           )
+
+          for p in penalties
+            if p.date is gm.date and ''+p.teamId is ''+tm._id
+                stagingTeamsState.update(tm._id,
+                  score: {$inc: p.points}
+                )
+
         #так как игры отсортированы по дате, мы можем записать в рекордс текущее состояние таблицы (фокусы с JSON - для клонирования)
         records[gm.date] = teams: JSON.parse(JSON.stringify(stagingTeamsState));
 

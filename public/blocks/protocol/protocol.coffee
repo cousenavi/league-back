@@ -14,14 +14,14 @@
   <div>Счёт матча:  ___ : ___  (после первого тайма: ___ : ___)</div><br>
   <table class="table">
   <thead>
-    <th>#</th><th>имя</th><th>Г + П</th><th>Ж + К</th><th>З + З</th>
-    <th>#</th><th>имя</th><th>Г + П</th><th>Ж + К</th><th>З + З</th>
+    <th>#</th><th>имя</th><th>Г + П</th><th>Ж + К</th><th>ИМ</th>
+    <th>#</th><th>имя</th><th>Г + П</th><th>Ж + К</th><th>ИМ</th>
   </thead>
   <tbody>
     #{("<tr #{if !homePl[i]? and !awayPl[i]? then 'style="height: 0;border: 0;"' else ''}><td>#{homePl[i]?.number || ''}</td><td>#{homePl[i]?.name || ''}</td><td></td><td></td><td></td><td>#{awayPl[i]?.number || ''}</td><td>#{awayPl[i]?.name || ''}</td><td></td><td></td><td></td></tr>" for i in [0..24]).join('') }
   </tbody>
   </table>
-<span class="help">Г+П: гол + пас, Ж+К: карточки, И+И: игрок матча (выбор своих) + (выбор соперника)<br>
+<span class="help">Г+П: гол + пас, Ж+К: карточки, ИМ: игрок матча (выбор своих) + (выбор соперника)<br>
 Примеры заполнения: 2+3; 1+0; 0+1</span>
 <br><br><br><br>
 <table id="signs">

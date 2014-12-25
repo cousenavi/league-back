@@ -4,6 +4,7 @@
     templates = {
       playerAchievement: function(pl) {
         var html;
+        console.log(pl);
         html = '';
         if (pl.goals) {
           html += "&nbsp;<i class='ev goal'></i>" + pl.goals;
